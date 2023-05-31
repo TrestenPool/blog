@@ -43,3 +43,19 @@ This work is published under [MIT][mit] License.
 [use-template]: https://github.com/cotes2020/chirpy-starter/generate
 [CD]: https://en.wikipedia.org/wiki/Continuous_deployment
 [mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+
+<!-- MY NOTES -->
+Run the localhost serve
+  bundle exec jekyll serve
+
+Create a post
+  bundle exec jekyll compose "My New Post" --collection "posts"
+
+Create a draft
+  bundle exec jekyll compose "My new draft" --collection "drafts"
+
+Publish a draft
+  bundle exec jekyll publish _drafts/my-new-draft.md
+
+Rename a post
+  bundle exec jekyll rename _posts/2014-01-24-my-new-draft.md "My New Post"
