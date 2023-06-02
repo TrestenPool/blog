@@ -5,7 +5,7 @@ date: 2023-05-30 20:10 -0500
 categories: [Programming]
 tags: [c, gdb, programming] 
 image:
-  path: /2023-06-02-gdb-refresher/Screenshot from 2023-06-02 12-33-33.png
+  path: /2023-06-02-gdb-refresher/1.png
 ---
 
 # GDB Refresher
@@ -17,19 +17,26 @@ gcc -g program.c -o program
 ```
 - To call run the debugger on the program now all you need to do is `gdb program`
 
-## Layouts
-- show layout of the code
 
 ## Focus
+- You can change the focus of where the arrow keys interact with
+
+## Layouts
+- show layout of the code
 ![image](/2023-06-02-gdb-refresher/2.png)
 
 - You can change the focus of different parts of the gdb interface
-  - show the registers
-    - `layout reg`
-  - show the assembly
-    - `layout asm`
   - show the actual code
     - `layout src`
+      - ![image](/2023-06-02-gdb-refresher/layout_src.png)
+
+  - show the registers
+    - `layout reg`
+      - ![image](/2023-06-02-gdb-refresher/layout_reg.png)
+
+  - show the assembly
+    - `layout asm`
+      - ![image](/2023-06-02-gdb-refresher/layout_asm.png)
 
 ## Printing
 
