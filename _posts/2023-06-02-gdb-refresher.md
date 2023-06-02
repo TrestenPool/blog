@@ -6,6 +6,7 @@ categories: [Programming]
 tags: [c, gdb, programming] 
 image:
   path: /2023-06-02-gdb-refresher/Screenshot from 2023-06-02 12-33-33.png
+---
 
 # GDB Refresher
 ![image](/2023-06-02-gdb-refresher/Screenshot from 2023-06-02 12-33-33.png)
