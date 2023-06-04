@@ -20,6 +20,10 @@ gcc -g program.c -o program
 
 ## Focus
 - You can change the focus of where the arrow keys interact with
+  - Focus on the src
+    - `Focus src`
+  - Focus on the command line
+    - `Focus cmd`
 
 ## Layouts
 - show layout of the code
@@ -39,6 +43,12 @@ gcc -g program.c -o program
       - ![image](/2023-06-02-gdb-refresher/layout_asm.png)
 
 ## Printing
+- Printing the value that is stored in a variable
+  - `p/my_variable`
+
+- Printing the memory location of a variable
+  - `x/1c &my_variable`
+  - `x/1c my_ptr`
 
 
 
