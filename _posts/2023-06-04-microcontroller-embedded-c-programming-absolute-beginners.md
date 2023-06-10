@@ -9,9 +9,54 @@ image:
   path: /2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/microcontroller_udemy.png
 ---
 
-# Udemy Microcontroller Embedded C Programming Tutorial Notes
+<!------------------------------------------------------->
+<!------------ C COMPILATION & EXECUTION ---------------->
+<!------------------------------------------------------->
+## Index of Topics
+---
+> [Overview]()
+>> + [Hardware used for this course](#1.1)
+>> + [Asked chatgpt to write me curriculium for embedded systems](#1.2)
 
-### I asked ChatGPT to write me a curriculium to learn embedded systems.
+> [Basic Usage]()
+>> + [How printf works on the microcontroller](#2.1)
+
+
+<!------------------------------------------------------->
+<!------------ HARDWARE USED FOR THE COURSE ------------->
+<!------------------------------------------------------->
+<br><br><br>
+### Hardware used for this course <a id='1.1'></a>
+---
+- Board Name: 
+  - STM32F4DISCOVERY
+  - <https://www.st.com/en/evaluation-tools/stm32f4discovery.html>
+  
+- Features
+  - STM32F407VGT6 microcontroller featuring 32-bit Arm® Cortex®-M4 with FPU core, 1-Mbyte Flash memory and 192-Kbyte RAM in an LQFP100 package
+  - USB OTG FS
+  - ST MEMS 3-axis accelerometer
+  - ST-MEMS audio sensor omni-directional digital microphone
+  - Audio DAC with integrated class D speaker driver
+  - User and reset push-buttons
+  - USB with Micro-AB
+  - Stereo headphone output jack
+  - 2.54 mm pitch extension header for all LQFP100 I/Os for quick connection to prototyping board and easy probing
+  - Flexible power-supply options: ST-LINK, USB VBUS, or external sources
+  - External application power supply: 3 V and 5 V
+  - Comprehensive free software including a variety of examples, part of STM32CubeF4 MCU Package, or STSW-STM32068 for using legacy standard libraries
+  - On-board ST-LINK/V2-A debugger/programmer with USB re-enumeration capability: mass storage, Virtual COM port, and debug port
+  - Support of a wide choice of Integrated Development Environments (IDEs) including IAR Embedded Workbench®, MDK-ARM, and STM32CubeIDE
+
+
+
+<!------------------------------------------------------->
+<!----------------- CHAT GPT CURRICULUM ---------------->
+<!------------------------------------------------------->
+<br><br><br>
+### I asked ChatGPT to write me a curriculium to learn embedded systems. <a id='1.2'></a>
+---
+
 1. Basics of Embedded Systems:
 - Understand the fundamentals of embedded systems, including hardware-software interaction, real-time constraints, and resource limitations.Study microcontroller architecture, digital logic, and basic electronics.
 
@@ -45,3 +90,16 @@ image:
 
 11. Industry Standards and Best Practices:
 - Stay updated on industry standards, protocols, and best practices related to embedded systems development. Follow blogs, forums, and relevant publications to stay abreast of the latest advancements in the field.
+
+
+<!------------------------------------------------------->
+<!------ How printf works on the microcontroller -------->
+<!------------------------------------------------------->
+<br><br><br>
+### How printf works on the microcontroller <a id='2.1'></a>
+---
+
+- Only applicable to MCU's based on **ARM Cortex (M3, M4, M7)** or higher processors
+- Works over **SWO pin (Serial Wire Output)** of SWD interface
+  - ![swo logic](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/swo_logic.png){: height="100"}
+    - The processor communicates on the *swo pin* to send data to the *debug circuit* on the board

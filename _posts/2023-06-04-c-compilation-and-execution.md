@@ -9,16 +9,25 @@ image:
   path: /2023-06-04-c-compilation-and-execution/book_of_c.jpeg
 ---
 
+<!------------------------------------------------------->
+<!------------ C COMPILATION & EXECUTION ---------------->
+<!------------------------------------------------------->
 ## Index of Topics
+---
 > [C Compilation and execution](#1.1)
 >> + [Memory Addressing](#1.2)
 >> + [Static keyword](#1.3)
 >> + [Header Guards](#1.4)
+>> + [Casting](#1.5)
+
 > [C Tools](#2.1)
 >> + [Objdump](#2.2)
 >> + [HexDump](#2.3)
 
----
+<!------------------------------------------------------->
+<!------------ C COMPILATION & EXECUTION ---------------->
+<!------------------------------------------------------->
+<br><br><br>
 ## C compilation and execution <a id='1.1'></a>
 ---
 
@@ -54,13 +63,19 @@ image:
   - Once the main function completes or encounters a return statement, the program terminates, and control is returned to the operating system.
 
 
----
+
+<!------------------------------------------------------->
+<!----------------- MEMORY ADDRESSING ------------------->
+<!------------------------------------------------------->
+<br><br><br>
 ### Memory Addressing <a id='1.2'></a>
 ---
 - Typically even though you may have a 64 bit machine. The address space is only going to be 48 bits
 
-
----
+<!------------------------------------------------------->
+<!------------------- HEADER GUARDS --------------------->
+<!------------------------------------------------------->
+<br><br><br>
 ### Static Keyword <a id='1.3'></a>
 ---
 
@@ -108,9 +123,8 @@ int main(int argc, char const *argv[]){
   collect2: error: ld returned 1 exit status
   ```
 
----
+
 #### 2. On a Variable
----
 - There are 2 ways to use the static keyword on a variable
   1. Static Storage Duration:
     - By default, variables declared within a function have automatic storage duration, meaning they are created when the block is entered and destroyed when the block is exited. However, when the static keyword is used with a local variable within a function, it changes the variable's storage duration to static. This means that the variable is initialized only once, and its value is retained between function calls. The variable exists throughout the entire program's execution.
@@ -156,7 +170,13 @@ int main(int argc, char const *argv[]){
     ```
     {: file='main.c'}
 
+<!------------------------------------------------------->
+<!------------------- HEADER GUARDS --------------------->
+<!------------------------------------------------------->
+<br><br><br>
 ### Header Guards <a id='1.4'>
+--- 
+
 - They are used to tell the compiler to include and define certain snippets of code. This is important so that way code from a file isn't included more than once. 
 - I know what you're thinking, I would never include code from another file twice?!?
 - But it is easier than you think when you work with multiple files 
@@ -167,18 +187,48 @@ int main(int argc, char const *argv[]){
   - In this scenario if we did not use a #indef, then we would accidently include the C file twice because A includes it directly and indirectly because A includes B which itself includes C
 
 
+<!------------------------------------------------------->
+<!---------------------- CASTING ------------------------>
+<!------------------------------------------------------->
+<br><br><br>
+### Casting <a id='1.5'>
+---
+
+#### There are two types of casting
+1. Implicit casting
+  - `unsigned char my_variable = 0xFF + 0x11;`
+    - This will perform the addition which is 0xFF + 0x11 = 0x110
+    - But this will truncated to 0x10 which is 16 in decimal
+2. Explicit casting
+  - `unsigned char var = (unsigned char) (0xFF + 0x11); `
+  - This is doing the same casting except explicitly
 
 
+
+
+
+<!------------------------------------------------------->
+<!---------------------- C Tools ------------------------>
+<!------------------------------------------------------->
+<br><br><br>
 ### C Tools <a id='2.1'></a>
 ---
 
 List of some of some helpful C Tools
 - gdb
 - valgrind
-- objdump
+- binutils
+  - objdump
+  - readelf
+  - strings
+  - strip 
 
----
 
+
+<!------------------------------------------------------->
+<!---------------------- OBJDUMP ------------------------>
+<!------------------------------------------------------->
+<br><br><br>
 ### Objdump <a id='2.2'></a>
 ---
 
@@ -192,9 +242,26 @@ List of some of some helpful C Tools
     - The last line specifies the start address
       - for an object file it will be 0x0 because it hasn't been linked therefore it doesn't know where the start address will be
       - for an executable it will be populated with a 64 bit hex memory address that contains the start of the program in memory when it gets loaded
+  - `objdump -s <filename>`
+    - Gives the executable data separated by sections
+  - `objdump -d <filename>`
+    - This will dissasemble the executable into the assembly code
 
----
+  - `readelf --segments <filename>`
+    - This will display the logical segments of memory for you program
+  
+  - `strip <filename>`
+    - This will strip all of the debug information and symbols from the executable
+      - Makes the executable smaller 
+      - Also makes it harder to debug and reverse engineer
 
+
+
+
+<!------------------------------------------------------->
+<!---------------------- HEXDUMP ------------------------>
+<!------------------------------------------------------->
+<br><br><br>
 ### Hexdump <a id='2.3'></a>
 ---
 
@@ -205,14 +272,26 @@ List of some of some helpful C Tools
         - The memory address is on the far left
         - There is 16 bytes in hex format in the next two columns 
         - The far right contains the ascii character strings that are contained in the two 16 byte columns in the middle
+  
+To edit one of these files you can use vim
+  - `vim -b main.o`
+    - `:%!xxd`
+      - this will give you the same view as `hexdump -C main.o`, except now you can edit the hex
+    - `:%!xxd -r`
+      - this will take back the binary to it's original format
+    - `:wq`
+      - makes sure to save the file
 
 ---
 
 
-<br>
-<br>
-<br>
-<br>
+
+
+
+<br><br><br><br>
+<!------------------------------------------------------->
+<!---------------------- HEXDUMP ------------------------>
+<!------------------------------------------------------->
 ### References
 > [C Compilation and execution](#1.1)
 >> + [Memory Addressing](#1.2)
