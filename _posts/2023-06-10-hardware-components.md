@@ -40,16 +40,16 @@ image:
 
 #### Current (not appied/ applied) to copper wire
 - With no current supplied to a copper wire, electrons are free and move randomly
-  - [no current](/2023-06-10-hardware-components/no_current.png)
+  - ![no current](/2023-06-10-hardware-components/no_current.png)
 
 - When current is applied to the copper wire via a battery, the free electrons will move in the a **circuit** from **positive to negative**
-  - [with current](/2023-06-10-hardware-components/current_applied.png)
+  - ![with current](/2023-06-10-hardware-components/current_applied.png)
 
 #### (Closed / Open) Circuit
 - Closed Circuit
-  - [closed circuit](/2023-06-10-hardware-components/closed_circuit.png)
+  - ![closed circuit](/2023-06-10-hardware-components/closed_circuit.png)
 - Open Circuit
-  - [open circuit](/2023-06-10-hardware-components/open_circuit.png)
+  - ![open circuit](/2023-06-10-hardware-components/open_circuit.png)
 
 #### 
 
