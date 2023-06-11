@@ -33,7 +33,10 @@ image:
   - <https://www.st.com/en/evaluation-tools/stm32f4discovery.html>
   
 - Features
-  - STM32F407VGT6 microcontroller featuring 32-bit Arm® Cortex®-M4 with FPU core, 1-Mbyte Flash memory and 192-Kbyte RAM in an LQFP100 package
+  - STM32F407VGT6 microcontroller 
+  - **32-bit Arm® Cortex®-M4** with FPU core
+  - **1-Mbyte Flash memory**
+  - **192-Kbyte RAM in an LQFP100 package**
   - USB OTG FS
   - ST MEMS 3-axis accelerometer
   - ST-MEMS audio sensor omni-directional digital microphone
@@ -103,3 +106,26 @@ image:
 - Works over **SWO pin (Serial Wire Output)** of SWD interface
   - ![swo logic](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/swo_logic.png){: height="100"}
     - The processor communicates on the *swo pin* to send data to the *debug circuit* on the board
+- If we zoom into the processor we can see that it uses **ITM (Instrumentation Trace Macrocell Unit)**
+  - ![itm logic](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/itm_image.png){: height="100"}
+  - The ITM is a debugging feature that allows real-time instrumentation and tracing of the program execution. It provides a dedicated communication channel between the microcontroller and a debugger, typically through the SWO (Serial Wire Output) pin.
+  - ITM can allow for the following types of traces to be monitored
+    - ![trace types](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/trace_data.png){: height="100"}
+- **SWD (Serial Wire Debug)**
+  - 2 wire protocol for accessing the arm debug interface
+    - 1st wire
+      - **SWDIO** : a bidirectional data line
+    - 2nd wire
+      - **SWCLK** : a clock driven by the host
+  - It is part of the ARM Debug Interface Specification V5
+  - Using SWD interface allows you to
+    - program MCU internal flash
+    - access different memory regions
+    - add breakpoints, stop/run cpu
+  - An alternative to JTAG
+  - You can use the serial wire viewer for your printf statements and debugging
+
+ 
+  
+
+
