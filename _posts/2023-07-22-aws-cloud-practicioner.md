@@ -6,7 +6,7 @@ author: Tresten Pool
 categories: [cloud]
 tags: [Cloud, Certificates] 
 image:
-  path: /2023-07-22-aws-cloud-practicioner.md/profile.png
+  path: /2023-07-22-aws-cloud-practicioner/profile.jpg
 ---
 
 ## AWS Notes
