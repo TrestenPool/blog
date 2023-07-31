@@ -57,9 +57,11 @@ image:
 - Running in mainland china (instead of singapore) means you would not need to traverse the Great Firewall
 - There are 2 regions
   - ![regions](/2023-07-22-aws-cloud-practicioner/china-1.png)
+  
   1. Ningxia
     - CN-Northwest-1
     - Operated by NSWCF
+
   2. Beijing
     - CN-North-1
     - Operated by NSWCF
@@ -79,7 +81,7 @@ image:
   - technology to cool the datacenters use of recycled water for cooling purposes
 
 ### AWS Ground Station
-- ![ground station](/2023-07-22-aws-cloud-practicioner/satellite.png){: width="972" height="589" .w-50 .left}
+- ![ground station](/2023-07-22-aws-cloud-practicioner/satellite.png)
 - fully managed service that lets you control satellite communications, process data, and scale your operations without having to worry about building or managing your own ground station infrastructure
 
 - used for 
@@ -159,6 +161,6 @@ image:
 - Typically done with Horizontal scaling because vertical scaling is generally hard for traditional architecture so you'll usually only see horizontal scaling described with elasticity
 
 - Auto Scaling Groups (ASG)
-- ![aws auto scaling](/2023-07-22-aws-cloud-practicioner/auto-scaling.png){: width="972" height="589" .w-50 .left}
+- ![aws auto scaling](/2023-07-22-aws-cloud-practicioner/auto-scaling.png)
   - an AWS feature that will automatically add or remove servers based on scaling rules you define based on metrics
   
