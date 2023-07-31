@@ -164,3 +164,44 @@ image:
 - ![aws auto scaling](/2023-07-22-aws-cloud-practicioner/auto-scaling.png)
   - an AWS feature that will automatically add or remove servers based on scaling rules you define based on metrics
   
+### Fault Tolerance
+- ability for your service to ensure there is **no single point of failture**. Preventing the chance of failure
+
+- **Fail-overs** is when you have a plan to **shift traffic** to a redundant system in case the primary system fails
+
+- ![fail over](/2023-07-22-aws-cloud-practicioner/fail-over.png)
+  - a common example is having a copy (secondary) of your database where all ongoing changes are synced. The secondary system is not in-use until a **fail over occurs** and it becomes the primary database
+
+### High Durablility (DR)
+- ability to **recover** from a disaster and prevent the loss of data. Solutions that recover from a disaster is known as **Disaster Recovery (DR)**
+
+- Common questions
+  - Do we have a backup?
+  - How fast can you recover with the backup
+  - Does you backup still work?
+  - How do you ensure current live data is not corrupt
+
+- Cloud Endure Disaster Recovery
+  - ![cloudendure](/2023-07-22-aws-cloud-practicioner/cloudendure.png)
+  - continously replicates your machine into a low-cose staging area in your target AWS accoiunt and preferred regions enabling fast and reliable recovery in case of IT data center failures.
+
+### Business Continuity Plan (BCP)
+  - A **business continuity plan** is a document that outlines how a business will continue operating **during an unplanned disruption in services**
+
+  - ![bcp](/2023-07-22-aws-cloud-practicioner/bcp.png)
+    - a BCP will define the **Recovery point (RPO) and Recovery time(RTO)**
+  
+  - Recovery Point Objective (RPO)
+    - ![rpo](/2023-07-22-aws-cloud-practicioner/rpo-diagram.png)
+    - the maximum acceptable amount of data loss after and unplanned data-loss incident, express as an **amount of time**
+    - How much data are you willing to lose?
+  
+  - Recovery Time Objective (RTO)
+    - ![rto](/2023-07-22-aws-cloud-practicioner/rto-diagram.png)
+    - the maximum amount of downtime during your business can tolerate without incurring a significant financial loss
+    - How much time are you willing to go down?
+  
+### Disaster Recovery Options
+  - ![disaster options](/2023-07-22-aws-cloud-practicioner/disaster-recovery-options.png)
+    - backing up you data and restoring it new infrastructure is a lot less work and cost effective as opposed as always having a scalled up copy of your infrastructure in another aws regions if the other was to go down
+  
