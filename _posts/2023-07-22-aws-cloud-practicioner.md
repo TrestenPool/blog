@@ -67,6 +67,7 @@ image:
 
 ### Sustainablilty
 - Amazon co-founded the Climate Pledge to achieve Net-Zero Carbon Emissions by 2040 across all amazon businesses 
+- <https://sustainability.aboutamazon.com/products-services/the-cloud?energyType=true>
 
 1. Renewable Energe
   - working towards having their AWS Global infrastructure powered by 100% renewable energy by 2025
@@ -77,4 +78,87 @@ image:
 3. Water Stewardship
   - technology to cool the datacenters use of recycled water for cooling purposes
 
-4. 
+### AWS Ground Station
+- ![ground station](/2023-07-22-aws-cloud-practicioner/satellite.png){: width="972" height="589" .w-50 .left}
+- fully managed service that lets you control satellite communications, process data, and scale your operations without having to worry about building or managing your own ground station infrastructure
+
+- used for 
+  - Weather forecasting
+  - surface imaging
+  - communications, video broadcasts
+
+- to use ground station:
+  - schedule a contact (select satellite, start and end time, and the ground location)
+  - use ec2 instances that will uplink and downlink data during the contact or receive downlinked data in the aws s3 bucket
+
+### AWS Outposts
+- fully managed service that offers the same AWS infrastructure, aws service, api's, and tools to virtually any datacenter, co-location space, or non-premises facility for a truly consistent hybrid experience
+
+- AWS Outposts is a rack of servers running AWS infrastructure on your phyiscal location
+
+- comes with the rack server and server
+
+- AWS Outposts comes in 3 form factors
+  - 42U
+  - 1U
+  - 2U  
+
+### Cloud Architecture Teminologies
+- Solutions Architect
+  - tech role that architects a solution using multiple systems via researching, documentation, experimentation
+
+- Cloud Architect
+  - focused solely on the cloud solutuion
+
+- Availability
+  - your ability to ensure a service remains available (High Availability HA)
+
+- Scalablility
+  - your ability to grow rapidly or unimpeded
+
+- Elasticity
+  - Your ability to shrink and grow to meet the demand
+
+- Fault tolerance
+  - your ability to prevent a failure
+
+- Disaster recovery
+  - your ability to recover from a failure (Highly Durable DR)
+
+- Business factors you should always keep in mind
+  - Security - How secure is this solution?
+  - Cost - How much is this going to cost
+
+### High Availability
+- your ability for your service to remain available by ensuring there is no **single point of failure** and/or ensure level of performance
+
+- Run your workload across multilple **Availability zones** ensures if 1 or 2 AZ's become unavailable your service/applications remains available
+
+- Elastic Load Balancer
+  - A load balancer allows you to evenly distribute traffic to multiple servers in one or more datacenters. If a datacernter or server becomes unavailable, the load balancer will route the traffic to the other working datacenter and servers
+
+### High Scalability
+- your ability to **increase your capacity** based on the increasing/decreasing demand in traffic, memory and computing power
+
+- 2 types of scaling
+  1. Vertical Scaling
+    - Upgrade to a bigger server, ex. better cpu, more ram
+  2. Horizontal Scaling
+    - Adding more servers of the same size, compute devices to distribute the load to 
+    - Typically preferred because helps with **HA**
+
+### High Elasticity
+- your ability to **automatically** increase/decrease your capacity based on the current demand of traffic, memory and computing power
+
+- Horizontal scaling
+  - Scaling out
+    - add more servers of the same size
+  - Scaling in
+    - removing underutilized server of the same size
+
+- Typically done with Horizontal scaling because vertical scaling is generally hard for traditional architecture so you'll usually only see horizontal scaling described with elasticity
+
+- Auto Scaling Groups (ASG)
+- ![aws auto scaling](/2023-07-22-aws-cloud-practicioner/auto-scaling.png){: width="972" height="589" .w-50 .left}
+  - an AWS feature that will automatically add or remove servers based on scaling rules you define based on metrics
+  
