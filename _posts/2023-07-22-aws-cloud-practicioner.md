@@ -12,6 +12,70 @@ image:
 # AWS Notes
 
 
+### AWS Account ID
+- every aws account has a unique Account ID
+- composed of 12 digits
+- used when
+  - logging in with a non-root user account
+  - support cases
+- it is generally good practice to keep the account id secret because could be used for malicious actions
+
+### Amazon Resource Names (ARN)
+- uniquely identify aws resources. ARN's are required to specify a resource unambiguously across all of AWS
+- can contain a wildcard asterick, typically usefull for policies to specify a group of things
+  - arn:aws:iam::123456789012:user/Development/product_1234/*
+
+- ARN's have the followinng variations
+  - arn:partition:service:region:account-id:resource-id
+  - arn:partition:service:region:account-id:resource-type/resource-id
+  - arn:partition:service:region:account-id:resource-type:resource-id
+
+- Partition
+  - aws - aws regions
+  - aws-cn - china regions
+  - aws-us-gov - AWS govcloud regions
+
+- Service
+  - ec2
+  - s3
+
+- Regions
+  - us-east-1
+  - us-central-1
+
+- Resource ID
+  - Could be a number, name or path
+  - user/Bob
+  - instance/i-1232751232382
+
+##### Examples
+- S3 bucket arn
+  - arn:aws:s3:::my-bucket
+    - doesn't contain region, account-id because s3 buckets are in every region and account id because it is the current user
+
+- Load balancer
+  - arn:aws:elasticloadbalancing:us-east-2:123456789101112:loadbalancer/app/my-web-server/1231828182323
+
+
+### AWS Policies
+- policies are used to define **permissions** and access control for various aws resources. 
+- these policies can be fine-grained or umbrella multiple resources
+- policies in AWS are written in JSON format
+- There are several types of policies used in AWS
+
+  - IAM (Identity and access management)
+    - These policies are used to control access to AWS resources for individual users, groups, or roles. IAM policies define the permissions that are granted or denied for specific actions on specific resources. They are attached to IAM entities, such as users, groups, or roles.
+
+  - Resource-based policies 
+    - These policies are associated directly with AWS resources such as S3 buckets, Lambda functions, and SQS queues. They define permissions for other AWS identities to access the resources. For example, you can use a resource-based policy on an S3 bucket to allow a specific IAM user from another AWS account to access the contents of the bucket.
+
+  - SCP (Service Control Policies)
+    - SCPs are used within AWS Organizations to manage permissions across multiple AWS accounts in an organization. SCPs define the maximum permissions that can be applied to an account or organization unit (OU) within the organization.
+
+  - Assume Role Policies
+    - When using IAM roles to grant temporary permissions to an entity (such as an AWS service or a federated user), an assume role policy is attached to the role. It specifies which principal (AWS service or federated user) is allowed to assume the role and under what conditions.
+
+
 ### AWS Global Infrastructure
 - globally distributed hardware and datacenters that are physically networked together to act as one large resource for the end user customer
 
