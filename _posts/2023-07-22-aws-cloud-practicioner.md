@@ -268,4 +268,51 @@ image:
 ### Disaster Recovery Options
   - ![disaster options](/2023-07-22-aws-cloud-practicioner/disaster-recovery-options.png)
     - backing up you data and restoring it new infrastructure is a lot less work and cost effective as opposed as always having a scalled up copy of your infrastructure in another aws regions if the other was to go down
+
+### Powershell cloudshell 
+  - by default the cloudshell uses linux terminal
+  - [powershell guide](https://aws.plainenglish.io/aws-powershell-tools-in-cloudshell-79bbc4dcd7ac)
   
+  - How to use powershell in the cloudshell
+    
+    1. `pwsh` 
+      - switch to the powershell shell
+    
+    2. `Install-Module -Name AWS.Tools.Installer -Force`
+      - install the powershell aws installer
+    
+    3. `Install-AWSToolsModule AWS.Tools.Lambda`
+      - install any of the aws modules you would like, in this case it would be installing the lambda module commands
+
+### Configuring AWS Cli
+  - first make sure the aws cli is installed on your system
+  - go to iam the user you would like to use for the cli
+  - click on `Create access key` in the iam menu
+    - ![create access key](/2023-07-22-aws-cloud-practicioner/create-access-key.png)
+  - `aws configure`
+    - paste in the user id and the secret key from the step above
+  - you can edit and add additional profiles in ~/.aws/credentials
+
+### Infrastructure as Code (IaC)
+- Aws has two offerings
+  1. AWS CloudFormation (CFN)
+    - ![cloudformation](/2023-07-22-aws-cloud-practicioner/aws-cloudformation.png)
+    - **declarative** Iac tool
+      - What you see is what you get
+      - More verbose, but zero chance of mis-configuration
+      - Json, YAML, XML
+  
+  2. AWS Cloud Development Kit (CDK)
+    - ![cdk](/2023-07-22-aws-cloud-practicioner/aws-cdk.png)
+    - an **imperative** IaC tool
+      - You say what you want, and the rest is filled in implicit
+      - less verbose, you could end up with misconfiguration
+      - Does more than Declarative
+      - Python, ruby, php, javascript, etc...
+
+
+#### AWS CloudFormation
+
+- Allows you to write Iac in either a Json or Yaml file
+- easier for devops engineers who do not have a background in web programming languages
+- is simple but can lead to large files or is limited in some regard to creating dynamic or repeatable infrastructure compared to CDK
