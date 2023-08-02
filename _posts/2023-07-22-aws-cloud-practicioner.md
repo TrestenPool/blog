@@ -311,8 +311,38 @@ image:
       - Python, ruby, php, javascript, etc...
 
 
-#### AWS CloudFormation
+### AWS CloudFormation
 
 - Allows you to write Iac in either a Json or Yaml file
 - easier for devops engineers who do not have a background in web programming languages
 - is simple but can lead to large files or is limited in some regard to creating dynamic or repeatable infrastructure compared to CDK
+
+### AWS Toolkit for VSCode
+- plugin to create, debug, deploy aws resources
+
+- what you get
+  - aws explorer
+    - explore a wide range of aws resources to your linked aws account
+  
+  - aws cdk explorer
+    - allows you to expore your stacks defined by your cdk
+
+  - aws elastic container service
+    - provides intellisense for ecs task-definitions files
+
+  - Serverless applications
+    - create, debug, deploy serverless applications via SAM and CFN
+
+### Access Keys
+- **Key and secret** required to have programmatic access to AWS resources. Like when interacting with the aws api outside of the aws management console.
+- commonly referred to as **AWS Credentials**
+
+- Things to know about access keys
+  - share your access keys
+  - commit access keys to a codebase like git
+  - you can have 2 active access keys
+  - you can deacticate access keys
+  - access keys have whatever access a user has to a aws resource
+
+- ![access keys](/2023-07-22-aws-cloud-practicioner/aws-access-keys.png)
+- ![access keys 2](/2023-07-22-aws-cloud-practicioner/aws-access-keys-2.png)
