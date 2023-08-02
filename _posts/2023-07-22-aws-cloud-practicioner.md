@@ -11,6 +11,11 @@ image:
 
 # AWS Notes
 
+### AWS resources
+- AWS Labs
+  - Get hands on learning with aws resources for free
+  - [aws labs](https://aws.amazon.com/training/digital/aws-builder-labs/)
+
 
 ### AWS Account ID
 - every aws account has a unique Account ID
@@ -338,11 +343,27 @@ image:
 - commonly referred to as **AWS Credentials**
 
 - Things to know about access keys
-  - share your access keys
-  - commit access keys to a codebase like git
+  - Do **Not** share your access keys
+  - Do **Not** commit access keys to a codebase like git
   - you can have 2 active access keys
   - you can deacticate access keys
   - access keys have whatever access a user has to a aws resource
 
 - ![access keys](/2023-07-22-aws-cloud-practicioner/aws-access-keys.png)
 - ![access keys 2](/2023-07-22-aws-cloud-practicioner/aws-access-keys-2.png)
+
+
+### Shared Responsiblity Model
+- **Cloud security framework** that defines the security obligations of the customer versa the cloud service provider (CSP)
+
+- each CSP has their own variant of the Shared responsiblity model by they are all generally the same 
+
+- ![shared responsiblity model](/2023-07-22-aws-cloud-practicioner/aws-shared-responsiblity-model.png)
+
+- In / Of
+  - Customers are responsible for the data **in** the cloud
+  - AWS is responsible of the resources/hardware **of** the cloud
+
+- ![shared reponsiblity for types of cloud services](/2023-07-22-aws-cloud-practicioner/computing-responsiblity.png)
+
+- ![shared resopnsiblity level of customer responsiblity](/2023-07-22-aws-cloud-practicioner/aws-shared-responsiblity-model-2.png)
