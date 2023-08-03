@@ -11,6 +11,9 @@ image:
 
 # AWS Notes
 
+### Service level agreement
+  - service level agreements are used for describing what you get for aws in resources and what aws promoises in return whether it be a certain number for HA, DR or fault tolerance
+
 ### AWS resources
 - AWS Labs
   - Get hands on learning with aws resources for free
@@ -451,7 +454,7 @@ image:
 - **Elastic Load Balancer (ELB)**
   - **Distributes traffic to multiple instances**, can re-route traffic from unhealthy instances to healthy ones. Can route traffic to ec2 instances running in different AZ
 
-- **AWS Elastic Beanstalk (EB)
+- **AWS Elastic Beanstalk (EB)**
   - for **easiyly deploying web-applications** without having developers having to worry about setting up underlying aws resources. Simliar to Heroku
 
 
@@ -465,7 +468,7 @@ image:
   - FC (Fibre Channel) and iSCSI are two different storage protocols used in computer networks to connect and access block storage devices.
 
 - **AWS Elastic File Storage (EFS) - FILE**
-  - ![efs](assets/img/2023-07-22-aws-cloud-practicioner/efs-logo.png){: width="200" height="200" .w-75 .normal}
+  - ![efs](/2023-07-22-aws-cloud-practicioner/efs-logo.png){: width="200" height="200" .w-75 .normal}
   - NFS, SMB used as a network drive or file share, supports multiple reads, writing locks the file
   - when you need a network file share that **multple ec2 instances and concurrently read/write to** 
   
@@ -473,10 +476,103 @@ image:
   - ![s3](/2023-07-22-aws-cloud-practicioner/s3-logo.png){: width="200" height="200" .w-75 .normal}
   - supports multiple reads/writes (no locks)
   - no file limit or storage limit (scales up)
+  - you can only have 100 buckets
   - Buckets hold objects and may also have folders which in turn hold objects
   - S3 is a universal namespace so bucket names must be unique (think like having a domain name)
   - Https/API's
   - You can hold objects from 0 bytes to 5 terabytes in size
+  - Supports server side encryption **SSE** (encryption done by s3)
+    - only one server side encryption option per object
   
   - S3 Storage Classes
     - ![s3 storage class](/2023-07-22-aws-cloud-practicioner/s3-storage-classes.png)
+  
+- **AWS Storage Gateway**
+  - **hybrid cloud storage** service that extends yoiur on-premise storage to cloud
+
+- **File Gateway**
+  - extends your local storage to s3
+
+- **Volume Gateway**
+  - caches your local drives to s3 to have continious backup of local files in the cloud
+
+- **Tape Gateway**
+  - stores files onto virtual tapes for backing up your files on very cost effective long term storage
+
+- **AWS Backup**
+  - a fully managed **backup service** that makes it easy to centralize and automate the backup of data across **multiple aws services** like ec2, rds, dynamodb, efs. You create the backup plan.
+
+- **AWS FSx**
+  - Windows/Linux file server allows you to mount Fsx to your server
+
+
+### AWS Snow Family
+- **storage and compute devices used to physically move data in or out of the cloud** when moving data over the internate or private connection it is too slow, difficult or costly.
+- used for migrating large amounts of data to the cloud
+- Data is devlivered to s3
+- ![snow family](/2023-07-22-aws-cloud-practicioner/aws-snow-family.png)
+
+
+### Data Warehouses
+- A relational datastore for **analytic workloads**, which is generally **column-oriented data-store**
+- Companies will have terabytes and millinos of rows of data and they will need a fast way to be able to produce analytics reports
+- Data warehouses generally perform **aggregation** or a grouping of data to find a total or average
+- optimized around columns
+
+### DynamoDB
+  - a serverless **nosql key/value and document database**
+  - designed to scale billions of records with guaranteed consisten data return in at least a second. 
+  - you don't have to worry about managing shards
+  - **AWS's flagship database service**, whenever you think of databases on aws you should first think of DynamoDb
+  - 
+
+### DocumentDB
+  - **NoSQL document database** that is MongoDB compatible
+  - when you want to use MongoDB
+
+### Amazon Keyspaces
+  - fully managed **Apache Cassandra database**
+  - NoSql key/value database 
+
+
+### Relational Database Service (RDS)
+  - **relational db service**
+  - supports multiple sql engines
+  - most common type of database
+    - MySQL, MariaDB, Postgres, Oracle, Microsoft sql server, Aurora
+
+### Aurora
+  - Relational db
+  - fully managed db of either mysql (5x faster) and postgres (3x faster)
+
+### Aurora Serverless
+  - **serverless on-demand version of aurora** 
+  - you get the benefits of aurora but can trade off to have cold starts or you don't have lots of traffic demand
+
+### RDS on VMWare
+  - allows you to deploy rds supported engines to an on-premise data-center
+
+### Redshift 
+  - petabyte-size data-warehouse 
+  - hot online analytical processing (OLAP)
+
+### Elasticache
+  - managed db **in-memory and caching** open source database redis or memcached
+  - when you want to improve the performance of applications by adding a caching layer in front of web-server or database
+
+### Neptune
+  - Managed **graph database** 
+  - when you want to understand connections between data ex. (social media, mapping fraud rings, maps)
+
+### AWS Timestreams
+  - fully managed **time series database**
+  - think of devices that send lots of data that are **time sensitive** such as iot devices
+  - when you need to measure how things change over time
+
+### Amazon Quantum Ledger Database
+  - fully managed **ledger database that provides transparent, immutable and crytographically variable transaction logs.
+
+### Database Migration Service (DMS)
+  - a db migration service that allows you to migrate from 
+    - on-prem to aws
+    - sql to no-sql
