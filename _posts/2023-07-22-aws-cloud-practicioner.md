@@ -367,3 +367,116 @@ image:
 - ![shared reponsiblity for types of cloud services](/2023-07-22-aws-cloud-practicioner/computing-responsiblity.png)
 
 - ![shared resopnsiblity level of customer responsiblity](/2023-07-22-aws-cloud-practicioner/aws-shared-responsiblity-model-2.png)
+
+
+### EC2
+- ![ec2](/2023-07-22-aws-cloud-practicioner/ec2-logo.png){: .w-75 .normal}
+- Highyly configurable virtual machine commonly referred to as **instance**
+- Allows you to attach multiple virtual hard-drives for storage **Elastic Block Store (EBS)**
+- Allows you to pick an **AMI** (Amazon machine image)
+  - pre-defined configuration for a vm
+- considered the **backbone of aws** because a majority of aws services are using ec2 under the hood like S3, RDS, DynamoDB, Lambdas
+
+### AWS Container services
+- **Elastic Container Service (ECS)**
+  - container orchestration service
+
+- **Elastic Container Registry (ECR)**
+  - repository for container images
+
+- **ECS Fargate**
+  - serverless orchestration container services
+
+- **Elastic Kubernetes Services (EKS)**
+  - fully managed kubernetes service
+
+### High performance computing (HPC)
+- **Nitro System** is a combination of **dedicated hardware and lightweight hypervisor** enabling faster innovation and enhanced security. All new EC2 instances types use the Nitro System. They are made up by the 
+  - Nitro cards - specialized cards for VPC, EBS and instance storage
+  - Nitro security chips - integrated motherboart. protects hardware resources
+  - Nitro hypervisor - lightweight hypervisor memory and cpu allocation Bare-metal like performance
+
+- **Bare metal instance**
+  - you can launch ec2 instance that have **no hypervisor** so you can run workloads directly on the hardware for maximum performance and control. The **M5 and R5** ec2 instances run are bare metal.
+
+- What is High Performance Computing (HPC)
+  - a cluster of hundreds of thousands of servers with fast connections between each of them with the purpose of boosting computing capacity. 
+
+- AWS Parallel Cluster
+  - an AWS-suported open source cluster management tool that makes it easy for you to deploy and manage HPC clusters on AWS
+  - Tool is used in python
+
+### Edge Computing
+- What is edge computing
+  - When you push your computing workloads outside of your networks to run close to the destination location. 
+    - ex. Pushing computing to run on phones, IoT Devices, or external servers not within your cloud network
+
+- What is hybrid computing
+  - when you're able to run workloads on both your on-premise datacenter and AWS Virtual Private Cloud (VPC)
+
+- AWS Outposts
+  - physical rack of server that you can put in your datacenter. Allows you to use aws api and services such as ec2 right in your datacenter
+
+- AWS Wavelength
+  - allows you to build and launch your applications in a telecom datacenter. By doing this your applications will have **ultra-low latency** since they will be pushed over a 5G network and be closest as possible to the end user
+
+- VMWare Cloud on AWS
+  - allows you to **manage on-premise vm's using VMWare as EC2 instances**
+  - The datacenter must be using VMWare for Virtualization
+
+- AWS Local Zones
+  - **edge datacenters** located outside of an AWS region
+  - used so you can use AWS closer to end destination
+
+### Cost management
+
+- **Cost Management**
+  - How do we save money?
+
+- **Capacity Management**
+  - How do we meet the demand of traffic and usages though adding or upgrading servers?
+
+- **EC2 Spot Instances, Reserved Instanced and Savings Plan**
+  - Ways to save on computing, by paying up in full or partially, by commiting to yearly contracts or by being flexible about availability and interruption to computing service
+
+- **AWS Batch**
+  - plans, schedules and executes your batch computing workloads across the full range of AWS compute services, can utilize spot instance to save money
+
+- **AWS Compute Optimizer**
+  - suggests how to **reduce costs and improve performance** by using machine learning to analyze your previous usage history
+
+- **EC2 Autoscaling Groups (ASGs)**
+  - **Automatically adds or removes** ec2 instances to meet the current demand of traffic, will save you money and meet capacity, since you only run the amount of servers you need
+
+- **Elastic Load Balancer (ELB)**
+  - **Distributes traffic to multiple instances**, can re-route traffic from unhealthy instances to healthy ones. Can route traffic to ec2 instances running in different AZ
+
+- **AWS Elastic Beanstalk (EB)
+  - for **easiyly deploying web-applications** without having developers having to worry about setting up underlying aws resources. Simliar to Heroku
+
+
+### Types of Storage Services
+
+- **Elastic Block Store (EBS) - BLOCK**
+  - ![ebs](/2023-07-22-aws-cloud-practicioner/ebs-logo.png){: width="200" height="200" .w-75 .normal}
+  - **Block data is split evenly into split blocks** directly accessed by the OS
+  - supports only a single write volume
+  - When you need a virtual hard drive attached to a **single ec2 instance**
+  - FC (Fibre Channel) and iSCSI are two different storage protocols used in computer networks to connect and access block storage devices.
+
+- **AWS Elastic File Storage (EFS) - FILE**
+  - ![efs](assets/img/2023-07-22-aws-cloud-practicioner/efs-logo.png){: width="200" height="200" .w-75 .normal}
+  - NFS, SMB used as a network drive or file share, supports multiple reads, writing locks the file
+  - when you need a network file share that **multple ec2 instances and concurrently read/write to** 
+  
+- **AWS Simple Storage Service (S3) - OBJECT**
+  - ![s3](/2023-07-22-aws-cloud-practicioner/s3-logo.png){: width="200" height="200" .w-75 .normal}
+  - supports multiple reads/writes (no locks)
+  - no file limit or storage limit (scales up)
+  - Buckets hold objects and may also have folders which in turn hold objects
+  - S3 is a universal namespace so bucket names must be unique (think like having a domain name)
+  - Https/API's
+  - You can hold objects from 0 bytes to 5 terabytes in size
+  
+  - S3 Storage Classes
+    - ![s3 storage class](/2023-07-22-aws-cloud-practicioner/s3-storage-classes.png)
