@@ -64,6 +64,8 @@ image:
 - Load balancer
   - arn:aws:elasticloadbalancing:us-east-2:123456789101112:loadbalancer/app/my-web-server/1231828182323
 
+### IAM Instance Profile
+  - An AWS Identity and Access Management (IAM) instance profile is a secure way to grant AWS services or applications running on Amazon EC2 instances temporary credentials that allow them to access other AWS resources. It's essentially a container for an IAM role that you can associate with an EC2 instance during launch. This role specifies what permissions and access policies are granted to the EC2 instance or the applications running on it. 
 
 ### AWS Policies
 - policies are used to define **permissions** and access control for various aws resources. 
@@ -374,11 +376,40 @@ image:
 
 ### EC2
 - ![ec2](/2023-07-22-aws-cloud-practicioner/ec2-logo.png){: .w-75 .normal}
-- Highyly configurable virtual machine commonly referred to as **instance**
-- Allows you to attach multiple virtual hard-drives for storage **Elastic Block Store (EBS)**
-- Allows you to pick an **AMI** (Amazon machine image)
-  - pre-defined configuration for a vm
-- considered the **backbone of aws** because a majority of aws services are using ec2 under the hood like S3, RDS, DynamoDB, Lambdas
+  - Highyly configurable virtual machine commonly referred to as **instance**
+  - Allows you to attach multiple virtual hard-drives for storage **Elastic Block Store (EBS)**
+  - Allows you to pick an **AMI** (Amazon machine image)
+    - pre-defined configuration for a vm
+  - considered the **backbone of aws** because a majority of aws services are using ec2 under the hood like S3, RDS, DynamoDB, Lambdas
+
+  #### EC2 Instance Families
+    - General Purpose
+      - A1, T2, T3, T3A, T4G, M4, M5, M5a, M5n, M6zn, M6g, M6i, Mac
+      - use cases - web servers, code repo's
+    
+    - Compute Optimized
+      - C5, C4, Cba, C5n, C6g, C6gn
+      - use cases - high performance processor, scientific modeling, dedicated gaming servers
+    
+    - Memory Optimizied
+      - R4, R5, R5a, R5b, R5n, X1, X1e, High Memory, z1d
+      - use cases - in-memory caches, in memory databases, real time big data analytics
+    
+    - Accelerated Optimized
+      - P2, P3, P4, G3, G4ad, G4dn, F1, Inf1, VT1
+      - Hardware accelerators, co-processors
+      - use cases - machine learning, computational finance, speech recognization
+    
+    - Storage Optimized
+      - I3, I3en, D2, D3, D3en, H1
+      - use cases - high sequential read / write access to very large data sets on local storage
+  
+  #### EC2 Instance Types
+    - nano, micro, small, medium, large, xlarge, 2xlarge, 3xlarge, 4xlarge, 8xlarge
+    - instance size generally double in prices and key attributes
+    - they generally double in price as you go up
+    
+
 
 ### AWS Container services
 - **Elastic Container Service (ECS)**
@@ -576,3 +607,90 @@ image:
   - a db migration service that allows you to migrate from 
     - on-prem to aws
     - sql to no-sql
+
+### Cloud-Native Networking services
+  - ![aws networking](/2023-07-22-aws-cloud-practicioner/aws-networking.png)
+
+    - Most aws resources require that you deploy them in a **VPC (virtual private cloud)**
+
+    - In order for you or an application to access your application on your vpc you must have an **Internet Gateway**
+
+    - **Route Tables** determine where network traffic from your subnets are directed
+
+    - **Subnets** - a logical partition of an ip network into multiple, smaller network segments
+
+    - **NACL's (Network access control list)** acts as firewalls at the **subnet level**
+      - A network access control list (ACL) allows or denies specific inbound or outbound traffic at the subnet level
+      - There is **no additional charge** for using network ACLs.
+
+    - **Security Groups** - act as a firewall at the **instance level** 
+  
+
+### Network Access Control List (NACL)
+  - A network access control list (ACL) allows or denies specific inbound or outbound traffic at the subnet level
+
+  - There is **no additional charge** for using network ACLs.
+
+  - By default denies all inbound traffic and allows all outbound traffic
+    - this is used so that the security groups can allow specific traffic like ssh or https
+
+  - ![NACL diagram](/2023-07-22-aws-cloud-practicioner/nacl-diagram.png)
+    - The following diagram shows a VPC with two subnets. Each subnet has a network ACL. When traffic enters the VPC (for example, from a peered VPC, VPN connection, or the internet), the router sends the traffic to its destination. Network ACL A determines which traffic destined for subnet 1 is allowed to enter subnet 1, and which traffic destined for a location outside subnet 1 is allowed to leave subnet 1. Similarly, network ACL B determines which traffic is allowed to enter and leave subnet 2.
+
+  - Your VPC automatically comes with a modifiable default network ACL. By default, it **allows all inbound and outbound** IPv4 traffic and, if applicable, IPv6 traffic.
+
+### Internet Gateway
+- ![internet gateway logo](/2023-07-22-aws-cloud-practicioner/internet-gateway-logo.png){: width="200" height="200" .w-75 .normal}
+
+  - An internet gateway is a horizontally scaled, redundant, and highly available VPC component that **allows communication between your VPC and the internet**
+
+  - An internet gateway enables resources in your public subnets (such as EC2 instances) to **connect to the internet** if the resource has a public IPv4 address or an IPv6 address. Similarly, resources on the internet can initiate a connection to resources in your subnet using the public IPv4 address or IPv6 address. For example, an internet gateway enables you to connect to an EC2 instance in AWS using your local computer.
+
+  - An internet gateway provides a target in your VPC route tables for internet-routable traffic
+
+
+### Route Tables 
+- ![route table logo](/2023-07-22-aws-cloud-practicioner/aws-route-table-logo.png){: width="200" height="200" .w-75 .normal}
+
+  - A route table contains a set of rules, called routes, that determine **where network traffic from your subnet or gateway is directed.**
+
+### AWS Security Groups
+  - Feature for ec2 instances
+
+  - Acts as a **firewall at the instance level**
+
+  - **Implicitly denies all traffic**
+
+  - You create only **ALLOW** rules
+
+  - A security group controls the traffic that is allowed to reach and leave the resources that it is associated with. For example, after you associate a security group with an EC2 instance, it controls the inbound and outbound traffic for the instance. You can associate a security group only with resources in the VPC for which it is created.
+
+
+### AWS DirectConnect
+- ![directconnect](/2023-07-22-aws-cloud-practicioner/aws-directconnect-logo.png){: width="200" height="200" .w-75 .normal}
+
+  - dedicated gigabit connection from **on-premise to AWS (very fast connection)**
+
+
+
+### AWS PrivateLinks
+- ![privatelink](/2023-07-22-aws-cloud-practicioner/aws-privatelink-icon.png){: width="200" height="200" .w-75 .normal}
+
+  - **VPC interface endpoints**
+  
+  - keeps traffic within the AWS Network and not travers the internet to keep traffic secure
+
+  - privately connect your VPC to services as if they were in your VPC. You do not need to use an internet gateway, NAT device, public IP address, AWS Direct Connect connection, or AWS Site-to-Site VPN connection to allow communication with the service from your private subnets. Therefore, you control the specific API endpoints, sites, and services that are reachable from your VPC.
+
+  - ![vpc diagram](/2023-07-22-aws-cloud-practicioner/privatelink-diagram.png)
+    - In the following diagram, the VPC on the left has several EC2 instances in a private subnet and three interface VPC endpoints. The top-most VPC endpoint connects to an AWS service. The middle VPC endpoint connects to a service hosted by another AWS account (a VPC endpoint service). The bottom VPC endpoint connects to an AWS Marketplace partner service.
+
+
+### Virtual Private Cloud (VPC)
+  - Logically isoated sections of the aws network where you launch your aws resources
+
+  - you choose a range of ips using CIDR Range
+
+  - ![vpn](/2023-07-22-aws-cloud-practicioner/vpc-diagram.png)
+    - public subnet is one that can reach the internet
+    - private subnet is one that cannot reach the internet
