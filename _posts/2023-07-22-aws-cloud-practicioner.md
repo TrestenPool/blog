@@ -380,6 +380,11 @@ image:
   - Allows you to attach multiple virtual hard-drives for storage **Elastic Block Store (EBS)**
   - Allows you to pick an **AMI** (Amazon machine image)
     - pre-defined configuration for a vm
+  - 4 ways to connect
+    1. EC2 instance connect
+    2. session manager
+    3. ssh client
+    4. ec2 serial console
   - considered the **backbone of aws** because a majority of aws services are using ec2 under the hood like S3, RDS, DynamoDB, Lambdas
 
   #### EC2 Instance Families
@@ -694,3 +699,40 @@ image:
   - ![vpn](/2023-07-22-aws-cloud-practicioner/vpc-diagram.png)
     - public subnet is one that can reach the internet
     - private subnet is one that cannot reach the internet
+
+### Elastic IP address
+- Used in EC2
+- Allows you to assign a static ip address to an ec2 instance that will stay the same after restarts and shutdowns
+  - this is important because by default ec2 instances get a dynamic ip address that is subject to change
+
+### AMI (Amazon Machine image)
+  - ec2 feature
+  - contains all necessary info needed to launch an ec2 instance
+  - it is a block level disk image of the os drive
+
+### Launch template 
+  - ec2 feature
+  - a cookie cutter that you use to launch new instances with an auto-scaling group
+  - cool because you have can have **versioning** of a single launch tempalte
+
+### Auto scaling groups
+  - ec2 feature
+  - An Auto Scaling group is a collection of Amazon EC2 instances that are treated as a logical unit. You configure settings for a group and its instances as well as define the group’s minimum, maximum, and desired capacity. Setting different minimum and maximum capacity values forms the bounds of the group, which allows the group to scale as the load on your application spikes higher or lower, based on demand. To scale the Auto Scaling group, you can either make manual adjustments to the desired capacity or let Amazon EC2 Auto Scaling automatically add and remove capacity to meet changes in demand.
+
+### Elastic Load balancer
+  - distributes traffic between different instances based on demand and resources and health
+  - requrie a **target group** that allows you to define where you traffic gets distributed upon when the load balancer is in progress
+  - ![ELB types](/2023-07-22-aws-cloud-practicioner/elb-types.png)
+  - ![ELB classic type](/2023-07-22-aws-cloud-practicioner/elb-classictype.png)
+
+### Target Groups
+  - ELB feature
+  - A **target group** is required when creating ELB's
+  - this is because the elb has to know where it has to distribute the traffic upon and how
+  - There are 4 target types
+    1. Instances
+    2. Ip addresses
+    3. Lambda function
+    4. Application load balancer
+    
+
