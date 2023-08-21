@@ -11,6 +11,9 @@ image:
 
 # AWS Notes
 
+### Cheat Sheet resources
+  - [cheat sheet](https://www.awsboy.com/aws-cloud-practitioner-cheat-sheets-pricing-billing/)
+
 ### Service level agreement
   - service level agreements are used for describing what you get for aws in resources and what aws promoises in return whether it be a certain number for HA, DR or fault tolerance
 
@@ -19,6 +22,12 @@ image:
   - Get hands on learning with aws resources for free
   - [aws labs](https://aws.amazon.com/training/digital/aws-builder-labs/)
 
+### AWS Well-Architected Framework
+  - Security
+  - Reliability
+  - Performance Effeciency
+  - Cost optimization
+  - Operational excellence
 
 ### AWS Account ID
 - every aws account has a unique Account ID
@@ -387,6 +396,39 @@ image:
     4. ec2 serial console
   - considered the **backbone of aws** because a majority of aws services are using ec2 under the hood like S3, RDS, DynamoDB, Lambdas
 
+  #### Pricing ####
+    - Different types of pricing
+      1. On-demand
+        - low cost and flexible
+        - per hour or the second
+        - short-term, spikey, unpredictable workloads
+        - cannot be interrupted
+        - **least commitment**
+
+      2. Spot
+        - up to 90% off
+        - request spare computing capacity
+        - flexible start and end times
+        - can handle interruptions (server starting and stopping randomly)
+        **biggest saving**
+
+      3. Reserved
+        - up to 75% off
+        - steady state or predictable usage
+        - commit to ec2 over a 1 or 3 year term
+        - can resell unused reserved instances
+        - **best long term**
+
+      4. Dedicated
+        - dedicated server
+        - can be on-demand or reserved or spot
+        - **most expensive**
+      
+
+    
+    - Another way to save but can be used for more than just ec2 is **AWS Savings Plan**
+
+
   #### EC2 Instance Families
     - General Purpose
       - A1, T2, T3, T3A, T4G, M4, M5, M5a, M5n, M6zn, M6g, M6i, Mac
@@ -734,5 +776,376 @@ image:
     2. Ip addresses
     3. Lambda function
     4. Application load balancer
-    
+  
 
+### AWS Free tier
+  - includes offers that expire 12 months after sign-up or some that never expire
+  
+  #### 12 months after sign up include 
+    - ec2 750 hours
+      - linux 
+      t2 micro
+
+    - s3 5Gb
+
+    - rds 
+      - 750 hours
+      - 20gb db storage
+      - 20gb backup storage
+    
+    - cloudfront
+      - 50gb data transfer out
+
+  #### Always available free tier
+    - DynamoDb
+      - 200 million requests per month
+      - 25gb indexed data storage
+      - 2.5 million read request
+    
+    - Glacier
+      - Retrieve up to l0 gb of you glacier storage per month
+    
+    - lambda
+      - 1 million requests per month
+      - up to 3.2 million seconds of compute time per month
+  
+
+
+### Pricing
+
+  - There are three fundamental costs with aws **compute, storage, outbound data transfer**
+  - There are no costs for inbound data transfer
+  - There are also no costs for data transfer between other aws services from within the same region
+  - Paid by the hour or the second
+  - Price reflected in terms of GB
+
+  - Pay as you go (PAYG Model)
+    - no up-front payment and non long-term commitment
+  
+  #### Reserved instances (RI)
+    - designed for applications that have **steady state**, predictable usage or require reserved capacity
+    - **1 or 3 year contracts**
+    - they do **NOT** renew automatically
+
+    - RI marketplace
+      - can be sold after they have been active for at least 30 days and once aws has received the upfront payment (if applicable)
+
+    - Regional RI vs Zonal RI
+      - ![regional vs zonal ri diagram](/2023-07-22-aws-cloud-practicioner/regional-zonal-ri-diagram.png)
+
+    - formula
+      - **Term * Class offering * RI Attriutes * Payment options**
+      - the longer the term the greater the savings
+
+    - Classes
+      - ![RI diagram](/2023-07-22-aws-cloud-practicioner/ri-diagram.png)
+      
+      - standard
+        - up to 75% off
+
+      - Convertible
+        - up to 54% off
+
+
+    - RI Attributes
+      1. instance types
+        - ex. t2 micro
+      2. region
+        - ex. Us-East-1
+      3. tenancy
+        - ex. single-tenant
+      4. platform
+        - linux, windows
+
+    - payment options
+      - All upfront
+      - Partial upfron
+      - no upfront
+    
+    - Limits
+      - Per month
+        - 20 regional ri per region
+        - 20 zonal ri per az
+
+### Savings Plans
+  - similiar discounts as reserved instances but **simplifies the purchasing process**
+  - 1 or 3 year contracts
+  - all upfront, partial upfront, no upfront
+
+  - 3 types of savings plans
+    
+    1. Compute savings plans
+      - up to **66%**
+    
+    2. EC2 instance savings plans
+      - up to **72%**
+    
+    3. sagemaker savings plans
+      - up to **64%**
+
+### Security
+
+  #### Zero trust model
+    - "trust no one, veryify everything."
+    - Network centric (Old-way)
+      - traditional firewalls, vpns since few employees or workstations outside of the office
+    - Identity centric (New-way)
+      - bring your own device
+        - remote workstations much more common
+  
+  #### Principle of Least Privilege (PoLP)
+    - providing a user the least amount of permissions to perform an operation or action
+    - JEA (Just enough access)
+    - JIT (Just in time)
+  
+
+
+### Security Services
+  - AWS GuardDuty
+    - Detects suspicious or malicious activity based on cloudtrail and other logs
+
+  - Amazon Detective
+    - Used to analyze, investigate security issues (can ingest from GuardDuty)
+  
+
+### IAM Identity and Access Management (IAM)  
+
+  - How do configure permissions
+    - IAM Policies
+      - ![]()
+      - Json document which grants permissions for a specific identity or roles to access services
+
+    - IAM Permission
+      - the api actions that can or cannot be performed
+  
+  - Identities
+    - IAM Users
+    - IAM Groups
+    - IAM Roles
+
+### Application Integration
+  - app integration is the process of letting two independent apps to communicate and work with each other
+  
+  - workloads encourage systems and services to be **loosely coupled** 
+
+  - common design patterns
+    - queing
+    - streaming
+    - pub/sub
+    - api gateway
+    - state machine
+    - event bus
+  
+  - What is a messaging system?
+    - asynchronous communication from sender and receiver (producer and consumer)
+
+  - what is a Qeueing system?
+    - messaging system that generally delete messages once they are consumed. 
+    - simple communication. **NOT real time**
+    - Have to **pull**, not reactive
+    - **AWS SQS**
+
+  - What is Streaming?
+    - Multiple consumers can **react** to events (messages)
+    - Events live in the stream for long periods of time, so complex operations can be applied
+    - **Real time**
+    - **AWS Kinesis**
+  
+  - What is pub/sub
+    - Publish-suscribe pattern
+    - commonly implemented in **messaging systems**
+    - publishers do not send their messages directly to receivers, instead they send it to to a **messaging bus**
+    - **AWS SNS**
+
+  
+  - What is a state machine?
+    - A state machine is an abstract model which decides how one state moves to another based on a series of conditions. 
+    - Like a flow chart
+    - **aws step functions**
+      - coordinate multilple aws serivce into a serverless workflow
+  
+  - What is an Event bus?
+    - an event bus receives events from a source and routes events to a target based on rules
+    - **AWS Event Bridge**
+      - serverless event bus service that is used for application integration by streaming real-time data
+      - previously known as **Amazon Cloudwatch**
+
+
+
+### AWS API Gateway
+- ![api gateway](/2023-07-22-aws-cloud-practicioner/api-gateway.png)
+  - What is an API gateway
+    - program that sits between a single entry-point and multiple backends
+    - allows for **throttling, logging, routing logic or formatting of the request and response**
+
+  - a solution for creating secure apis in your cloud environment at any scale
+
+### Simple Notification Service (SNS)
+  - pub-sub messaging system
+  - sends notifications in many formats (email, http, sms, etc..)
+  - push messages which are sent to subscribers
+
+### Simple Queue Service (SQS)
+  - queing messaging service
+  - sends events to messaging queue
+  - Other apps pull from the queue for messages
+  - commonly used for background jobs
+
+### Step Functions
+  - **state machine service**
+
+### EventBridge (Cloudwatch)
+  - **serverless event bus**
+  - makes it easy to connect apps together from your own app
+
+### Kinesis
+  - **real-time streaming**
+  - producers send data to the stream, multiple consumers consume within the stream
+
+### Amazon MQ
+  - **Managed message broker service**
+  - uses **Apache ActiveMQ**
+
+### Managed Kafka Service (MSK)
+  - fully managed **Apache Kafka service**
+  - platform for building real-time streaming data pipelines
+
+### App Sync
+  - Fully managed **GraphQL Service**
+
+### Kubernetes
+  - **container orchestration system**
+  - **pods** - a group of one or more containers with **shared storage, network resources and other shared settings**
+  - **tens to hundreds** of services that they need to manage
+
+### Podman
+  - container engine that is OCI compliant
+  - replacement for docker, because docker introduced the paid model
+  - daemonless
+  - allows you to create pods
+
+
+### AWS Config
+  - **Compliance-as-code framework**
+  - allows us to manage change in your aws account
+  - Per region basis
+  - Cac (Compliance as code)
+
+### AWS Quick Starts
+  - **prebuilt templates** to help deploy a wide range of stacks
+
+### Tags
+  - key/value pair assigned to aws resources
+
+### Resource Groups
+  - **collection of resources that share one or more tags**
+
+### Serverless Services
+  - What is serverless?
+    - underlying servers, infrastructure and os is taken care of by the CSP.
+    - Generally Highly available, scalable and cost-efective by default
+    - **pay-for-value**
+    - you don't pay for idle servers
+    - scale-to-zero
+      - resources cost you nothing if not in use
+  
+  - Dynamodb
+  - S3
+  - ECS Fargate
+  - lambda
+  - step functions
+  - auora serverless
+  - much more...
+
+### AWS cloudtrail
+  - logging by default and will collect logs for the last 90 days
+  - if you need more than 90 days create a **trail**
+  - trails output to **s3**
+  - if you need to see a gui output to **Amazon Athena**
+
+
+### Machine learning and AI services
+  - AWS Sagemaker
+    - fully managed **build, trail, and deploy ML models** at scale
+
+  - Amazon CodeGuru
+    - ML **code analysis**
+  
+  - Amazon Lex
+    - **conversation interface service**
+
+  - Amazon Personalize
+    - **real-time recommendations**
+  
+  - Amazon Polly
+    - **text to speech**
+  
+  - Amazon Rekognition
+    - **image and video recognition service**
+  
+  - Amazokn Transcribe
+    - **speech-to-text service**
+  
+  -  Amazon Textract
+    - **OCR (extract text from scanned documents) service**
+  
+  - Amazon Translate
+    - **Neural ML translation service**
+    
+  - Amazon Comprehend
+    - **Natural language Process (NLP) service**
+
+  - Amazon Forecast
+    - **time-series forecasting service**
+
+  - AWS Deep learning AMI's
+    - **pre-installed with popular deep learning frameworks
+
+  - AWS Deep Learning Containers
+    - **Docker images with pre-installed popular deep learning frameworks and interfaces**
+
+  - AWS DeepComposer
+    - **ML enabled musical keyboard**
+
+  - AWS DeepLens
+    - **video camera that uses deep-learning**
+
+  - AWS DeepRacer
+    - **toy race car**
+      - autonomous driving 
+    
+  - Amazon Elastic inference
+    - **lost cost gpu powered to ec2 instancces to reduce cost of running deep learning by 75%**
+  
+  - Amazon Faud Detector
+    - **fully managed fraud detection a service**
+  
+  - Amazon Kendra
+    - **Enterprise ML search engine service**
+  
+
+### Aws Cloud Adoption Framework CAF
+  - whitepaper to help you plan your migration from on-premise to aws
+  - 6 key areas
+    1. Business perspective
+    2. People perspective
+    3. Governance perspective
+    4. Platform perspective
+    5. Security perspective
+    6. Operations perspective
+
+
+### AWS Support plans
+ - ![support plans](/2023-07-22-aws-cloud-practicioner/aws-support-plans.png)
+
+### AWS Service Health Dashboard
+  - shows the general status of aws services
+
+### AWS Personal Health Dashboard
+  - provides **alerts and guidance**
+  - shows events to help manage active events
+
+### AWS Abuse
+  - **AWS Trust & Safety**
+  - team that specifically deals with abuses occuring on the aws platform
+    - spam, port scanning, ddos
