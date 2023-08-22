@@ -9,6 +9,9 @@ image:
   path: /2023-07-22-aws-cloud-practicioner/profile.jpg
 ---
 
+## Link to certification!!!!
+- [Certificate](https://www.credly.com/badges/70b777ce-3bd5-42a3-94e4-379d01667958)
+
 # AWS Notes
 
 ### Cheat Sheet resources
