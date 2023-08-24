@@ -103,20 +103,27 @@ image:
 ---
 
 - Only applicable to MCU's based on **ARM Cortex (M3, M4, M7)** or higher processors
+
 - Works over **SWO pin (Serial Wire Output)** of SWD interface
   - ![swo logic](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/swo_logic.png){: height="100"}
     - The processor communicates on the *swo pin* to send data to the *debug circuit* on the board
+
 - If we zoom into the processor we can see that it uses **ITM (Instrumentation Trace Macrocell Unit)**
   - ![itm logic](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/itm_image.png){: height="100"}
   - The ITM is a debugging feature that allows real-time instrumentation and tracing of the program execution. It provides a dedicated communication channel between the microcontroller and a debugger, typically through the SWO (Serial Wire Output) pin.
   - ITM can allow for the following types of traces to be monitored
     - ![trace types](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/trace_data.png){: height="100"}
+
 - **SWD (Serial Wire Debug)**
   - 2 wire protocol for accessing the arm debug interface
     - 1st wire
-      - **SWDIO** : a bidirectional data line
+      - **SWDIO (Serial Wire Debug Input/Output)** : a bidirectional data line
+      -  is one of the two pins used in the SWD protocol. It serves as a bidirectional communication line for transmitting debug and programming data between the debugger and the target device. 
+
     - 2nd wire
-      - **SWCLK** : a clock driven by the host
+      - **SWCLK (Serial Wire Clock signal)** : a clock driven by the host
+      - The SWCLK signal is used to synchronize the data transfer between the debugger and the target during debugging and programming operations.
+
   - It is part of the ARM Debug Interface Specification V5
   - Using SWD interface allows you to
     - program MCU internal flash
@@ -125,7 +132,16 @@ image:
   - An alternative to JTAG
   - You can use the serial wire viewer for your printf statements and debugging
 
- 
+- ![ITM unit zoomed in](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/itm_unit.png){: height="100"}
+  - Writing the printf function will be pushed onto the fifo queue and written by onto the swo pin
+
   
 
 
+
+<!------------------------------------------------------->
+<!------------ HARDWARE USED FOR THE COURSE ------------->
+<!------------------------------------------------------->
+<br><br><br>
+### REFERENCES
+---

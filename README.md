@@ -44,6 +44,10 @@ This work is published under [MIT][mit] License.
 [CD]: https://en.wikipedia.org/wiki/Continuous_deployment
 [mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
 
+<!-- install rbenv -->
+Install rbenv and ruby-build through git, NOT apt-get
+  - https://stackoverflow.com/questions/37720892/you-dont-have-write-permissions-for-the-var-lib-gems-2-3-0-directory
+
 <!-- MY NOTES -->
 Run the localhost serve
   bundle exec jekyll serve
