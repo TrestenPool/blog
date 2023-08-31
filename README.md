@@ -53,7 +53,7 @@ Run the localhost serve
   bundle exec jekyll serve
 
 Create a post
-  bundle exec jekyll compose "Resume and Interview Tips" --collection "posts"
+  bundle exec jekyll compose "Java Programming Masterclass Udemy" --collection "posts"
 
 Create a draft
   bundle exec jekyll compose "My new draft" --collection "drafts"
