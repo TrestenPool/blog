@@ -36,12 +36,22 @@ image:
       - [Accesing characters in strings](#accesing-characters-in-strings)
       - [Getting the lenght of a string](#getting-the-lenght-of-a-string)
       - [String Formatting](#string-formatting)
-      - [StringBuilder](#stringbuilder)
-    - [Getting input](#getting-input)
-  - [Access Modifers](#access-modifers)
+      - [Joining](#joining)
+  - [Hash codes](#hash-codes)
+  - [this() super() constructor methods](#this-super-constructor-methods)
+    - [this() super() example](#this-super-example)
+  - [POJO'S](#pojos)
+    - [Record Data type](#record-data-type)
+    - [Protected](#protected)
+    - [Public](#public)
   - [Intellij Shortcuts / Live templates](#intellij-shortcuts--live-templates)
   - [Methods](#methods)
     - [Default Parameters](#default-parameters)
+    - [Method Overriding \& Method Overloading](#method-overriding--method-overloading)
+      - [Method Overriding](#method-overriding)
+        - [Rules](#rules)
+      - [Method Overloading](#method-overloading)
+    - [Covariant return types](#covariant-return-types)
   - [Exceptions](#exceptions)
     - [Try, Catch](#try-catch)
     - [Checked vs Un-Checked](#checked-vs-un-checked)
@@ -49,6 +59,7 @@ image:
     - [Compile time](#compile-time)
     - [Run time](#run-time)
     - [Java Path](#java-path)
+    - [Objects vs References vs Instance vs Class](#objects-vs-references-vs-instance-vs-class)
   - [Serialization](#serialization)
     - [What is Serialization](#what-is-serialization)
     - [How it is implementated](#how-it-is-implementated)
@@ -182,17 +193,165 @@ image:
   - `System.out.println("Hello " + namevariable + ", it is nice to meet you")`;
     - formatting a string to print
 
+  - `System.out.printf("Your age is %d", age);`
+
+  - ```java
+    for(int i = 10; i < 10_000_000; i*=10){
+        System.out.printf("i = %7d\n", i);
+    }
+  ```
+  - outuput
+    - ```text
+      i =      10
+      i =     100
+      i =    1000
+      i =   10000
+      i =  100000
+      i = 1000000
+    ```
+
   - `String greeting = String.format("Hello %s, it is a pleasure to meet you", name);`
     - formatting a new string with other string variables
     - List of format specifiers
     - ![](/2023-08-27-java-programming-masterclass-udemy/string-formatting-table.png)
+
+#### Substrings
+  - ```java
+    String birthdate = "01/29/1999";
+    System.out.println(birthdate.substring(0, 2) + " ==> " + birthdate.substring(3, 5) + " ==> " + birthdate.substring(6));
+  ```
+
+#### Joining
+  - ```java
+    String newDate = String.join("/", "12", "12", "51", "1999");
+  ```
+
     
 #### StringBuilder
   - Stringbuilder is a muttable string class
   - StringBuilder does NOT share the String's special features such as being able to assign a literal value or use the + operator on it
 
+#### Text Block
+  - a special format for **multi-line String literals**
+  - simply a String, with a new representation in the source code
+  - It became official **JDK 15**
+  - ```java
+      // old way
+      String bulletIt = "Print a bulleted list: \n" +
+              "\t\u2022 First Point" + "\n" +
+              "\t\u2022 Second Point" + "\n";
+      System.out.println(bulletIt);
 
-### Getting input 
+
+      // new way with textblock """ text goes here """
+      String textblock = """
+              Print a Bulleted List:
+                  \u2022 First Point
+                  \u2022 Second Point""";
+      System.out.println(textblock);
+  ```
+
+<!--------------------------------------------------------------------------->
+<!------------------------------- HASH CODES ------------------------------>
+<!------------------------------------------------------------------------->
+## Hash codes
+  - hash codes are integers that are unique to an instance in the currently executing code
+  - can be used if we have multiple references and see if the are pointing to the same object stored in the heap
+  - mechanism for comparisons
+  - think of it like the address in memory like in c
+
+<!------------------------------------------------------------------------->
+<!------------------------------- Java OOP -------------------------------->
+<!------------------------------------------------------------------------->
+## this() super() constructor methods
+
+### this() super() example
+  - keywords **extends** is used to extend from a base class
+  - a child class can only extend from 1 parent class
+  - In the constructor of the child class, the super() method is used to instantiate the superclass
+  - **super() has to be the first line in the constructor of the child class**
+  - **this() has to be the first line in the constructor it is calling from**
+
+  - ```java
+    public class Animal {
+      private String type;
+      private String size;
+      private double weight;
+
+      public Animal(String size, double weight){
+        this.size = size;
+        this.weight = weight;
+        System.out.println("Animal 2 argument constructor finished");
+      }
+
+      public Animal(String type, String size, double weight) {
+        this(size, weight);
+        this.type = type;
+        System.out.println("Animal 3 argument constructor finished");
+      }
+    }
+  ```
+  - ```java
+    public class Dog extends Animal{
+        public Dog(String size, double weight) {
+            super("Dog", size, weight);
+            System.out.println("Dog constructor finished");
+        }
+
+    }
+  ```
+    - If you were to execute the following code in Main `Dog myDog = new Dog("Medium", 32.0);`, you would get the output below
+      - ```
+        Animal 2 argument constructor finished
+        Animal 3 argument constructor finished
+        Dog constructor finished
+      ```
+
+
+<!------------------------------------------------------------------------->
+<!------------------------------- POJOS ----------------------------------->
+<!------------------------------------------------------------------------->
+## POJO'S
+  - Plain old java object
+  - might also be referred to as a bean or javabean
+  - A javabean is just a pojo with some extra rules applied to it
+  - A Pojo is sometimes called a **Entity**, because it mirrors database entities
+  - Another acronym is DTO, for Data transfer object
+
+### Record Data type
+  - records was introduced in **JDK 14**
+  - called **"Plain Data Carriers"**
+  - became officially part of Java in JDK 16
+  - It's purpose is to replace the boilerplat code for the POJO, but more restrictive
+  - special class that contains data, that's not meant to be altered
+  - it seeks **immutability**
+  - contains only constructor and accessors
+  - best of all developers don't need to write the boilerplate code anymore
+  - ```java
+    public record LPAStudent(String id, String name, String dateOfBirth, String classList) {
+    }
+  ```
+    - The line above is called the **Record Header**
+    - the record header contains the **record components**
+    - All of the record components are declared as **private and final**
+    - Getters are just the name of the record component themselves
+      - ex. to access id you would use student.id();
+
+
+<!------------------------------------------------------------------------->
+<!------------------------------- ANNOTATIONS ----------------------------->
+<!------------------------------------------------------------------------->
+## Annotations
+  - Annotations are a type of metadata
+  - a way of formally describing additional information about our code
+  - Annotations are more structured, and have more meaning that comments
+  - used by the compiler, or other pre-processing functions to get more information about the code
+
+
+<!------------------------------------------------------------------------->
+<!------------------------------- GETTING INPUT  -------------------------->
+<!------------------------------------------------------------------------->
+## Getting input 
   - 4 options
   - 1: System.in
     - ```java
@@ -272,9 +431,99 @@ image:
 <!------------------------------------------------------------------------->
 ## Access Modifers
   - Here are the 4 types of access modifers
+    1. Default
+    2. Private
+    3. Protected
+    4. Public
     - ![](/2023-08-27-java-programming-masterclass-udemy/access-modifers.png)
-  
+  - in Java, Access modifiers help to restrict the scope of a class, constructor, variable, method, or data member
 
+### Default
+  - When no access modifier is specified for a class, method, or data member – It is said to be having the default access modifier by default. 
+  - having default access modifiers are accessible only within the same package
+
+  - ```java
+    // Java program to illustrate default modifier
+    package p1;
+
+    // Class Geek is having Default access modifier
+    class Geek
+    {
+      void display()
+      {
+        System.out.println("Hello World!");
+      }
+    }
+    ```
+
+### Private
+  - The methods or data members declared as private are accessible only within the class in which they are declared.
+  - Top-level classes or interfaces can not be declared as private because
+    - private means “only visible within the enclosing class”.
+  - The following line of code will produce an error because display() method inside class A is private 
+
+  - ```java
+    // Java program to illustrate error while
+    // using class from different package with
+    // private modifier
+    package p1;
+
+    class A
+    {
+    private void display()
+      {
+        System.out.println("GeeksforGeeks");
+      }
+    }
+
+    class B
+    {
+    public static void main(String args[])
+      {
+        A obj = new A();
+        // Trying to access private method
+        // of another class
+        obj.display();
+      }
+    }
+  ```
+
+### Protected
+  - The methods or data members declared as protected are accessible within the same package or subclasses in different packages.
+
+  - ```java
+    // Java program to illustrate
+    // protected modifier
+    package p1;
+
+    // Class A
+    public class A {
+      protected void display() {
+        System.out.println("GeeksforGeeks");
+      }
+    }
+  ```
+
+  - ```java
+    // Java program to illustrate
+    // protected modifier
+    package p2;
+    import p1.*; // importing all classes in package p1
+
+    // Class B is subclass of A
+    class B extends A {
+      public static void main(String args[]) {
+        B obj = new B();
+        obj.display();
+      }
+    }
+  ```
+
+### Public
+  - The public access modifier has the widest scope among all other access modifiers.
+  - Classes, methods, or data members that are declared as public are accessible from everywhere in the program. There is no restriction on the scope of public data members.
+
+  
 
 
 <!------------------------------------------------------------------------->
@@ -299,6 +548,55 @@ image:
     - `Dog myPetDog = new Dog().setName("Clifford").setColor("Red").setAge(12);`
     - Note: this will not work if you have required fields that require arguments to be passed through, that is when you would use the **Builder pattern**
 
+### Method Overriding & Method Overloading
+  - ![](/2023-08-27-java-programming-masterclass-udemy/method-overloading-overriding.png)
+
+#### Method Overriding
+  - Override methods super class methods in the subclasses
+  - Defining a method in a child class that already exists in the parent class with the same name, same arguments
+  - Often referred to as **Runtime Polymorphism** or **Dynamic Method Dispatch**
+    - because the method that is going to be called is decided at runtime
+  - ex. overriding toString()
+
+##### Rules
+  - You can't override static methods, only instance methods
+  - method overriding cannot have Lower access modifer
+    - ex cannot use protected if the parent method is using public
+    - It's a fundamental principle in OOP: the child class is a fully-fledged instance of the parent class, and must therefore present at least the same interface as the parent class. Making protected/public things less visible would violate this idea; you could make child classes unusable as instances of the parent class.
+  - Only inherited methods can be overriden
+
+#### Method Overloading
+  - Having multiple methods with different method signatures
+  - Often referred to as **compile-time polymorphism**
+    - this means the compiler is determining the right method  to call, based on the method name and argument list
+  - ex. having multiple constructors where 1 has 0 parameters and others have multiple parameters
+
+### Covariant return types
+  - When you return a more specified return type in an overriden method, example below
+    - ```java
+      // Classes used as return types:
+      class A {
+      }
+
+      class B extends A {
+      }
+
+      // "Class B is narrower than class A"
+      // Classes demonstrating method overriding:
+
+      class C {
+          A getFoo() {
+              return new A();
+          }
+      }
+
+      class D extends C {
+          // Overriding getFoo() in parent class C
+          B getFoo() {
+              return new B();
+          }
+      }
+    ```
 
 <!------------------------------------------------------------------------->
 <!------------------------------- EXCEPTIONS ------------------------------>
@@ -340,6 +638,14 @@ image:
 
 ### Java Path
   - what is the java path
+
+### Objects vs References vs Instance vs Class
+  - Classes are just the blueprints for objects
+  - Objects are the memory structures stored on the heap
+  - Objects are an instance of a Class
+  - References are the variables stored on the stack that point to the object location on the heap
+  - Instances are objects that are created from instanciating a class
+
 
 <!------------------------------------------------------------------------->
 <!---------------------------- SERIALIZATION ------------------------------>
