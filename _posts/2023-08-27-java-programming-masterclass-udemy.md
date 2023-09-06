@@ -6,7 +6,7 @@ author: Tresten Pool
 categories: [Udemy, Java]
 tags: [Java, Programming, Udemy] 
 image: 
-  path: /2023-08-27-java-programming-masterclass-udemy
+  path: /2023-08-27-java-programming-masterclass-udemy/profile.png
 ---
 
 <!-- no toc -->
@@ -374,7 +374,7 @@ image:
 
 ### Iterator Position
   - The iterator position never at an index but between the indexes
-  - ![](assets/2023-08-27-java-programming-masterclass-udemy/iterator.png)
+  - ![](/2023-08-27-java-programming-masterclass-udemy/iterator.png)
 
 ### ListIterator
   - Notes
