@@ -20,6 +20,7 @@ image:
     - [Primitive Data types vs Wrapper Classes](#primitive-data-types-vs-wrapper-classes)
     - [Converting string value to the different primitive data types with **Parse**](#converting-string-value-to-the-different-primitive-data-types-with-parse)
     - [Casting](#casting)
+    - [Var](#var)
     - [Max and min value of any datatype](#max-and-min-value-of-any-datatype)
     - [Unicode](#unicode)
     - [Doubles and floats](#doubles-and-floats)
@@ -37,6 +38,25 @@ image:
       - [Getting the lenght of a string](#getting-the-lenght-of-a-string)
       - [String Formatting](#string-formatting)
       - [Joining](#joining)
+  - [Arrays](#arrays)
+    - [Notes](#notes)
+    - [Declaration](#declaration)
+    - [Instanciating](#instanciating)
+    - [Sorting](#sorting)
+    - [Searching](#searching)
+    - [Equality](#equality)
+    - [Fill](#fill)
+    - [CopyOf](#copyof)
+    - [Multi-Dimensional arrays](#multi-dimensional-arrays)
+      - [Declaration](#declaration-1)
+      - [Printing](#printing)
+  - [Iterator](#iterator)
+    - [Iterator Position](#iterator-position)
+    - [ListIterator](#listiterator)
+  - [List, ArrayList, LinkedLists, Iterator, Autoboxing](#list-arraylist-linkedlists-iterator-autoboxing)
+    - [ArrayList](#arraylist)
+    - [LinkedList](#linkedlist)
+  - [Collections](#collections)
   - [Hash codes](#hash-codes)
   - [this() super() constructor methods](#this-super-constructor-methods)
     - [this() super() example](#this-super-example)
@@ -52,8 +72,7 @@ image:
         - [Rules](#rules)
       - [Method Overloading](#method-overloading)
     - [Covariant return types](#covariant-return-types)
-  - [Exceptions](#exceptions)
-    - [Try, Catch](#try-catch)
+    - [Variable Arguments](#variable-arguments)
     - [Checked vs Un-Checked](#checked-vs-un-checked)
   - [How a java program is ran](#how-a-java-program-is-ran)
     - [Compile time](#compile-time)
@@ -107,6 +126,14 @@ image:
 
 ### Casting
   - `int x = (int) ( 10.5 / 2)`
+
+### Var
+  - **(LVTI)** Local variable type inference was introduced in Java 10
+  - Lets you assign a variable where the type is decided at runtime
+  - `var mymovie =  new Horror("Alien vs Predator");`
+    - constraint
+      - can't be used in field declarations
+      - can't be used in method signatures, either as parameter or as return type
 
 ### Max and min value of any datatype
   - Getting the max
@@ -250,6 +277,163 @@ image:
                   \u2022 Second Point""";
       System.out.println(textblock);
   ```
+
+<!--------------------------------------------------------------------------->
+<!------------------------------- ARRAYS ------------------------------------>
+<!--------------------------------------------------------------------------->
+## Arrays
+
+### Notes
+  - Arrays are not resizable
+  - You can't add or delete elements
+  - You can only modify values 
+
+### Declaration
+    - ```java
+      int[] integerArray;
+      String[] nameList;
+      
+      // not as common to have the square brackets after the array variable name
+      String courseList[];
+    ```
+
+### Instanciating
+  - ```java
+    int[] integerArray = new int[10];
+  ```
+
+### Print 
+  - Easy way to print out all elements out instead of using a for or for each loop is to use the static method in Arrays
+  - ```java
+    int[] integerarray = {1,2,3,4,5,6,6};
+
+    // this will print out all of the elements in the array in square brackets comma delimited
+    System.out.println(Arrays.toString(integerarray));
+  ```
+
+### Sorting
+  - `Arrays.sort(myintarray);`
+  - You have to use the static method **sort** in Arrays class
+
+### Searching
+  - Best way to search through a sorted array is using `Arrays.binarySearch(arr, "key");`
+    - returns the index of where it found the element, -1 if not found
+    - has to be sorted before using
+
+### Equality
+  - you can check if two arrays have the same elements with `Arrays.equals(arr1, arr2);`
+
+### Fill
+  - `Arrays.fill(myintarray, 0);`
+  - This will fill all of the elements in the array with 0
+
+### CopyOf
+  - `int[] secondarr = Arrays.copyOf(myintarray, myintarray.length);`
+
+### Multi-Dimensional arrays
+
+#### Declaration
+  - standard matrix declaration
+  - ```java
+    // declare 3x3 matrix, defaults to 0's
+    int[][] array = new int[3][3];
+  ```
+  - Multi-dimensional array with varrying lengths
+  - ```java
+    // 3 row matrix varrying lengths of rows
+    int[][] matrix = new int[3][];
+
+    matrix[0] = new int[5];
+    matrix[1] = new int[2];
+    matrix[2] = new int[3];
+  ```
+
+#### Printing
+  - easiest way to print out multi dimensional array with **Arrays.deepToString()**
+  - ```java
+    System.out.println(Arrays.deepToString(matrix));
+ 
+<!--------------------------------------------------------------------------->
+<!------------------------------- ITERATORS --------------------------------->
+<!--------------------------------------------------------------------------->
+## Iterator
+  - Notes
+    - Iterator starts off before the first element, meaning it is not pointing to anything when you first get the iterator
+    - Only goes forward
+    - Cannot get the current element it is currently pointed to, it can only go to the next object and return you that object
+    - You can't reset an interator, once it finishes its traversal it is done, if you wanted to reset it you would have to request a new iterator
+  
+  - methods
+    - **Collection.iterator()** - get the iterator
+      - `Iterator iterator = Collection.iterator()`
+    - **Iterator.hasNext()** - Checks to see if there is another element to go to next
+      - `while(iterator.hasNext())`
+    - **Iterator.next()** - goes to the next element
+      - `iterator.next()`
+    - **Iterator.remove()** - removes the element that is currently at the cursor of the iterator
+
+### Iterator Position
+  - The iterator position never at an index but between the indexes
+  - ![](assets/2023-08-27-java-programming-masterclass-udemy/iterator.png)
+
+### ListIterator
+  - Notes
+    - there is a list iterator
+    - Adds a couple more methods
+      - **ListIterator.previous** - Goes to the prevoius object 
+    - Adds an object at the current cursor
+      - **ListIterator.add()** - Adds an object at the current position in the list
+    - Removes an object in the current cursor
+
+
+<!--------------------------------------------------------------------------->
+<!--------- Lists, Arraylist, LinkedList, Iterator, Autoboxing ------------->
+<!--------------------------------------------------------------------------->
+## List, ArrayList, LinkedLists, Iterator, Autoboxing
+  - They are **java containers**
+  - Why do we have these in the first place when we have arrays
+    - Arrays are mutable but **do not** **allow for resizing**
+  - List is the interface that classes like the ArrayList implement to achieve consistency
+  - Make sure to specify a type in the diamond brackets because otherwise it will default to the **raw parameterized type**
+    - `ArrayList mylist = new ArrayList(); // raw type`
+    - `ArrayList<Integer> mylist = new ArrayList<>() //  specifying type;`
+      - Make sure to include the <> on the right side of the assignment otherwise it will default to raw type
+
+### ArrayList
+  - Differences between arrays and arraylists
+    - ![](/2023-08-27-java-programming-masterclass-udemy/array_arraylist.png)
+    - ![](/2023-08-27-java-programming-masterclass-udemy/array_arraylist_search.png)
+    - ![](/2023-08-27-java-programming-masterclass-udemy/array_arraylist_sort.png)
+  - implments List
+  - Does not implement Synchronizable therefore is **not thread-safe**
+  - Maintains an array in memory that is actually bigger than what we need in most cases
+  - Keeps track of the capacity and the size of the array and resizes if needed behind the scenes
+  - ```java
+    ArrayList<GroceryItem> grocerList = new ArrayList<>();
+    grocerList.add(new GroceryItem("milk"));
+    grocerList.add(new GroceryItem("yogurt"));
+    grocerList.add(new GroceryItem("apples", "Produce", 6));
+
+    System.out.println(grocerList);
+  ```
+  - instanciating an array with **Arrays.asList()**
+  - ```java
+    ArrayList<String> arrayList = new ArrayList<>(Arrays.asList("Hello", "World"));
+  ```
+
+### LinkedList
+  - Can be more performance efficient if you are performing a majority of operations at the head or end of the list
+
+
+
+
+<!--------------------------------------------------------------------------->
+<!------------------------------- COLLECTIONS ------------------------------->
+<!--------------------------------------------------------------------------->
+## Collections
+  - explain
+
+
 
 <!--------------------------------------------------------------------------->
 <!------------------------------- HASH CODES ------------------------------>
@@ -597,6 +781,19 @@ image:
           }
       }
     ```
+
+### Variable Arguments
+  - **Vargs**
+  - More flexible than just taking in a single String array
+  - Takes 0, 1 or many arguments
+  - `String... args`
+  - ```java
+    public static void printText(String... args){
+      for(String el: args){
+          System.out.printf("%s ", el);
+      }
+    }
+  ```
 
 <!------------------------------------------------------------------------->
 <!------------------------------- EXCEPTIONS ------------------------------>
