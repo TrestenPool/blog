@@ -7,3 +7,4 @@ categories: [Java, OOP]
 image: 
   path: /2023-09-11-s-o-l-i-d-principles-java/profile.png
 ---
+
