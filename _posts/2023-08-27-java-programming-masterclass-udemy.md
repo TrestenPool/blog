@@ -50,29 +50,25 @@ image:
     - [Multi-Dimensional arrays](#multi-dimensional-arrays)
       - [Declaration](#declaration-1)
       - [Printing](#printing)
-  - [Iterator](#iterator)
-    - [Iterator Position](#iterator-position)
-    - [ListIterator](#listiterator)
-  - [List, ArrayList, LinkedLists, Iterator, Autoboxing](#list-arraylist-linkedlists-iterator-autoboxing)
-    - [ArrayList](#arraylist)
-    - [LinkedList](#linkedlist)
-  - [Collections](#collections)
-  - [Hash codes](#hash-codes)
-  - [this() super() constructor methods](#this-super-constructor-methods)
-    - [this() super() example](#this-super-example)
-  - [POJO'S](#pojos)
-    - [Record Data type](#record-data-type)
-    - [Protected](#protected)
-    - [Public](#public)
-  - [Intellij Shortcuts / Live templates](#intellij-shortcuts--live-templates)
-  - [Methods](#methods)
-    - [Default Parameters](#default-parameters)
-    - [Method Overriding \& Method Overloading](#method-overriding--method-overloading)
-      - [Method Overriding](#method-overriding)
-        - [Rules](#rules)
-      - [Method Overloading](#method-overloading)
-    - [Covariant return types](#covariant-return-types)
-    - [Variable Arguments](#variable-arguments)
+  - [Abstraction](#abstraction)
+    - [Notes](#notes-1)
+    - [Abstract classes](#abstract-classes)
+      - [Example](#example)
+      - [Abstract class extending another Abstract class](#abstract-class-extending-another-abstract-class)
+      - [Why Use Abstract classes](#why-use-abstract-classes)
+  - [Interface](#interface)
+    - [Visibility](#visibility)
+    - [Examples](#examples)
+    - [Unboxing](#unboxing)
+    - [Usage](#usage)
+    - [Switch statement](#switch-statement)
+  - [Annotations](#annotations)
+  - [Getting input](#getting-input)
+  - [Access Modifers](#access-modifers)
+    - [Default](#default)
+    - [Private](#private)
+  - [Exceptions](#exceptions)
+    - [Try, Catch](#try-catch)
     - [Checked vs Un-Checked](#checked-vs-un-checked)
   - [How a java program is ran](#how-a-java-program-is-ran)
     - [Compile time](#compile-time)
@@ -101,8 +97,6 @@ image:
 <!------------------------------------------------------------------------->
 ## Jshell
   - REPL for java terminal
-
-
 
 
 
@@ -354,6 +348,134 @@ image:
     System.out.println(Arrays.deepToString(matrix));
  
 <!--------------------------------------------------------------------------->
+<!------------------------------- ABSTRACTION ------------------------------->
+<!--------------------------------------------------------------------------->
+## Abstraction
+
+### Notes
+  - keeps the user from viewing complex code
+
+  - provides the user with only necessary information
+
+  - If you consider an elephant, dog, lizard, you would probably say they are all animals
+    - An animal is a really **abstract concept**
+    - An animal doesn't really exists except to describe more specific things 
+    - If you can't draw it on a piece of paper it is probably abstract
+
+  - Concrete Method
+    - A method body with at least one statement
+    - Is set to **implement** **an abstract method** if it overrides one
+  
+### Abstract classes
+  - ![](/2023-08-27-java-programming-masterclass-udemy/abstract_table.png)
+  - Can have a mix of abstract and concrete methods
+
+  - `abstract class Animal { `
+    - default visibility is **package** which is something that you cannot specify other than by leaving off any access modifer before declaring the abstract class like this
+    - visiblitiy of package means that only classes in the same package have access to the abstract class
+    - The same goes for the abstract methods, if they are not specified, it will default to **package**
+
+  - `public abstract class Animal {`
+    - if we wanted to give access to this abstract class outside of this package you must specify **public** 
+
+#### Example
+  - ```java
+    public abstract class Animal {
+      // field properties
+      protected String type;
+      protected String size;
+      protected double weight;
+
+      // constructor
+      public Animal(String type, String size, double weight) {
+          this.type = type;
+          this.size = size;
+          this.weight = weight;
+      }
+
+      // methods
+      protected abstract void breathe();
+      protected abstract void move(int speed);
+      protected abstract void breed();
+
+      // final method
+      public final void exists(){
+          System.out.println("Existing out here");
+      }
+    }
+  ```
+
+  - ```java
+    public class Dog extends Animal {
+        public Dog(String type, String size, double weight) {
+            super(type, size, weight);
+        }
+
+        @Override
+        protected void breathe() {
+            System.out.println("panting like a dog");
+        }
+
+        @Override
+        protected void move(int speed) {
+            System.out.println("Moving on all 4's at " + speed + "mph");
+        }
+
+        @Override
+        protected void breed() {
+            System.out.println("Pour hot water on us if we get stuck again");
+        }
+    }
+  ```
+
+#### Abstract class extending another Abstract class
+  - when an abstract class extends another abstract class there are a couple of things to keep in mind
+    - It has the option to implement **any number or none of the abstract methods** it is extending from
+
+#### Why Use Abstract classes
+  - An abstract class in your hierarchy forces the designers of subclasses, to think about , and create unique and targeted implementations, for the abstracted methods
+  
+<!--------------------------------------------------------------------------->
+<!------------------------------- INTERFACE --------------------------------->
+<!--------------------------------------------------------------------------->
+## Interface
+  - A class can implement multiple interfaces but only 1 abstract class
+  - similiar to an abstract class, although it isn't a class at all
+  - by using an interface you must implement all of the abstract methods on the interface
+  - A class that implements an interface does so it can be known by that type
+  - keyword **interface** is used to specify an interface
+  - You don't have to put the keyword **abstract** before every method as it is implicity put there
+
+### Visibility
+  - Visibility of an interface is **package** by default, meaning only classes in the same package have access to it
+  - the abstract methods can only be labeled with the public access modifer
+
+  - **interface members** are implicitly **public**
+
+### Examples
+  - ```java
+    /** interface **/
+    public interface FlightEnabled {
+      abstract void fly();
+      abstract void land();
+    }
+
+    /** implements class **/
+    public class Bird implements FlightEnabled {
+      @Override
+      public void fly() {
+          System.out.println("Flying through the air");
+      }
+
+      @Override
+      public void land() {
+          System.out.println("Getting ready for landing");
+      }
+    }
+  ```
+
+  
+<!--------------------------------------------------------------------------->
 <!------------------------------- ITERATORS --------------------------------->
 <!--------------------------------------------------------------------------->
 ## Iterator
@@ -391,6 +513,7 @@ image:
 <!--------------------------------------------------------------------------->
 ## List, ArrayList, LinkedLists, Iterator, Autoboxing
   - They are **java containers**
+  - **No support** for **primitive** datatypes 
   - Why do we have these in the first place when we have arrays
     - Arrays are mutable but **do not** **allow for resizing**
   - List is the interface that classes like the ArrayList implement to achieve consistency
@@ -425,7 +548,89 @@ image:
   - Can be more performance efficient if you are performing a majority of operations at the head or end of the list
 
 
+<!--------------------------------------------------------------------------->
+<!----------------------- AUTOBOXING, UNBOXING ------------------------------>
+<!--------------------------------------------------------------------------->
+## Autoboxing, Unboxing
+  - Autoboxing
+    - Going from primitive to wrapper class
+  
+  - Unboxing
+    - Going from a wrapper to a primitive
 
+### Autoboxing
+  - **Integer.valueOf()** - Converts int to Integer
+  - ```java
+    // manually doing it ourselves
+    int x = 15;
+    Integer integer = Integer.valueOf(x);
+
+    // Letting java do it for us (PREFERRED)
+    Integer intWrappper = x;
+  ```
+
+### Unboxing
+  - ```java
+    Integer integer = 15;
+
+    // manually unboxing
+    int intval = integer.intValue();
+
+    // letting java do it for us (PREFFERED)
+    int intval = integer;
+  ```
+
+<!--------------------------------------------------------------------------->
+<!------------------------------- ENUMS ------------------------------------->
+<!--------------------------------------------------------------------------->
+## Enums
+  - A special data type that contains predefined constants.
+  - like an array except, its elements are known, not changeable and can be referred to by its constant name instead of index position
+  - ordered in the way you declare the constants
+
+### Declaring
+  - ```java
+    public enum DayofTheWeek{
+      Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+    }
+  ```
+
+### Usage
+  - ```java
+    // Assignment
+    Enum<DayofTheWeek> day = DayofTheWeek.Monday;
+
+    // printing out its name and its index
+    System.out.printf("Value: %s\nIndex: %d", day.name(), day.ordinal());
+  ```
+
+  - methods
+    - enumVariable.name() - name of the enum
+    - enumVariable.ordinal() - index of the enum
+  
+  - Getting all of the enums with **Enum.values()**
+
+  - ```java
+    DayofTheWeek[] days = DayofTheWeek.values();
+    for(DayofTheWeek curr_day: days){
+        System.out.println(curr_day);
+    }
+  ```
+
+### Switch statement 
+  - ```java
+    // Gets all of the enums
+    var daysOfTheWeek = DayofTheWeek.values();
+    var day = daysOfTheWeek[6];
+
+    switch (day){
+        case Monday -> System.out.println("I hate mondays");
+        case Friday -> System.out.println("Woohoo, almost the weekend");
+        case Saturday -> System.out.println("LET's get drunk tonight!!");
+        case Sunday -> System.out.println("ohh, I feel like sh**, I'm resting for work tomorrow");
+        default -> System.out.println("Just another weekday :(");
+    }
+  ```
 
 <!--------------------------------------------------------------------------->
 <!------------------------------- COLLECTIONS ------------------------------->
@@ -707,7 +912,6 @@ image:
   - The public access modifier has the widest scope among all other access modifiers.
   - Classes, methods, or data members that are declared as public are accessible from everywhere in the program. There is no restriction on the scope of public data members.
 
-  
 
 
 <!------------------------------------------------------------------------->
