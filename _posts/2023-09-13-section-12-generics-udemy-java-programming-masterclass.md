@@ -15,6 +15,7 @@ image:
 - [Generic naming convention](#generic-naming-convention)
 - [Raw usage of generic classes](#raw-usage-of-generic-classes)
 - [Converting ArrayList to a List of a specific type](#converting-arraylist-to-a-list-of-a-specific-type)
+- [Comparable explained](#comparable-explained)
 
 
 # Git
@@ -122,4 +123,44 @@ String[] arrayOfData = someData.toArray(new String[0]);
 // or
 String[] arrayOfData = someData.toArray(new String[]{});
 
+```
+
+# Comparable explained
+  - Comparable is an interface
+  - if a class implements comparable it may use the Arrays.sort() to sort the elements in the array
+
+```java
+public interface Comparable<T> {
+  int compareTo(T o);
+}
+```
+  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/compareto.png)
+
+  - If we wanted to have our class be able to use the sort method on an array we would have to implement it
+
+```java
+enum Name{TRESTEN, KLARI, BRIANA}
+
+public class Student implements Comparable<Student> {
+    // field
+    private Name name;
+
+    // constructor
+    public Student(Name name) {
+        this.name = name;
+    }
+
+    @Override
+    public int compareTo(Student otherStudent) {
+        return name.ordinal() - otherStudent.name.ordinal();
+
+        // example if Tresten is comparing against Klari would return -1 which means that Klari > Tresten
+        // example if Tresten is comparing against Briana would return -2 which means that Briana > Tresten
+        // example if Tresten is comparing against Tresten would return 0 which means that Briana == Tresten
+
+        // ordinal() is a method you can call on an enum to return the index in the enum, if we wanted to change the order we would just have to 
+        // ... change the order in the enum
+    }
+
+}
 ```
