@@ -51,19 +51,6 @@ image:
     - [Multi-Dimensional arrays](#multi-dimensional-arrays)
       - [Declaration](#declaration-1)
       - [Printing](#printing)
-  - [Abstraction](#abstraction)
-    - [Notes](#notes-1)
-    - [Abstract classes](#abstract-classes)
-      - [Example](#example)
-      - [Abstract class extending another Abstract class](#abstract-class-extending-another-abstract-class)
-      - [Why Use Abstract classes](#why-use-abstract-classes)
-  - [Interface](#interface)
-    - [Visibility](#visibility)
-    - [Implementing interface](#implementing-interface)
-    - [Examples](#examples)
-    - [Interface post JDK 8 update](#interface-post-jdk-8-update)
-    - [Interface Extension method](#interface-extension-method)
-    - [Private methods](#private-methods)
   - [Iterator](#iterator)
     - [Iterator Position](#iterator-position)
     - [ListIterator](#listiterator)
@@ -304,6 +291,7 @@ image:
 <!------------------------------- ARRAYS ------------------------------------>
 <!--------------------------------------------------------------------------->
 ## Arrays
+  - something
 
 ### Notes
   - Arrays are not resizable
