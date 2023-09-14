@@ -14,11 +14,12 @@ image:
   - [Example](#example)
 - [Generic naming convention](#generic-naming-convention)
 - [Raw usage of generic classes](#raw-usage-of-generic-classes)
+- [Converting ArrayList to a List of a specific type](#converting-arraylist-to-a-list-of-a-specific-type)
 
 
 # Git
   - [Github link to Section 12 example code Sports teams examples](https://github.com/TrestenPool/Java-Programming-MasterClass/tree/main/section12/Generics/src)
-  - [Github link to Section 12 Challenge map ](https://github.com/TrestenPool/Java-Programming-MasterClass/tree/main/section12/Generics/src)
+  - [Github link to Section 12 Challenge map ](https://github.com/TrestenPool/Java-Programming-MasterClass/tree/main/section12/Generics_Challenge/Generics_Challenge/src/tresten)
     - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/challenge_class_diagram.png)
 
 # Overview
@@ -101,3 +102,24 @@ image:
     - A subclass that has extended or implements Player would work just fine
   - this is saying that a type that extends the Player class can be passed as a type to this class during instanciation
   - the example is called an **upper bound**
+
+# Converting ArrayList to a List of a specific type
+  - [stackoverflow](https://stackoverflow.com/questions/36598928/java-generics-in-arraylist-toarray)
+  - ArrayList.toArray() will always return an array of objects if no parameter of the specific type requested is passed to it
+
+```java
+// our String arraylist
+ArrayList<String> someData = new ArrayList<>();
+
+// this works fine
+String someLine = someData.get(0);
+
+// but this will fail, this is because .toArray() will return an array of objects
+String[] arrayOfData = someData.toArray();
+
+// the way to do it is the following
+String[] arrayOfData = someData.toArray(new String[0]);
+// or
+String[] arrayOfData = someData.toArray(new String[]{});
+
+```
