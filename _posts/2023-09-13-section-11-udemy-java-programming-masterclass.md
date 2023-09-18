@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Section 11 Abstraction in Java. Udemy - Java Programming Masterclass
+title: Section 11 (Abstraction) in Java. Udemy - Java Programming Masterclass
 date: 2023-09-13 10:45 -0500
 author: Tresten Pool
 categories: [Udemy, Java]
