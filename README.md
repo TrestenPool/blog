@@ -54,7 +54,7 @@ Run the localhost serve
 
 Create a post
   bundle exec jekyll compose "Udemy Spring boot course: Section 1 QuickStart" --collection "posts"
-  bundle exec jekyll compose "Section 13. (Nested Classes and types) Udemy - Java Programming Masterclass" --collection "posts"
+  bundle exec jekyll compose "Section 14. (Lambda expressions, functional interfaces, method references) Udemy - Java Programming Masterclass" --collection "posts"
 
 Create a draft
   bundle exec jekyll compose "My new draft" --collection "drafts"

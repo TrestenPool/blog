@@ -28,7 +28,7 @@ image:
   - when your classes are tightly coupled, meaning their functionality is interwoven
 
 ## 4 types of Nested classes
-  - ![](/2023-09-18-section-13-nested-classes-and-types-udemy-java-programming-masterclass.md/4_types.png)
+  - ![4 types](/2023-09-18-section-13-nested-classes-and-types-udemy-java-programming-masterclass.md/4_types.png)
 
   1. Static Nested class
   2. Instance or inner class
