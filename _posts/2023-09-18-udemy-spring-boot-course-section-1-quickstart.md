@@ -12,6 +12,8 @@ image:
   - [Github repo](#github-repo)
   - [Spring boot version](#spring-boot-version)
   - [Spring Framework](#spring-framework)
+    - [Overview](#overview-1)
+  - [Springboot Framework](#springboot-framework)
     - [What is it?](#what-is-it)
     - [Spring and Springboot](#spring-and-springboot)
     - [Spring Initializr](#spring-initializr)
@@ -39,7 +41,23 @@ image:
   - Using Spring boot 3
   - requires JDK 17 or higher
 
+
+
 ## Spring Framework
+  - Lightweight dev with **Java POJOs**
+  - **Dependency injection** to promote loose coupling
+
+### Overview
+  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_core_container.png)
+  - the core container is the heart of spring
+    - it manages how beans are created
+    - it has a bean factory for creating beans
+    - SpEL - Spring expression language: language in the config files to refer to other beans
+
+
+
+
+## Springboot Framework
 
 ### What is it?
   - popular framework for building java applications
@@ -50,6 +68,7 @@ image:
   - performs auto-configuration based on props files and JAR classpath
   - provides an embedded HTTP server so you can get started quickly
     - Tomcat, jetty, undertow
+
 
 ### Spring and Springboot
   - Springboot uses spring behind the scenes
