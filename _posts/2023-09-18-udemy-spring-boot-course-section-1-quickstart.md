@@ -11,6 +11,7 @@ image:
 - [Overview](#overview)
   - [Github repo](#github-repo)
   - [Spring boot version](#spring-boot-version)
+  - [Standard Directory Structure](#standard-directory-structure)
   - [Spring Framework](#spring-framework)
     - [Overview](#overview-1)
   - [Springboot Framework](#springboot-framework)
@@ -22,8 +23,13 @@ image:
     - [Deploying Springboot applications](#deploying-springboot-applications)
     - [Does Springboot replace Spring MVC, Spring Core, Spring AOP, Spring REST, Spring....](#does-springboot-replace-spring-mvc-spring-core-spring-aop-spring-rest-spring)
     - [Does Springboot run faster than regular Spring code?](#does-springboot-run-faster-than-regular-spring-code)
+    - [Spring Projects](#spring-projects)
   - [Maven](#maven)
     - [What is Maven](#what-is-maven)
+    - [POM file](#pom-file)
+    - [Project Coordinates](#project-coordinates)
+    - [mvnw](#mvnw)
+    - [Maven Errors](#maven-errors)
   - [Creating a demo springboot application](#creating-a-demo-springboot-application)
     - [Steps](#steps)
       - [Spring initializer](#spring-initializer)
@@ -41,7 +47,12 @@ image:
   - Using Spring boot 3
   - requires JDK 17 or higher
 
-
+## Standard Directory Structure
+  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_directory_structure.png)
+  - if doing a web app place the webapp files in src>main>webapp
+  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/app_properties.png)
+    - By default Spring boot will load properties from: application.properties
+    - things like where the port number can be configured
 
 ## Spring Framework
   - Lightweight dev with **Java POJOs**
@@ -53,8 +64,6 @@ image:
     - it manages how beans are created
     - it has a bean factory for creating beans
     - SpEL - Spring expression language: language in the config files to refer to other beans
-
-
 
 
 ## Springboot Framework
@@ -104,6 +113,11 @@ image:
 ### Does Springboot run faster than regular Spring code?
   - No, it uses the same code of the Spring framework
 
+### Spring Projects
+  - Spring projects are additional Spring modules built-on top of the Spring Framework
+    - Spring Cloud, Spring Data, Spring Batch, Spring Security .. .
+  - [spring projects site](https://spring.io/projects)
+
 ## Maven
 
 ### What is Maven
@@ -115,6 +129,36 @@ image:
   - All you do is have to tell maven what dependencies you will need
     - Maven will go out and download the JAR files for those projects for you
 
+### POM file
+  - **Project Object Model File**
+  - shopping list for maven
+  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/maven_structure.png)
+
+### Project Coordinates
+  - where maven goes to look to download
+  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/project_coordinates.png)
+  - referred to as **GAV** (Group ID, Artificat ID, Version)
+  - [maven search](https://search.maven.org/)
+
+### mvnw 
+  - mvnw allows you to run a Maven project
+    - no need to have maven installed
+    - if maven installed is not correct version it will automatically update it to the latest version
+  - two mvn files for windows or linux/mac
+    - mvnw.cmd -- windows
+    - mvnw.sh -- linux/mac
+
+### Maven Errors
+  - JDK17 does not work with mvn 3.6.0 [error fix](https://medium.com/ci-cd-devops/error-error-executing-maven-error-java-lang-illegalstateexception-unable-to-load-cache-item-39e886a67216)
+  - I was getting warning error when attempting to run `mvn package` or `mvn spring-boot:run` saying Java_Home was not set
+    - I had placed the following lines in `/etc/environment` as root
+
+```sh
+JAVA_HOME="/usr/lib/jvm/jdk-17-oracle-x64"
+export JAVA_HOME
+```
+
+  - After the modification run `source /etc/environment`
 
 ## Creating a demo springboot application
 
