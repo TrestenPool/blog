@@ -40,6 +40,8 @@ image:
       - [Spring initializer](#spring-initializer)
       - [Run the app](#run-the-app)
       - [Setup / mapping](#setup--mapping)
+  - [Configure app to read from Application Properties file](#configure-app-to-read-from-application-properties-file)
+  - [Common Springboot application properties](#common-springboot-application-properties)
 
 
 
@@ -272,17 +274,20 @@ export JAVA_HOME
   - Cheat sheet
     - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/Maven-Commands-Cheat-Sheet.png)
 
-  - Package the application into a .jar file
+  - Creates the target/ directory with all necessary file and the .jar file
 ```sh
 ./mvnw package
+```
+
+  - Deletes all in target/ directory and removes the directory
+```sh
+./mvnw clean
 ```
 
   - Run the spring boot application with the maven spring boot plugin
 ```sh
 ./mvnw spring-boot:run
 ```
-
-
 
 
 ## Creating a demo springboot application
@@ -333,3 +338,56 @@ public class FunRestController {
 ```
   - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/helloworld.png)
     - now when we navigate to localhost:8080 we get this message
+
+
+## Configure app to read from Application Properties file
+  - By default springboot reads configuratoin from **src/main/resources/application.properties**
+  - You can define ANY custom properties in this file
+  - Your spring boot app can access properties using **@Value**
+
+```properties
+coach.name=Mickey Mouse
+team.name=The Mouse Club
+```
+{: file='application.properties'}
+
+```java
+// inject the values
+@Value("${coach.name}")
+private String coachName;
+
+@Value("${team.name}")
+private String teamName;
+
+// /teaminfo displays the values we injected from the .properties file
+@GetMapping("/teaminfo")
+public String teamInfo(){
+    return "Team name: %s Coach name: %s".formatted(teamName, coachName);
+}
+```
+{: file='restController.java'}
+
+  - output
+    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/output.png)
+
+
+## Common Springboot application properties
+  - [common properties docs](https://luv2code.com/spring-boot-props)
+
+  - Grouped into the following categories
+
+| Categories
+|:------:|
+| Core 
+| Web 
+| Security 
+| Data 
+| Actuator 
+| Integration 
+| DevTools 
+| Testing 
+
+```properties
+server.port=8080
+```
+{: file='application.properties'}
