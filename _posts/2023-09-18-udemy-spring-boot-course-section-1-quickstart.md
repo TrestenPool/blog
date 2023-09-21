@@ -18,18 +18,23 @@ image:
     - [What is it?](#what-is-it)
     - [Spring and Springboot](#spring-and-springboot)
     - [Spring Initializr](#spring-initializr)
+    - [Springboot Starters](#springboot-starters)
     - [Springboot embedded server](#springboot-embedded-server)
     - [Running a Springboot application](#running-a-springboot-application)
+    - [Enable Auto-reload for Spring project](#enable-auto-reload-for-spring-project)
     - [Deploying Springboot applications](#deploying-springboot-applications)
     - [Does Springboot replace Spring MVC, Spring Core, Spring AOP, Spring REST, Spring....](#does-springboot-replace-spring-mvc-spring-core-spring-aop-spring-rest-spring)
     - [Does Springboot run faster than regular Spring code?](#does-springboot-run-faster-than-regular-spring-code)
     - [Spring Projects](#spring-projects)
+    - [Springboot Actuator](#springboot-actuator)
+    - [Springboot Actuator Security](#springboot-actuator-security)
   - [Maven](#maven)
     - [What is Maven](#what-is-maven)
     - [POM file](#pom-file)
     - [Project Coordinates](#project-coordinates)
     - [mvnw](#mvnw)
     - [Maven Errors](#maven-errors)
+    - [Maven Commands](#maven-commands)
   - [Creating a demo springboot application](#creating-a-demo-springboot-application)
     - [Steps](#steps)
       - [Spring initializer](#spring-initializer)
@@ -53,6 +58,7 @@ image:
   - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/app_properties.png)
     - By default Spring boot will load properties from: application.properties
     - things like where the port number can be configured
+  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/templates.png)
 
 ## Spring Framework
   - Lightweight dev with **Java POJOs**
@@ -90,6 +96,13 @@ image:
   - then creates a Maven / Gradle project
   - then import the project into your ide
 
+### Springboot Starters
+  - Curated list of maven dependencies
+  - A collction of dependencies grouped together
+  - Example:
+    - Spring-boot-starter-web
+  - [list of spring boot starters]()
+
 ### Springboot embedded server
   - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/embedded_server.png)
   - springboot provides an embedded HTTP server so you can get started quickly
@@ -100,11 +113,39 @@ image:
   - Since everything is self contained in the .jar file
   - We can run the springboot application with `java -jar mycoolapp.jar`
     - runs the app and spins up the server!
+  
+  - spring boot maven plugin option
+  - You can also run the application by running `mvn spring-boot:run` or using the mvnw.sh file `./mvnw spring-boot:run`
+
+### Enable Auto-reload for Spring project
+  - You can enable auto-reloading for a spring project so you don't have to stop and start all the time to see the changes
+  - You have to run from intellij run logo, won't work if you run from the terminal with `./mvnw spring-boot:run`
+  - Place the dependency in the pom.xml file
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-devtools</artifactId>
+  <optional>true</optional> <!-- Can prevent passing devtools dependencies into other modules -->
+</dependency>
+```
+{: file='pom.xml'}
+
+  - Enable "Build Project Automatically"
+    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/build_automatically.png)
+  
+  - Enable "Allow auto-make to start even if developed application is currently running"
+    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/allow_auto-make.png)
+  
+    
 
 ### Deploying Springboot applications
   - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/war_deploy.png)
   - Springboot apps can also be deployed in the traditional way with **WAR** files
   - Deploy WAR file to an external server: Tomcat, JBoss, WebSpher
+  - Do not use the **src/main/webapp** directory if app is packaged as a **WAR**
+    - Although standard convention by maven, it works only with WAR packaging
+    - it is **silently ignored** by most build tools if you **generate a JAR**
 
 ### Does Springboot replace Spring MVC, Spring Core, Spring AOP, Spring REST, Spring....
   - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring.png)
@@ -117,6 +158,73 @@ image:
   - Spring projects are additional Spring modules built-on top of the Spring Framework
     - Spring Cloud, Spring Data, Spring Batch, Spring Security .. .
   - [spring projects site](https://spring.io/projects)
+
+### Springboot Actuator
+  - Exposes endpoints to monitor and manage springboot application
+  - dev-ops functionality out of the box
+  - Just add the following dependency to your pom.xml file and REST endpoints are automatically added to your application
+
+```xml
+<dependency>
+  <version>3.1.3</version>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+{: file='pom.xml'}
+
+To get access to the /actuator/info we need to add the following lines to the `application.properties` file
+
+```properties
+# Enabling the /health & /info endpoints only
+#management.endpoints.web.exposure.include=health,info
+
+# Expose all endpoints with the wildcard
+management.endpoints.web.exposure.include=*
+
+# Customizing the /actuator/info endpoint
+management.info.env.enabled=true # tells the plugin to read the variables below to display on the /info route
+info.app.name=Hello world App
+info.app.description=Demo Spring Boot app
+info.app.version=1.0
+```
+{: file='application.properties'}
+
+
+| Endpoint| Description          
+|:--------|:-----------
+| /actuator/health | Health of the application
+| /actuator/info | information of the application
+| /actuator/auditevents | Audit events for your app
+| /actuator/beans | list of all of the beans registered in the Spring application context
+| /actuator/mappings | list of all @Requestmapping paths
+
+  - [List of all of the endpoints can be found here](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints)
+
+### Springboot Actuator Security
+  - You may want to add security so everyone doesn't have access to the actuator endpoints
+  
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-security</artifactId>
+  <version>3.1.4</version>
+</dependency>
+```
+{: file='pom.xml'}
+
+  - After adding the plugin, spring security will prompt for a login
+    - Default user --> **user**
+    - Default password --> **Generated by the console**
+  - There are more advanced ways to configure spring security like connecting to a db but for now we will just use the method below
+  - If you want to override the defaults you can specify the credentials in the application.properties like below
+
+```properties
+spring.security.user.name=tresten
+spring.security.user.password=password123
+```
+{: file='application.properties'}
+
 
 ## Maven
 
@@ -159,6 +267,23 @@ export JAVA_HOME
 ```
 
   - After the modification run `source /etc/environment`
+
+### Maven Commands
+  - Cheat sheet
+    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/Maven-Commands-Cheat-Sheet.png)
+
+  - Package the application into a .jar file
+```sh
+./mvnw package
+```
+
+  - Run the spring boot application with the maven spring boot plugin
+```sh
+./mvnw spring-boot:run
+```
+
+
+
 
 ## Creating a demo springboot application
 
