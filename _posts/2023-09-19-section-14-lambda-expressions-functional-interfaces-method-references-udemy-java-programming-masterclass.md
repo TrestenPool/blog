@@ -14,6 +14,7 @@ image:
     - [Functional interface](#functional-interface)
       - [Consumer functional interface](#consumer-functional-interface)
       - [Predicate functional interface](#predicate-functional-interface)
+      - [Supplier functional interface](#supplier-functional-interface)
   - [Syntax](#syntax)
   - [Usuage example](#usuage-example)
   - [Multi line lambda](#multi-line-lambda)
@@ -38,6 +39,9 @@ image:
   -  java provides a library of functional interfaces in **java.util.function.package**. Just over 40 interfaces and counting.
   - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/functional_interface_types.png)
     - 4 types of functional interface types
+  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/function_operator.png)
+    - Notice for both **functions** on the left type is **R** which means it could be a different result type than the parameters
+    - Notice for both **Operators** the type input and the **type result** are the **same**
 
 #### Consumer functional interface
   - in the `java.util.function` package
@@ -107,6 +111,39 @@ public static void fire_person(Predicate<String> fire_person_predicate, List<Str
     }
 }
 ```
+
+#### Supplier functional interface
+  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/supplier.png)
+  - **Factory method** like code
+  - Takes **no arguments** **returns** instance of type **T**
+
+```java
+public static void main(String... args){
+  String[] mystrings = new String[]{"one", "two", "three", "four", "five", "six", "seven"};
+  String[] randomSelectedValues = randomlySelectedValues(3, mystrings, () -> new Random().nextInt(7));
+  System.out.println(Arrays.toString(randomSelectedValues));
+}
+
+public static String[] randomlySelectedValues(int count,
+                                              String[] values,
+                                              Supplier<Integer> s){
+    String[] selectedValues = new String[count];
+    for(int i = 0; i < count; i++){
+        selectedValues[i] = values[s.get()];
+    }
+    return selectedValues;
+}
+```
+
+```java
+Consumer<String> consumer = (message) -> {
+    String[] parts = message.split(" ");
+    Arrays.asList(parts).forEach(s -> System.out.println(s));
+};
+
+consumer.accept("Hello world, nice to see you");
+```
+  
 
 ## Syntax
   - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/syntax.png)
