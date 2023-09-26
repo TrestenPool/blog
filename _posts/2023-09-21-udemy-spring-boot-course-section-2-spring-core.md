@@ -12,13 +12,16 @@ image:
 - [Dependency Injection](#dependency-injection)
   - [Types of Injection](#types-of-injection)
     - [Constructor Injection](#constructor-injection)
+      - [Constructor injection example](#constructor-injection-example)
     - [Setter Injection](#setter-injection)
-      - [Setter injection example](#setter-injection-example)
+      - [Setter Injection example](#setter-injection-example)
   - [Spring Autowiring](#spring-autowiring)
     - [Types of Autowiring](#types-of-autowiring)
 - [Spring Container](#spring-container)
   - [Configuration of the spring container](#configuration-of-the-spring-container)
-- [Component Scanning](#component-scanning)
+- [@SpringBootApplication annotation](#springbootapplication-annotation)
+  - [Component Scanning](#component-scanning)
+    - [Specify explicitly](#specify-explicitly)
 
 
 
@@ -57,11 +60,7 @@ Team example
   - use this when you have **required dependencies**
   - recommended as first choice
 
-### Setter Injection
-  - use this when you have **optional dependencies**
-  - if dependency is not provided, your app can provide reasonable default logic
-
-#### Setter injection example
+#### Constructor injection example
   - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/example.png)
     - In this example we want the spring container to autowire a coach bean to our DemoController class
 
@@ -110,6 +109,18 @@ public class DemoController {
   - **@AutoWired** annoation tells spring to infer the type and spring bean to be injected into the constructor when calling this restcontroller at creation
     - if you only have 1 constructor then @Autowired on constructor is optional
 
+
+### Setter Injection
+  - use this when you have **optional dependencies**
+  - if dependency is not provided, your app can provide reasonable default logic
+
+#### Setter Injection example
+  - inject dependencies by calling setter methods on your POJO class
+
+```java
+```
+
+
 ## Spring Autowiring
   - simplifies the process of injecting dependencies into Spring beans (components or objects).
   - Dependency injection is a fundamental concept in Spring, and autowiring is one way to achieve it.
@@ -130,8 +141,6 @@ public class DemoController {
 
 
 
-
-
 # Spring Container
 Primary Functions
   - Create and manage objects (Inversion of control)
@@ -145,7 +154,50 @@ Primary Functions
 | Java Annotations   |  Modern   |
 | Java Source Code   |  Modern   |
 
-# Component Scanning
-  - Spring will scan your java classes for special annotations
-  - @Component, etc..
-    - This automatially registers the beans in the Spring Container
+# @SpringBootApplication annotation
+  - **@SpringBootApplication** enables the following by default
+    - @EnableAutoConfiguration
+    - @ComponentScan
+    - @Configuration
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DependencyInjectionDemoApplication {
+  SpringApplication.run(DependencyInjectionDemoApplication.class, args);
+}
+```
+
+| Annotation               |                                    Description                                     |
+| :----------------------- | :--------------------------------------------------------------------------------: |
+| @EnableAutoConfiguration |                   Enables Springboots auto-configuration support                   |
+| @ComponentScan           | Enables component scanning of current package. Also recursively scans sub-packages |
+| @Configuration           |   Able to register extra beans with @Bean or import other configuration classes    |
+
+  - `SpringApplication.run()`
+    - Creates application context and registers all beans
+    - Starts the embedded server Tomcat, etc..
+
+## Component Scanning
+  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/component_scanning.png)
+  - default, spring scans all sub packages from where the main method file is located
+    - scans these packages recursively
+  - doesn't matter the name of the packages
+  
+### Specify explicitly 
+  - we can specify explicitly what packages to scan with `scanBasePackages= {...}`
+
+```java
+@SpringBootApplication(
+		scanBasePackages= {"springboot.something","springboot.other"}
+)
+public class DependencyInjectionDemoApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(DependencyInjectionDemoApplication.class, args);
+	}
+
+}
+
+```
