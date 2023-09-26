@@ -118,6 +118,27 @@ public class DemoController {
   - inject dependencies by calling setter methods on your POJO class
 
 ```java
+@RestController
+public class Controller {
+    private Coach mycoach;
+
+    // SETTER INJECTION
+    @Autowired
+    public void setMycoach(Coach mycoach) {
+        this.mycoach = mycoach;
+    }
+
+    @GetMapping("/")
+    public String test(){
+        return "Hello world";
+    }
+
+    @GetMapping("/getdailyworkout")
+    public String getdailyWorkout(){
+        return this.mycoach.getDailyWorkout();
+    }
+}
+
 ```
 
 

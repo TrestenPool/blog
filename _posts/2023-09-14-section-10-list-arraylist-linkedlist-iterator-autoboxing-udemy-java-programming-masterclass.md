@@ -22,6 +22,7 @@ image:
   - [Multi-Dimensional arrays](#multi-dimensional-arrays)
     - [Declaration](#declaration-1)
     - [Printing](#printing)
+    - [Lambdas](#lambdas)
 - [Iterator](#iterator)
   - [Iterator Position](#iterator-position)
   - [ListIterator](#listiterator)
@@ -112,7 +113,21 @@ matrix[2] = new int[3];
 ```java
 System.out.println(Arrays.deepToString(matrix));
 ```
- 
+
+### Lambdas  
+  - The Arrays class has many methods you can use on it to achieve different tasks
+  - Arrays.fill() Arrays.setAll() Arrays.replaceAll()
+  - here is an example of using Arrays.setAll() on an array
+    - setAll() takes in an array of any type and an IntegerFunction with the following method signature
+      - `R apply(int value);`
+
+```java
+  String[] firstNames = new String[]{
+          "Tresten", "Briana", "Kim", "Anna", "Timmy", "Josh", "Dave", "Quin"
+  };
+  Arrays.setAll(firstNames, (i) -> firstNames[i].toUpperCase());
+```
+
   
 
 

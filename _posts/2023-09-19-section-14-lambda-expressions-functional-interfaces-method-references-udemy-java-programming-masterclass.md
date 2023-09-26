@@ -15,10 +15,13 @@ image:
       - [Consumer functional interface](#consumer-functional-interface)
       - [Predicate functional interface](#predicate-functional-interface)
       - [Supplier functional interface](#supplier-functional-interface)
+    - [Convienence Methods](#convienence-methods)
   - [Syntax](#syntax)
   - [Usuage example](#usuage-example)
   - [Multi line lambda](#multi-line-lambda)
   - [Scope](#scope)
+  - [Method Reference](#method-reference)
+    - [Method Reference restrictions](#method-reference-restrictions)
 
 
 # Git
@@ -144,6 +147,79 @@ Consumer<String> consumer = (message) -> {
 consumer.accept("Hello world, nice to see you");
 ```
   
+### Convienence Methods
+  - default methods in the functional interface
+  - In this example below we show the .andThen() in the Function interface
+  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/convenience_methods.png)
+
+.andThen() example
+```java
+String name = "Tresten";
+
+// first function
+Function<String, String> uCase = String::toUpperCase;
+
+// apply the first function and print out the results
+System.out.println(uCase.apply(name));
+
+// second function
+Function<String, String> lastName = (s) -> s.concat(" Pool");
+
+// setup of the first function calling the second one after
+Function<String,String> uCaseLastName = uCase.andThen(lastName);
+
+// call the setup method above with the name variable
+System.out.println(uCaseLastName.apply(name));
+```
+
+
+.andThen() chaining example
+```java
+Function<String, String> uCase = String::toUpperCase;
+
+Function<String, String[]> f0 = uCase
+        .andThen(s -> s.concat(" Pool"))  // return String
+        .andThen(s -> s.split(" "));    // return String[]
+
+System.out.println(Arrays.toString(f0.apply("Tresten")));
+```
+
+.andThen() chaining example
+```java
+String[]names = {"Josh", "Dave", "Bob", "Carrol"};
+Consumer<String> s0 = s -> System.out.print(s.charAt(0));
+Consumer<String> s1 = System.out::println;
+Arrays.asList(names).forEach(s0
+        .andThen(s -> System.out.print(" - "))
+        .andThen(s1)
+);
+```
+
+
+Comparator Example
+
+```java
+default void sort(Comparator<? super E> c){ .. }
+```
+
+```java
+public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
+        Function<? super T, ? extends U> keyExtractor)
+```
+
+```java
+// compare by lastname then compare by firstname
+list.sort(Comparator.comparing(Person::lastName)
+    .thenComparing(Person::firstname));
+
+// print out results
+list.forEach(System.out::println);
+```
+
+
+
+
+
 
 ## Syntax
   - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/syntax.png)
@@ -219,4 +295,48 @@ list.forEach(mystring -> {
     list.set(index, "%s %s".formatted(prefix, list.get(index).toUpperCase()) );
 });
 ```
-  
+
+## Method Reference
+  - You can just use a method reference in the lambda body
+  - method references are for easier readibility
+  - The second example shows just replacing with the method reference
+  - Both achieve the same result of printing every element in the list
+
+```java
+backedByArray.forEach(s -> System.out.println(s));
+```
+
+```java
+backedByArray.forEach(System.out::println);
+```
+
+```java
+class Test{
+    public static int ID_GENERATOR = 1000;
+    private int id;
+
+    public Test() {
+        id = ID_GENERATOR++;
+        System.out.println("Created Test object with id: " + this.id);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        seedArray(Test::new, 10);
+    }
+
+    public static Test[] seedArray(Supplier<Test> reference, int count){
+        Test[] testArray = new Test[count];
+        for(int i = 0; i < count; i++){
+            testArray[i] = reference.get();
+        }
+        return testArray;
+    }
+
+}
+```
+
+### Method Reference restrictions
+  - methods which can be used, are based on the context
+  - you can reference a static or instance method
