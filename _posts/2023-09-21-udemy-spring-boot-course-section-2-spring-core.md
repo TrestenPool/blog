@@ -15,6 +15,7 @@ image:
       - [Constructor injection example](#constructor-injection-example)
     - [Setter Injection](#setter-injection)
       - [Setter Injection example](#setter-injection-example)
+    - [Field Injection](#field-injection)
   - [Spring Autowiring](#spring-autowiring)
     - [Types of Autowiring](#types-of-autowiring)
 - [Spring Container](#spring-container)
@@ -22,6 +23,18 @@ image:
 - [@SpringBootApplication annotation](#springbootapplication-annotation)
   - [Component Scanning](#component-scanning)
     - [Specify explicitly](#specify-explicitly)
+  - [@Qualifer](#qualifer)
+  - [@Primary](#primary)
+  - [Lazy Initialization @Lazy](#lazy-initialization-lazy)
+    - [Global Configuration](#global-configuration)
+  - [Bean Scope](#bean-scope)
+    - [Specify Bean Scope @Scope](#specify-bean-scope-scope)
+    - [Singleton](#singleton)
+    - [Prototype](#prototype)
+  - [Bean LifeCycle](#bean-lifecycle)
+    - [@PostConstruct init()](#postconstruct-init)
+    - [@PreDestroy destroy() method](#predestroy-destroy-method)
+  - [Configure Beans with java code @Configuration \& @Bean](#configure-beans-with-java-code-configuration--bean)
 
 
 
@@ -116,6 +129,7 @@ public class DemoController {
 
 #### Setter Injection example
   - inject dependencies by calling setter methods on your POJO class
+  - can have any setter method name, Spring will infer based on arguments and property being set on what bean to inject
 
 ```java
 @RestController
@@ -139,6 +153,33 @@ public class Controller {
     }
 }
 
+```
+
+### Field Injection
+  - There is a 3rd injection type that is not recommended
+  - not popular like it used to be in the old days
+  - reason why is because it makes it harder to unit test
+  - inject beans into class properties even private ones
+  - behind the scenes accomplishes this with java reflection.
+
+```java
+@RestController
+public class Controller {
+    @Autowired
+    private Coach mycoach;
+
+    // no need for constructor or setters
+
+    @GetMapping("/")
+    public String test(){
+        return "Home route";
+    }
+
+    @GetMapping("/getdailyworkout")
+    public String getdailyWorkout(){
+        return this.mycoach.getDailyWorkout();
+    }
+}
 ```
 
 
@@ -222,3 +263,265 @@ public class DependencyInjectionDemoApplication {
 }
 
 ```
+
+## @Qualifer
+  - when you have multiple beans and need to specify one
+
+
+By default the component name for a class will camelCase with the first letter being lowercase.
+In order to override this you have to specify with **@Component("BeanName")**
+```java
+@Component("FootballCoach")
+public class FootballCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "10 up-downs, and hit  25 people";
+    }
+}
+```
+  
+Then to specify which bean you want injected you can use the **@Qualifer("BeanName")**
+```java
+@RestController
+public class Controller {
+    private Coach mycoach;
+
+    @Autowired
+    public Controller(@Qualifier("footballCoach") Coach mycoach) {
+        this.mycoach = mycoach;
+    }
+
+    @GetMapping("/")
+    public String test(){
+        return "Home route";
+    }
+
+    @GetMapping("/getdailyworkout")
+    public String getdailyWorkout(){
+        return this.mycoach.getDailyWorkout();
+    }
+}
+```
+
+## @Primary
+  - You can use the @Primary annotation instead or instead or in conjunction with the @Qualifer annotation
+  - It goes in the @Component class
+  - That way if you have multiple coach types it will inject the class with the @Primary annotation as default
+  - You will get an error if more than one bean has the @Primary annotation
+  - If you have a @Primary bean and specify a bean in @Qualifer, the **@Qualifer has higher priority**
+
+```java
+@Component
+@Primary
+public class BaseballCoach implements Coach{
+  // implementation
+}
+```
+
+## Lazy Initialization @Lazy
+  - Lazy initialization is the pattern of putting off the creation of an object or process until it is needed.
+  - By default, when your app starts, all beans are initialized. Regardless if they are going to be used or not
+  - We can setup lazy initialization where the beans is only created if:
+    - It is needed for dependency injection
+    - it is explictly requested
+
+```java
+@Component
+@Lazy
+public class BaseballCoach implements Coach{
+    @Override
+    public String getDailyWorkout() {
+        return "Do 10 poles and hit 5 homeruns";
+    }
+}
+```
+
+| Advantages                     |                                Disadvantages                                |
+| :----------------------------- | :-------------------------------------------------------------------------: |
+| Only create objects as needed  | Web related components have to create the beans needed on the first request |
+| Helps with faster startup time |               may not see configuration issues until too late               |
+
+
+### Global Configuration
+  - Using the @Lazy for every single component could get tedious
+  - We could use the global configuration to make all components to load lazyily
+
+```properties
+spring.main.lazy-initialization=true
+```
+
+## Bean Scope
+  - Default scope is **Singleton**
+    - spring container only creates 1 instance of a bean
+    - it is cached in memory
+    - all dependency injections for a bean will reference the same bean
+
+  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/singleton_diagram.png)
+
+### Specify Bean Scope @Scope
+  - [Spring bean scopes documentation](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html)
+
+| Scope          |                                                                                             Description                                                                                             |
+| :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| Singleton      |                                                        Scopes a single bean definition to a single object instance per Spring IoC container.                                                        |
+| Prototype      |                                                                 Scopes a single bean definition to any number of object instances.                                                                  |
+| Session        |                               Scopes a single bean definition to the lifecycle of a HTTP Session. Only valid in the context of a web-aware Spring ApplicationContext.                               |
+| Global Session | Scopes a single bean definition to the lifecycle of a global HTTP Session. Typically only valid when used in a portlet context. Only valid in the context of a web-aware Spring ApplicationContext. |
+
+```java
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class FootballCoach implements Coach{
+
+  public class FootBallCoach(){
+    System.out.println("FootballCoach constructor()");
+  }
+    
+    @Override
+    public String getDailyWorkout() {
+        return "10 up-downs, and hit  25 people";
+    }
+    
+}
+```
+
+```java
+@RestController
+public class Controller {
+    private Coach mycoach;
+    private Coach otherCoach;
+
+    @Autowired
+    public Controller(@Qualifier("footballCoach") Coach mycoach,
+                      @Qualifier("footballCoach") Coach otherCoach) {
+        this.mycoach = mycoach;
+        this.otherCoach = otherCoach;
+    }
+
+    @GetMapping("/check")
+    public String check(){
+        return "Comparing beans: myCoach == otherCoach: " + ((mycoach ==  otherCoach) ? "True": "False");
+    }
+```
+
+  - if we went to /other
+    - we wold see "False", because myCoach and otherCoach are two different objects since using the **prototype scope**
+
+### Singleton
+  - One bean instance per spring container
+
+### Prototype
+  - Scopes single bean to any number of object instances
+  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/prototype_example.png)
+
+
+
+
+
+## Bean LifeCycle
+  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/Bean-Life-Cycle-Process-flow3.png)
+  - if we want to execute some code on the bean instantiation and just after closing the spring container, then we can write that code inside the custom init() method and the destroy() method.
+  - What is the point of the custom init/destroy methods
+    - custom code during bean initialization, destroy
+
+### @PostConstruct init()
+  - The @PostCostruct is the init() method
+
+```java
+@Component
+public class FootballCoach implements Coach{
+
+    public FootballCoach() {
+        System.out.println("IN CONSTRUCTOR: " + getClass().getSimpleName());
+    }
+
+    // init method
+    @PostConstruct
+    public void doStartupStuff(){
+        System.out.println("football coach needs redbull to get started...");
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "10 up-downs, and hit  25 people";
+    }
+}
+```
+
+```java
+@RestController
+public class Controller {
+    private Coach mycoach;
+
+    @Autowired
+    public Controller(@Qualifer("footballCoach")Coach mycoach) {
+        this.mycoach = mycoach;
+    }
+
+
+    @GetMapping("/getdailyworkout")
+    public String getdailyWorkout(){
+        return this.mycoach.getDailyWorkout();
+    }
+
+}
+```
+
+  - Output will be the following
+
+```
+IN CONSTRUCTOR: FootballCoach
+football coach needs redbull to get started...
+```
+
+### @PreDestroy destroy() method
+  - The @PreDestroy is the destroy() method
+  - The destroy() method is **not** called on beans with **Prototype scope**
+
+```java
+@PreDestroy
+public void doCleanupStuff(){
+    System.out.println("Cleaning up the rest of the stuff");
+}
+```
+
+## Configure Beans with java code @Configuration & @Bean
+  - you can configure beans with java code instead of annotations
+  - When does it make sense to use a configuration file instead of @Component on classes
+    - make an existing 3rd party class available to the Spring Framework
+
+  - Steps
+    - Need to configure class with **@Configuration** annotation
+    - Configure **@Bean method** that returns a bean
+  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/configure_bean.png)
+
+```java
+public class SwimCoach implements Coach{
+    @Override
+    public String getDailyWorkout() {
+        return "swim 10 laps";
+    }
+}
+```
+{: file='SwimCoach.java'}
+
+```java
+@Configuration
+public class SportsConfig {
+  @Bean("swimmingCoach") // overriding the default bean id which would just be the method name below
+  public Coach swimCoach(){ // bean id will default to the method name
+      return new SwimCoach();
+  }
+}
+```
+{: file='SportsConfig.java'}
+
+```java
+@Autowired
+public Controller(@Qualifier("swimmingCoach") Coach mycoach) {
+    this.mycoach = mycoach;
+}
+```
+{: file='Controller.java'}
+
