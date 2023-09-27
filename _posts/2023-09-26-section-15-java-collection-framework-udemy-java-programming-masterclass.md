@@ -2,4 +2,34 @@
 layout: post
 title: Section 15. (Java Collection Framework) Udemy - Java Programming Masterclass
 date: 2023-09-26 16:50 -0500
+categories: [Udemy, Java]
+tags: [Java, Programming] 
+image: 
+  path: /2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/profile.png
 ---
+
+- [Java Collections](#java-collections)
+  - [Overview](#overview)
+  - [What's in the framework, what's not?](#whats-in-the-framework-whats-not)
+  - [Collection is the root of the collection hierarchy](#collection-is-the-root-of-the-collection-hierarchy)
+  - [Collection interface methods](#collection-interface-methods)
+
+
+# Java Collections
+
+## Overview
+  - just an object that represents a group of objects where there is some relationship for them
+  - arrays, lists, vectors, sets, queues, tables, dictionaries and maps
+  - They are differentiated by the way the store the objects in memory, how they are accesses and ordered, and whether they allow duplicates and null value s
+
+## What's in the framework, what's not?
+  - Objects who implement they Collection interface 
+    - except: maps
+
+## Collection is the root of the collection hierarchy
+  - Everything branches off of the Collection interface
+  - ![](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/tree.png)
+
+## Collection interface methods
+  - ![](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/collection_methods.png)
+  
