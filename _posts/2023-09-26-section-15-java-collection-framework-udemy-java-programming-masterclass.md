@@ -13,6 +13,16 @@ image:
   - [What's in the framework, what's not?](#whats-in-the-framework-whats-not)
   - [Collection is the root of the collection hierarchy](#collection-is-the-root-of-the-collection-hierarchy)
   - [Collection interface methods](#collection-interface-methods)
+  - [What's a Collection Class?](#whats-a-collection-class)
+- [Collection Types](#collection-types)
+  - [List](#list)
+  - [Queue](#queue)
+  - [Set](#set)
+  - [SortedSet](#sortedset)
+  - [Map](#map)
+  - [Deque](#deque)
+- [Collection Helper methods](#collection-helper-methods)
+  - [Collections.nCopies(int count, Object o)](#collectionsncopiesint-count-object-o)
 
 
 # Java Collections
@@ -32,4 +42,45 @@ image:
 
 ## Collection interface methods
   - ![](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/collection_methods.png)
+
+## What's a Collection Class?
+  - The Collections class is not the Collections Framework
+
+# Collection Types
+
+## List
+  - **Ordered**
+  - aka sequence
+
+## Queue
+  - Ordered
+  - Special methods for the first & last elements
+  - FIFO / LIFO
+  - Stack and Queues
+
+## Set
+  - **Unordered**
+  - **No Duplicates**
+
+## SortedSet
+  - Ordered
+  - No Duplicates
+
+## Map
+  - Stores **key,value** pairs
+
+## Deque
+
+
+# Collection Helper methods
+
+## Collections.nCopies(int count, Object o)
+  - Similiar to Arrays.fill()
+  - Collections has Collections.fill() but it doesn't work
+  
+```java
+List<Card> king_of_clubs = Collections.nCopies(2, Card.getFaceCard(Card.Suit.CLUB, 'K'));
+```
+
+
   
