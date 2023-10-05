@@ -7,6 +7,43 @@ tags: [Java, Programming, Udemy, Springboot]
 image: 
   path: /2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/profile.png
 ---
+- [Specialized Component annotations](#specialized-component-annotations)
+- [Github repo for this section](#github-repo-for-this-section)
+- [References](#references)
+- [@RestController, @RequestMapping \& @GetMapping](#restcontroller-requestmapping--getmapping)
+- [Why have a service layer](#why-have-a-service-layer)
+  - [Best Practices](#best-practices)
+- [Java JSON Data binding](#java-json-data-binding)
+- [@PathVariable](#pathvariable)
+- [Exception handling](#exception-handling)
+  - [Controller specific](#controller-specific)
+  - [Global handling](#global-handling)
+- [Employee Example API](#employee-example-api)
+  - [Requirements](#requirements)
+  - [Endpoints](#endpoints)
+  - [Model / Entity](#model--entity)
+  - [DAO interface](#dao-interface)
+  - [DAO implementation](#dao-implementation)
+  - [Service](#service)
+  - [Service implementation](#service-implementation)
+  - [Rest controller](#rest-controller)
+- [Creating the CRUD DAO automatically by spring instead of creating different DAO for different entities](#creating-the-crud-dao-automatically-by-spring-instead-of-creating-different-dao-for-different-entities)
+  - [JPARepository](#jparepository)
+  - [Extended features](#extended-features)
+- [Spring Data REST](#spring-data-rest)
+  - [Endpints exposed for you](#endpints-exposed-for-you)
+  - [How does it work](#how-does-it-work)
+  - [How do you implement this?](#how-do-you-implement-this)
+  - [Architectur before/after](#architectur-beforeafter)
+  - [HATEOAS compliant](#hateoas-compliant)
+  - [Spring Data REST Advanced Features](#spring-data-rest-advanced-features)
+  - [Base path for the endpoints](#base-path-for-the-endpoints)
+  - [Manually specifying plural names for the endpoints](#manually-specifying-plural-names-for-the-endpoints)
+  - [Accessing different pages](#accessing-different-pages)
+  - [Spring Data REST configurations](#spring-data-rest-configurations)
+  - [Sorting](#sorting)
+
+
 
 # Specialized Component annotations
   - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/component_annotation.png)
@@ -14,7 +51,7 @@ image:
   - They all act the same because they are all composed annotations with @Component as a meta-annotation for each of them. They are like @Component aliases with specialized uses and meaning outside Spring auto-detection or dependency injection.
 
 # Github repo for this section
-[Github repo]()
+[Github repo](https://github.com/TrestenPool/SpringTutorial/tree/main/Section4)
 
 # References
   - [jpa-repository docs](http://www.luv2code.com/jpa-repository-javadoc)
@@ -562,3 +599,67 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 ## How do you implement this?
   - All you do is have to add the dependency in the pom.xml file and add your JpaRepository entity interfaces and spring will automatically scan them and implement the CRUD API
 
+## Architectur before/after
+  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/spring_data_rest.png)
+
+## HATEOAS compliant
+  - Spring Data REST endpoints are HATEOAS compliant
+  - HATEOAS - Hypermedia as the Engine of Application State
+  - think of it as meta-data for REST data
+  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/hateoas_example.png)
+    - example of hateoas compliant for a get request of a single entity
+
+  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/hateoas_collection.png)
+    - example of hateoas compliant for a collection response which contains
+      - page size
+      - total elements
+      - pages, etc..
+
+## Spring Data REST Advanced Features
+  - Pagination, sorting and searching
+
+## Base path for the endpoints
+  - Can be specified in the applicaton.properties file with the following
+
+```properties
+spring.data.rest.base-path=/api
+```
+
+## Manually specifying plural names for the endpoints
+  - Done with the @RepositoryRestResource(path="endpointname")
+
+```java
+@RepositoryRestResource(path = "members")
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+}
+```
+
+##  Accessing different pages
+  - spring data-rest defaults to 20 results
+  - we can change that with the following appendage to the url
+  - Zero based
+
+  http://localhost:3000/api/memebers?page=0 
+
+## Spring Data REST configurations
+  - below is a table of some popular configurationsj
+  - [list of more configurations](http://www.luv2code.com/spring-boot-props)
+
+| Name                               | Description                                   |
+| :--------------------------------- | :-------------------------------------------- |
+| spring.data.rest.base-path         | Base path used to expose repository resources |
+| spring.data.rest.default-page-size | Default size of pages                         |
+| spring.data.rest.max-page-size     | Maximum size of pages                         |
+
+## Sorting
+  - We can sort by maniupulating the url
+  - For some reason there is a bug where it won't work if you try to sort with a field that is using underscores
+    - example http://localhost:8080/employees?sort=**last_name**  -- does not work 
+    - but if you camelCase it would work with **lastName**
+  - [stack overflow underscores issue sorting](https://stackoverflow.com/questions/40746303/spring-data-rest-sorting-fields-with-underscores)
+  - Sort by last name
+    - **http://localhost:8080/employees?sort=last_name**
+  - Sort by first name
+  - **http://localhost:8080/employees?sort=last_name**
+  - Sort first name descending
+  - **http://localhost:8080/employees?sort=last_name, desc**
