@@ -7,6 +7,7 @@ tags: [Java, Programming, Udemy, Spring]
 image: 
   path: /2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/profile.png
 ---
+- [Entity Lifecycle](#entity-lifecycle)
 - [Important Database concepts](#important-database-concepts)
   - [Primary Key , Foreign Key](#primary-key--foreign-key)
   - [Cascade](#cascade)
@@ -16,8 +17,23 @@ image:
   - [One-to-One](#one-to-one)
   - [One-to-Many](#one-to-many)
   - [Many-to-Many](#many-to-many)
+- [Examples](#examples)
 
 
+# Entity Lifecycle
+  - [hibernate entity life cycle](https://www.baeldung.com/hibernate-entity-lifecycle)
+  - Every Hibernate entity naturally has a lifecycle within the framework – it’s either in a transient, managed, detached or deleted state.
+
+| Operations        | Description                                                                                                                                                                           |
+| :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| New / Transient   | An entity instance that has been created but is not yet managed by the persistence context. It is not associated with a database record.                                              |
+| Detach            | An entity instance that was once managed but is no longer associated with the persistence context. Changes to a detached entity are not automatically synchronized with the database. |
+| Merge             | will reattach to hibernate session                                                                                                                                                    |
+| Persist / managed | An entity instance that is actively managed by the persistence context and is associated with a database record. Changes to a managed entity will be synchronized with the database.  |
+| Removed           | An entity instance marked for deletion.                                                                                                                                               |
+| Refresh           | Reload / sync object with data from db. Prevents stale data                                                                                                                           |
+
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/entity_lifecycle.png)
 
 # Important Database concepts
 
@@ -48,6 +64,17 @@ CREATE TABLE orders (
   - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/cascade.png)
     - if we save the instructor, if were to cascade we would also save the instructor detail
     - by the same token if we were to delete an instructor we would delete the instructor detail if it is one-to-one
+  - by default no operations are cascaded
+
+| Cascade Type | Description                                                                              |
+| :----------- | :--------------------------------------------------------------------------------------- |
+| Persist      | if entity is persisted / related entity will also be persisted                           |
+| Remove       | if entity is removed / related entity will also be removed                               |
+| Refresh      | if entity is refreshed / related entity will also be refreshed                           |
+| Detach       | if entity is detached (not associated w/ session) / related entity will also be detached |
+| Merge        | if entity is merged / related entity will also be merged                                 |
+| All          | All the above cascade types                                                              |
+
 
 ## Eager , Lazy Loading
   - When fetch data, should we retrieve all of the results or just a subset of the results
@@ -68,10 +95,7 @@ CREATE TABLE orders (
   - we can get the instructor detail through the instructor
   - we can get the instructor through the instructor detail
 
-
-  
-
-
+ 
 # Association Mappings
   - In the database we will have multiple tables and relationships between tables
     - We will need these advanced mappings to describe this in hibernate
@@ -92,5 +116,6 @@ CREATE TABLE orders (
 ## Many-to-Many
   - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/many-to-many.png)
 
-
-
+# Examples
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/goal.png)
+  

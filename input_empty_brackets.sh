@@ -12,6 +12,6 @@ find "$directory" -type f -print0 | while IFS= read -r -d $'\0' file; do
     if grep -q '\[\]' "$file"; then
         # Replace empty brackets with [hello]
         sed -i 's/\[\]/['"$inserted_text"']/' "$file"
-        echo "Inserted [hello] into $file"
+        echo "Inserted [alt-text] into $file"
     fi
 done
