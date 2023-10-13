@@ -42,7 +42,7 @@ Benefits
   - Hibernate provides the Object-to-Relational Mapping **(ORM)**
 
 ORM
-  - ![](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/profile.png/hibernate.png)
+  - ![alt-text](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/profile.png/hibernate.png)
   - Developer defines mapping between java class and database table
 
 # JPA
@@ -111,12 +111,12 @@ server.port=8081
 @SpringBootApplication
 public class CruddemoApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[alt-text] args) {
 		SpringApplication.run(CruddemoApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(String[] args){
+	public CommandLineRunner commandLineRunner(String[alt-text] args){
 		return run -> {
 			System.out.println("Hello world");
 		};
@@ -131,7 +131,7 @@ public class CruddemoApplication {
 @SpringBootApplication
 public class CruddemoApplication implements CommandLineRunner {
 
-	public static void main(String[] args) {
+	public static void main(String[alt-text] args) {
 		SpringApplication.run(CruddemoApplication.class, args);
 	}
 
@@ -155,8 +155,8 @@ logging.level.root=warn
 
 # Entity class @Entity / @Table
   - Java class that is mapped to a database table
-  - ![](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/jpa.png)
-  - ![](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/entity_map.png)
+  - ![alt-text](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/jpa.png)
+  - ![alt-text](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/entity_map.png)
   - annotated with the **@Entity** annotaion
   - must have **public or protected** **no-argument** constructor
     - class can have other constructors
@@ -204,8 +204,8 @@ public class Student {
 ## Data Access Object (DAO)
   - Responsible for interfacing with the db
   - Like a helper class for communicating with our db
-  - ![](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/dao.png)
-  - ![](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/dao_jpa.png)
+  - ![alt-text](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/dao.png)
+  - ![alt-text](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/dao_jpa.png)
     - The DAO uses the entity manager for saving/retrieving and other operations with the db
 
 ### Data Access Object Methods()
@@ -227,7 +227,7 @@ public class Student {
   - JPA **Entity Manager** and **Data source** are **automatically** created by springboot
     - based on the file **application.properties**
   - We can autowire / inject the JPA Entity Manager into our Student DAO
-  - ![](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/data_source.png)
+  - ![alt-text](/2023-09-27-udemy-spring-boot-course-section-3-hibernate-jpa/data_source.png)
   
 ## Example CRUD command line app
 
@@ -371,7 +371,7 @@ Here is the main method and commandLineRunner methods()
 @SpringBootApplication
 public class CruddemoApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[alt-text] args) {
 		SpringApplication.run(CruddemoApplication.class, args);
 	}
 

@@ -915,7 +915,7 @@ image:
 
   - How do configure permissions
     - IAM Policies
-      - ![]()
+      - ![alt-text]()
       - Json document which grants permissions for a specific identity or roles to access services
 
     - IAM Permission

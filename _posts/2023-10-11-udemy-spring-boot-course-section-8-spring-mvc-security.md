@@ -24,16 +24,16 @@ image:
 
 
 # Git repo
-  - []()
+  - [alt-text]()
 
 # App goal
-  - ![](/2023-10-11-udemy-spring-boot-course-section-8-spring-mvc-security/app.png)
+  - ![alt-text](/2023-10-11-udemy-spring-boot-course-section-8-spring-mvc-security/app.png)
     - Employees can access /
     - Admins can access /systems
     - Managers can access /leaders
   
   - Security design goal
-  - ![](/2023-10-11-udemy-spring-boot-course-section-8-spring-mvc-security/our_diagram.png)
+  - ![alt-text](/2023-10-11-udemy-spring-boot-course-section-8-spring-mvc-security/our_diagram.png)
   
 ## Example
 
@@ -270,7 +270,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
   - By default spring uses the format ROLE_ROLEName
   - So we have to be mindful of this when we insert our roles into the authorities table
   - it should look something like this ...
-  - ![](/2023-10-11-udemy-spring-boot-course-section-8-spring-mvc-security/roles_pic.png)
+  - ![alt-text](/2023-10-11-udemy-spring-boot-course-section-8-spring-mvc-security/roles_pic.png)
   
 # Make spring security use custom tables for authentication
   - we will try to use jdbc authentication with our custom tables

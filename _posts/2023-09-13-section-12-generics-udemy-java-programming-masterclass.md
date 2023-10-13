@@ -30,7 +30,7 @@ image:
 # Git
   - [Github link to Section 12 example code Sports teams examples](https://github.com/TrestenPool/Java-Programming-MasterClass/tree/main/section12/Generics/src)
   - [Github link to Section 12 Challenge map ](https://github.com/TrestenPool/Java-Programming-MasterClass/tree/main/section12/Generics_Challenge/Generics_Challenge/src/tresten)
-    - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/challenge_class_diagram.png)
+    - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/challenge_class_diagram.png)
 
 # Overview
   - java supports generic types, such as
@@ -39,7 +39,7 @@ image:
     - interfaces
     - methods
   
-  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/anatomy.png)
+  - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/anatomy.png)
   - generics allow the compiler to do **compile-time type checking**, when adding and processing elements in the list
 
 
@@ -125,12 +125,12 @@ ArrayList<String> someData = new ArrayList<>();
 String someLine = someData.get(0);
 
 // but this will fail, this is because .toArray() will return an array of objects
-String[] arrayOfData = someData.toArray();
+String[alt-text] arrayOfData = someData.toArray();
 
 // the way to do it is the following
-String[] arrayOfData = someData.toArray(new String[0]);
+String[alt-text] arrayOfData = someData.toArray(new String[0]);
 // or
-String[] arrayOfData = someData.toArray(new String[]{});
+String[alt-text] arrayOfData = someData.toArray(new String[alt-text]{});
 
 ```
 
@@ -143,7 +143,7 @@ public interface Comparable<T> {
   int compareTo(T o);
 }
 ```
-  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/compareto.png)
+  - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/compareto.png)
 
   - If we wanted to have our class be able to use the sort method on an array we would have to implement it
 
@@ -178,7 +178,7 @@ public class Student implements Comparable<Student> {
 
 # Comparator interface
   - the **Comparator** interface is similiar to the **Comparable** interface, and they often get confused for one another
-  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/compareto.png)
+  - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/compareto.png)
   - They both have **different method signatures**
   - it's common practice to include a **Comparator** as a **nested class**
 
@@ -188,7 +188,7 @@ public interface Comparator<T> {
 }
 ```
 
-  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/comparable_comparator.png)
+  - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/comparable_comparator.png)
 
 ```java
 public class StudentGPAComparator implements Comparator<Student> {
@@ -209,7 +209,7 @@ public static void main(String... args){
   Student student3 = new Student("Bianca");
 
   // fill the array
-  Student[] studentsArray = new Student[]{student3, student1, student2};
+  Student[alt-text] studentsArray = new Student[alt-text]{student3, student1, student2};
 
   // create instance of the Comparator
   Comparator<Student> gpaSorter = new StudentGPAComparator();
@@ -293,7 +293,7 @@ public static <T extends Student> void printList(List<T> students){
 ```
 
   - When used as a **reference types**, a container of one type has **no relationship** to the same container of another type, even if the contained types do have a relationship
-  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/reference_types.png)
+  - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/reference_types.png)
 
 
 ## Limitation of a reference of generic classs with a list argument
@@ -353,7 +353,7 @@ public static void printList(List<? extends Student> students){
 ```
 
 ## Wildcard upperbound, lowerbound
-  - ![](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/bounded.png)
+  - ![alt-text](/2023-09-13-section-12-generics-udemy-java-programming-masterclass/bounded.png)
 
 ## Type Erasure
   - Generics exist to enforce **tighter type checks**, at **compile time**.
@@ -364,7 +364,7 @@ public static void printList(List<? extends Student> students){
 
   - Example
 ```java
-public static  <E> boolean containsElement(E [] elements, E element){
+public static  <E> boolean containsElement(E [alt-text] elements, E element){
     for (E e : elements){
         if(e.equals(element)){
             return true;
@@ -377,7 +377,7 @@ public static  <E> boolean containsElement(E [] elements, E element){
   - gets transformed into this since the Type E was **unbounded** and thus gets turned into the Object type at compile-time
  
 ```java
-public static  boolean containsElement(Object [] elements, Object element){
+public static  boolean containsElement(Object [alt-text] elements, Object element){
     for (Object e : elements){
         if(e.equals(element)){
             return true;

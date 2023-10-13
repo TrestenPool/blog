@@ -31,7 +31,7 @@ image:
   
   - Things to maybe include in your resume
     - Proficient vs familiar with section
-      - ![](/2023-08-26-resume-and-interview-tips/proficient_vs_familiar.png)
+      - ![alt-text](/2023-08-26-resume-and-interview-tips/proficient_vs_familiar.png)
 
     - Include links to your sites such as
       - github, personal portfolio website, personal blog site

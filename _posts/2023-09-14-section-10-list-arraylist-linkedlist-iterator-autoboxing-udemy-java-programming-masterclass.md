@@ -46,15 +46,15 @@ image:
 
 ## Declaration
 ```java
-int[] integerArray;
-String[] nameList;
+int[alt-text] integerArray;
+String[alt-text] nameList;
 
 // not as common to have the square brackets after the array variable name
-String courseList[];
+String courseList[alt-text];
 ```
 
 ## Instanciating
-  - `int[] integerArray = new int[10];`
+  - `int[alt-text] integerArray = new int[10];`
 
 
 ## Print
@@ -62,7 +62,7 @@ String courseList[];
 
 ```java
 public static void Main(String... args){
-  int[] integerarray = {1,2,3,4,5,6,6};
+  int[alt-text] integerarray = {1,2,3,4,5,6,6};
 
   System.out.println(Arrays.toString(integerarray));
 }
@@ -86,7 +86,7 @@ public static void Main(String... args){
   - This will fill all of the elements in the array with 0
 
 ## CopyOf
-  - `int[] secondarr = Arrays.copyOf(myintarray, myintarray.length);`
+  - `int[alt-text] secondarr = Arrays.copyOf(myintarray, myintarray.length);`
 
 ## Multi-Dimensional arrays
 
@@ -95,13 +95,13 @@ public static void Main(String... args){
 
 ```java
 // declare 3x3 matrix, defaults to 0's
-int[][] array = new int[3][3];
+int[alt-text][alt-text] array = new int[3][3];
 ```
   - Multi-dimensional array with varrying lengths
 
 ```java
 // 3 row matrix varrying lengths of rows
-int[][] matrix = new int[3][];
+int[alt-text][alt-text] matrix = new int[3][alt-text];
 
 matrix[0] = new int[5];
 matrix[1] = new int[2];
@@ -122,7 +122,7 @@ System.out.println(Arrays.deepToString(matrix));
       - `R apply(int value);`
 
 ```java
-  String[] firstNames = new String[]{
+  String[alt-text] firstNames = new String[alt-text]{
           "Tresten", "Briana", "Kim", "Anna", "Timmy", "Josh", "Dave", "Quin"
   };
   Arrays.setAll(firstNames, (i) -> firstNames[i].toUpperCase());
@@ -153,7 +153,7 @@ System.out.println(Arrays.deepToString(matrix));
 
 ## Iterator Position
   - The iterator position never at an index but between the indexes
-  - ![](/2023-08-27-java-programming-masterclass-udemy/iterator.png)
+  - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/iterator.png)
 
 ## ListIterator
   - Notes
@@ -183,9 +183,9 @@ System.out.println(Arrays.deepToString(matrix));
 
 ## ArrayList
   - Differences between arrays and arraylists
-    - ![](/2023-08-27-java-programming-masterclass-udemy/array_arraylist.png)
-    - ![](/2023-08-27-java-programming-masterclass-udemy/array_arraylist_search.png)
-    - ![](/2023-08-27-java-programming-masterclass-udemy/array_arraylist_sort.png)
+    - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/array_arraylist.png)
+    - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/array_arraylist_search.png)
+    - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/array_arraylist_sort.png)
   - implments List
   - Does not implement Synchronizable therefore is **not thread-safe**
   - Maintains an array in memory that is actually bigger than what we need in most cases
@@ -222,12 +222,12 @@ list.set(1, 10); // Fails with UnsupportedOperationException
   - List.of() does not allow null elements
 
 ```java
-Integer[] array = {1,2,3};
+Integer[alt-text] array = {1,2,3};
 List<Integer> list = Arrays.asList(array);
 array[1] = 10;
 System.out.println(list); // Prints [1, 10, 3]
 
-Integer[] array = {1,2,3};
+Integer[alt-text] array = {1,2,3};
 List<Integer> list = List.of(array);
 array[1] = 10;
 System.out.println(list); // Prints [1, 2, 3]

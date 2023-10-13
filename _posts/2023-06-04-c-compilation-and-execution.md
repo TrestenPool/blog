@@ -97,7 +97,7 @@ int myFun1(int a, int b){
 // function from external.c
 int myFun1(int a, int b);
 
-int main(int argc, char const *argv[]){
+int main(int argc, char const *argv[alt-text]){
   int result = myFun1(1, 3);
   printf("result = %d\n", result);
   

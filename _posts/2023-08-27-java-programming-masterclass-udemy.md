@@ -229,7 +229,7 @@ image:
   - `String greeting = String.format("Hello %s, it is a pleasure to meet you", name);`
     - formatting a new string with other string variables
     - List of format specifiers
-    - ![](/2023-08-27-java-programming-masterclass-udemy/string-formatting-table.png)
+    - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/string-formatting-table.png)
 
 #### Substrings
   - ```java
@@ -298,7 +298,7 @@ image:
   - Getting all of the enums with **Enum.values()**
 
   - ```java
-    DayofTheWeek[] days = DayofTheWeek.values();
+    DayofTheWeek[alt-text] days = DayofTheWeek.values();
     for(DayofTheWeek curr_day: days){
         System.out.println(curr_day);
     }
@@ -435,7 +435,7 @@ image:
     import java.io.IOException;
     import java.io.InputStreamReader;
     public class Test {
-        public static void main(String[] args)
+        public static void main(String[alt-text] args)
             throws IOException
         {
             // Enter data using BufferReader
@@ -455,7 +455,7 @@ image:
   - 2: System.console
     - ```java
     public class Main {
-        public static void main(String[] args) {
+        public static void main(String[alt-text] args) {
             System.out.print("Enter your name: ");
             String name = System.console().readLine();
 
@@ -470,7 +470,7 @@ image:
   - 3: Command line arguments
     - ```java
     public class Main {
-        public static void main(String[] args) {
+        public static void main(String[alt-text] args) {
             if (args.length > 0) {
                 System.out.println("The command line arguments are:");
 
@@ -489,7 +489,7 @@ image:
     - ```java
     import java.util.Scanner;
     public class Main {
-        public static void main(String[] args) {
+        public static void main(String[alt-text] args) {
             Scanner sc = new Scanner(System.in);
             System.out.print("Enter your name: ");
             String name = sc.nextLine();
@@ -511,7 +511,7 @@ image:
     2. Private
     3. Protected
     4. Public
-    - ![](/2023-08-27-java-programming-masterclass-udemy/access-modifers.png)
+    - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/access-modifers.png)
   - in Java, Access modifiers help to restrict the scope of a class, constructor, variable, method, or data member
 
 ### Default
@@ -554,7 +554,7 @@ image:
 
     class B
     {
-    public static void main(String args[])
+    public static void main(String args[alt-text])
       {
         A obj = new A();
         // Trying to access private method
@@ -588,7 +588,7 @@ image:
 
     // Class B is subclass of A
     class B extends A {
-      public static void main(String args[]) {
+      public static void main(String args[alt-text]) {
         B obj = new B();
         obj.display();
       }
@@ -618,13 +618,13 @@ image:
 
 ### Default Parameters
   - Java does not support default values for parameters
-  - instead use the Builder design pattern [](https://www.newthinktank.com/2012/09/builder-design-pattern-tutorial/)
+  - instead use the Builder design pattern [alt-text](https://www.newthinktank.com/2012/09/builder-design-pattern-tutorial/)
   - or do something like this
     - `Dog myPetDog = new Dog().setName("Clifford").setColor("Red").setAge(12);`
     - Note: this will not work if you have required fields that require arguments to be passed through, that is when you would use the **Builder pattern**
 
 ### Method Overriding & Method Overloading
-  - ![](/2023-08-27-java-programming-masterclass-udemy/method-overloading-overriding.png)
+  - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/method-overloading-overriding.png)
 
 #### Method Overriding
   - Override methods super class methods in the subclasses
@@ -716,13 +716,13 @@ image:
 <!------------------------------ Java program ----------------------------->
 <!------------------------------------------------------------------------->
 ## How a java program is ran
-  - [](https://www.javatpoint.com/internal-details-of-hello-java-program)
+  - [alt-text](https://www.javatpoint.com/internal-details-of-hello-java-program)
 
 ### Compile time
-  - ![](/2023-08-27-java-programming-masterclass-udemy/compile_time.png)
+  - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/compile_time.png)
 
 ### Run time
-  - ![](/2023-08-27-java-programming-masterclass-udemy/runtime.png)
+  - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/runtime.png)
 
 ### Java Path
   - what is the java path

@@ -40,9 +40,9 @@ image:
   - A functional interface is an interface that has one, and **only one abstract method**
   - referred to as **SAM** (Single abstract method)
   -  java provides a library of functional interfaces in **java.util.function.package**. Just over 40 interfaces and counting.
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/functional_interface_types.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/functional_interface_types.png)
     - 4 types of functional interface types
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/function_operator.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/function_operator.png)
     - Notice for both **functions** on the left type is **R** which means it could be a different result type than the parameters
     - Notice for both **Operators** the type input and the **type result** are the **same**
 
@@ -70,9 +70,9 @@ list.forEach(s -> System.out.println(s));
 ```java
 public static void main(){
   var coordinates = Arrays.asList(
-          new double[]{47.182, -47.123},
-          new double[]{61.222, -77.190},
-          new double[]{12.331, -55.399}
+          new double[alt-text]{47.182, -47.123},
+          new double[alt-text]{61.222, -77.190},
+          new double[alt-text]{12.331, -55.399}
   );
 
   // using a variable for the lambda expression for the consumer method
@@ -94,7 +94,7 @@ public static <T> void processPoint(T t1, T t2, BiConsumer<T, T> consumer){
     - This is the abstract method for the predicate functional interface
 
 ```java
-public static void main(String[] args){
+public static void main(String[alt-text] args){
   List<String> mylist = new ArrayList<>(List.of(
           "Tresten", "Josh", "Dave", "Mike", "Roxy", "Tim"
   ));
@@ -116,21 +116,21 @@ public static void fire_person(Predicate<String> fire_person_predicate, List<Str
 ```
 
 #### Supplier functional interface
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/supplier.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/supplier.png)
   - **Factory method** like code
   - Takes **no arguments** **returns** instance of type **T**
 
 ```java
 public static void main(String... args){
-  String[] mystrings = new String[]{"one", "two", "three", "four", "five", "six", "seven"};
-  String[] randomSelectedValues = randomlySelectedValues(3, mystrings, () -> new Random().nextInt(7));
+  String[alt-text] mystrings = new String[alt-text]{"one", "two", "three", "four", "five", "six", "seven"};
+  String[alt-text] randomSelectedValues = randomlySelectedValues(3, mystrings, () -> new Random().nextInt(7));
   System.out.println(Arrays.toString(randomSelectedValues));
 }
 
-public static String[] randomlySelectedValues(int count,
-                                              String[] values,
+public static String[alt-text] randomlySelectedValues(int count,
+                                              String[alt-text] values,
                                               Supplier<Integer> s){
-    String[] selectedValues = new String[count];
+    String[alt-text] selectedValues = new String[count];
     for(int i = 0; i < count; i++){
         selectedValues[i] = values[s.get()];
     }
@@ -140,7 +140,7 @@ public static String[] randomlySelectedValues(int count,
 
 ```java
 Consumer<String> consumer = (message) -> {
-    String[] parts = message.split(" ");
+    String[alt-text] parts = message.split(" ");
     Arrays.asList(parts).forEach(s -> System.out.println(s));
 };
 
@@ -150,7 +150,7 @@ consumer.accept("Hello world, nice to see you");
 ### Convienence Methods
   - default methods in the functional interface
   - In this example below we show the .andThen() in the Function interface
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/convenience_methods.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/convenience_methods.png)
 
 .andThen() example
 ```java
@@ -177,16 +177,16 @@ System.out.println(uCaseLastName.apply(name));
 ```java
 Function<String, String> uCase = String::toUpperCase;
 
-Function<String, String[]> f0 = uCase
+Function<String, String[alt-text]> f0 = uCase
         .andThen(s -> s.concat(" Pool"))  // return String
-        .andThen(s -> s.split(" "));    // return String[]
+        .andThen(s -> s.split(" "));    // return String[alt-text]
 
 System.out.println(Arrays.toString(f0.apply("Tresten")));
 ```
 
 .andThen() chaining example
 ```java
-String[]names = {"Josh", "Dave", "Bob", "Carrol"};
+String[alt-text]names = {"Josh", "Dave", "Bob", "Carrol"};
 Consumer<String> s0 = s -> System.out.print(s.charAt(0));
 Consumer<String> s1 = System.out::println;
 Arrays.asList(names).forEach(s0
@@ -222,13 +222,13 @@ list.forEach(System.out::println);
 
 
 ## Syntax
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/syntax.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/syntax.png)
 
 ## Usuage example
   - lambda expression parameters are determined by the associated interface's method
   - The method to be used is **inferred by java**
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/lambda.png)
-  - ![](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/example.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/lambda.png)
+  - ![alt-text](/2023-09-19-section-14-lambda-expressions-functional-interfaces-method-references-udemy-java-programming-masterclass/example.png)
 
 ```java
 // our list of people
@@ -322,12 +322,12 @@ class Test{
 }
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[alt-text] args) {
         seedArray(Test::new, 10);
     }
 
-    public static Test[] seedArray(Supplier<Test> reference, int count){
-        Test[] testArray = new Test[count];
+    public static Test[alt-text] seedArray(Supplier<Test> reference, int count){
+        Test[alt-text] testArray = new Test[count];
         for(int i = 0; i < count; i++){
             testArray[i] = reference.get();
         }

@@ -108,7 +108,7 @@ image:
 
 ### Cloudformation failed multiple times trying to create my stack
   - Errors I would get
-  - ![]()
+  - ![alt-text]()
 
 ### Nginx 502
   - explain

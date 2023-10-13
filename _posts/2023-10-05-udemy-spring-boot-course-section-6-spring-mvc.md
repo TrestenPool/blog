@@ -49,7 +49,7 @@ image:
 
 ## Thymeleaf template (boilerplate)
   - thymeleaf expression is between the <p>
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/steps.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/steps.png)
     - theDate is passed from the controller by the model
 
 ```text
@@ -122,8 +122,8 @@ public class DemoController {
 
 # MVC Architecture
   - [mvc docs](https://www.tutorialspoint.com/spring/spring_web_mvc_framework.htm)
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/mvc_fonrt_controller.png)
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/dispatcher_servlet.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/mvc_fonrt_controller.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/dispatcher_servlet.png)
 
 # Sending/Receiving form with query parameters example
 
@@ -282,7 +282,7 @@ however if we change the form to send as POST
     - you must add the model attribute before showing the form
     - this is a bean that will hold form data for the data binding
 
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/object_binding.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/object_binding.png)
     - the name must match in the controller and in the view
     - `*{...} is shortcut syntax for ${student.firstName}`
     - when the form is loaded, spring mvc will read student from the model then call the getter methods()
@@ -367,7 +367,7 @@ th:field
   - used to get the object from the  form
 
 # Select with thymeleaf
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/select_thy.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/select_thy.png)
 
 ```html
 <form th:action="@{/processStudentForm}" method="POST" th:object="${student}">
@@ -482,7 +482,7 @@ public class StudentController {
 # Validation
   - Java has a standard Bean Validation API
   - [validation example](https://spring.io/guides/gs/validating-form-input/)
-  - [](http://www.beanvalidaton.org)
+  - [alt-text](http://www.beanvalidaton.org)
 
 
 ## Valiation Annotations
@@ -498,7 +498,7 @@ public class StudentController {
 | @Future / @Past | Date must be in future or past given date |
 
 ## Basic Form Validation example
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/validation_diagram.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/validation_diagram.png)
 
 Customer class
   - here we use some annotations that will be used for validations later
@@ -644,7 +644,7 @@ I have the following code in the model where I define an integer with the follow
 
   - I am getting the following error after trying to submit
   - it is trying to convert a String --> int
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/error.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/error.png)
 
 Fix
   - This can be fixxed by using the **Integer** class instead of primitive **int**
@@ -675,10 +675,10 @@ HTML file
   - We can get it by printing the BindingResult to the console then using that in the messages.properties file
   - Once we get the error message we can put it in our messages.properties file for the custom error message
   - `System.out.println("Binding result: " + bindingResult.toString());`
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/custom_error_message.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/custom_error_message.png)
 
 ## Creating Custom validation rule
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/custom_validation.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/custom_validation.png)
     - we want a custom validation to make sure the course code starts with LUV 
   
 Steps 1. Create the custom annotation
@@ -701,11 +701,11 @@ public @interface CourseCode {
     String message() default "must start with LUV";
 
     // define default groups
-    Class<?>[] groups() default {} ;
+    Class<?>[alt-text] groups() default {} ;
 
     // define default payloads
     // payloads provide custom details about the validation failure(security level, error code, etc..)
-    Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[alt-text] payload() default {};
 }
 ```
 
@@ -753,4 +753,4 @@ Student class
     private String courseCode;
 ```
 
-  - ![](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/utsa_example.png)
+  - ![alt-text](/2023-10-05-udemy-spring-boot-course-section-6-spring-mvc/utsa_example.png)

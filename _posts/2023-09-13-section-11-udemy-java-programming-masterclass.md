@@ -56,7 +56,7 @@ image:
     - Is set to **implement** **an abstract method** if it overrides one
   
 ### Abstract classes
-  - ![](/2023-08-27-java-programming-masterclass-udemy/abstract_table.png)
+  - ![alt-text](/2023-08-27-java-programming-masterclass-udemy/abstract_table.png)
   - Can have a mix of abstract and concrete methods
 
   - `abstract class Animal { `
@@ -180,7 +180,7 @@ image:
   - imagine there are 50 subclasses that implement an interface and you make a change, you would have to make that change in 50 other places to they can implement this 1 new method
 
   - ```java
-    public static void main(String[] args) {
+    public static void main(String[alt-text] args) {
       // not coding to an interface
       // the ArrayList is not an interface but an implementation of a list
       ArrayList<Integer> ll1 = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8));
@@ -229,7 +229,7 @@ image:
 --- 
 
 ## Abstract classes vs interfaces
-  - ![](/2023-09-13-section-11-udemy-java-programming-masterclass/interface_vs_abstract.png)
+  - ![alt-text](/2023-09-13-section-11-udemy-java-programming-masterclass/interface_vs_abstract.png)
 
 ### Abstract classes
   - abstract classes are very similiar to interfaces

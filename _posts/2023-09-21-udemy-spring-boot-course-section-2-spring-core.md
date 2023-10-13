@@ -42,13 +42,13 @@ image:
   - the approach of outsourcing the construction and management of objects
 
 Coding Scenario
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/coding_scenario.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/coding_scenario.png)
 
 Spring Solution
   - The app requests a coach object from spring
   - Spring will then use the **Object Factory** to return the reference to the correct object
   - Spring determines which object you need based on the **configuration** you set
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/spring_solution.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/spring_solution.png)
 
 # Dependency Injection
   - Dependency  Inversion Principle - client delegates to another object the responsiblity of providing its dependencies
@@ -57,12 +57,12 @@ Car Factory Example
   - user says give me a car object
     - car factory assemblies the car and all its parts and components
     - once the car factory is finished it will return the user the car object
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/car_di_example.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/car_di_example.png)
 
 Team example
   - The application requests a coach object
   - Spring object factory assemblies the correct object based on the configuration and returns the reference to the user 
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/di_example.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/di_example.png)
 
 ## Types of Injection
   - There are two types of injection
@@ -74,7 +74,7 @@ Team example
   - recommended as first choice
 
 #### Constructor injection example
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/example.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/example.png)
     - In this example we want the spring container to autowire a coach bean to our DemoController class
 
 ```java
@@ -243,7 +243,7 @@ public class DependencyInjectionDemoApplication {
     - Starts the embedded server Tomcat, etc..
 
 ## Component Scanning
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/component_scanning.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/component_scanning.png)
   - default, spring scans all sub packages from where the main method file is located
     - scans these packages recursively
   - doesn't matter the name of the packages
@@ -256,7 +256,7 @@ public class DependencyInjectionDemoApplication {
 		scanBasePackages= {"springboot.something","springboot.other"}
 )
 public class DependencyInjectionDemoApplication {
-	public static void main(String[] args) {
+	public static void main(String[alt-text] args) {
 		SpringApplication.run(DependencyInjectionDemoApplication.class, args);
 	}
 
@@ -357,7 +357,7 @@ spring.main.lazy-initialization=true
     - it is cached in memory
     - all dependency injections for a bean will reference the same bean
 
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/singleton_diagram.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/singleton_diagram.png)
 
 ### Specify Bean Scope @Scope
   - [Spring bean scopes documentation](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html)
@@ -413,14 +413,14 @@ public class Controller {
 
 ### Prototype
   - Scopes single bean to any number of object instances
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/prototype_example.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/prototype_example.png)
 
 
 
 
 
 ## Bean LifeCycle
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/Bean-Life-Cycle-Process-flow3.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/Bean-Life-Cycle-Process-flow3.png)
   - if we want to execute some code on the bean instantiation and just after closing the spring container, then we can write that code inside the custom init() method and the destroy() method.
   - What is the point of the custom init/destroy methods
     - custom code during bean initialization, destroy
@@ -494,7 +494,7 @@ public void doCleanupStuff(){
   - Steps
     - Need to configure class with **@Configuration** annotation
     - Configure **@Bean method** that returns a bean
-  - ![](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/configure_bean.png)
+  - ![alt-text](/2023-09-21-udemy-spring-boot-course-section-2-spring-core/configure_bean.png)
 
 ```java
 public class SwimCoach implements Coach{

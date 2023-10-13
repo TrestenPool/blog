@@ -26,11 +26,26 @@ image:
     - Unique identifer for a row in a table
   - Foreign Key
     - Field in one table that refers to the primary key in another table
+  
+  - Referential Integerity
+    - preserves relationship between tables
+    - prevents operations that would destroy relationships
+    - can only contain valid reference to primary key in another table
+  
+Example below shows how to create a foreign key in MySQL
+```sql
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    quantity INT,
+    product_id INT,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+```
 
 ## Cascade
   - Cascade
     - You can apply the same operation to related entities
-  - ![](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/cascade.png)
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/cascade.png)
     - if we save the instructor, if were to cascade we would also save the instructor detail
     - by the same token if we were to delete an instructor we would delete the instructor detail if it is one-to-one
 
@@ -44,12 +59,12 @@ image:
 
 ## Uni-Directional , Bi-Directional
   Uni-Directional
-  - ![](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/uni-directional.png)
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/uni-directional.png)
     - We retrieve the instructor detail only through the instructor
     - we can't retrieve the instructor through the instructor detail
   
   Bi-Directional
-  - ![](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/bi-directional.png)
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/bi-directional.png)
   - we can get the instructor detail through the instructor
   - we can get the instructor through the instructor detail
 
@@ -69,13 +84,13 @@ image:
 
 
 ## One-to-One
-  - ![](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/one-to-one.png)
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/one-to-one.png)
 
 ## One-to-Many
-  - ![](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/one-to-many.png)
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/one-to-many.png)
 
 ## Many-to-Many
-  - ![](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/many-to-many.png)
+  - ![alt-text](/2023-10-13-udemy-spring-boot-course-section-9-jpa-hibernate-advanced-mappings/many-to-many.png)
 
 
 

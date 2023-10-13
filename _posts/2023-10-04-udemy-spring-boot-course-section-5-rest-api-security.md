@@ -57,13 +57,13 @@ image:
   - more customizable for specific app requirements
 
 ## Servlet Filters
-  - ![](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/security_filters.png)
+  - ![alt-text](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/security_filters.png)
   - Servlet filters are used to **pre-process** / **post-process** web requests
   - Servlets route web requests based on security logic
   - spring provides a bulk of security functionality with servlet filters
 
 ### Spring Security Filters Workflow
-  - ![](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/workflow.png)
+  - ![alt-text](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/workflow.png)
   
 # Enabling Spring Security
   - just add the dependency to your pom.xml
@@ -174,11 +174,11 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 ```
 
 ## Request Matchers
-  - ![](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/authorize_requests.png)
+  - ![alt-text](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/authorize_requests.png)
   
 # Security Filter Chain
   - [security filter chain docs](https://docs.spring.io/spring-security/reference/servlet/architecture.html)
-  - ![](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/filter_chain.png)
+  - ![alt-text](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/filter_chain.png)
 
 # DB authentication
   - username and password stored in db
@@ -194,8 +194,8 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
   - [jdbc auth docs](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/jdbc.html)
   - Spring Security can read user account info from database
   - By default, you have to follow Spring Security's predefined table schemas
-  - ![](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/jdbc.png)
-  - ![](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/default_schema.png)
+  - ![alt-text](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/jdbc.png)
+  - ![alt-text](/2023-10-04-udemy-spring-boot-course-section-5-rest-api-security/default_schema.png)
 
 ## Setting up users & authorities table
 

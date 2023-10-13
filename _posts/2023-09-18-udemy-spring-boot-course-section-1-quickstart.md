@@ -55,19 +55,19 @@ image:
   - requires JDK 17 or higher
 
 ## Standard Directory Structure
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_directory_structure.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_directory_structure.png)
   - if doing a web app place the webapp files in src>main>webapp
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/app_properties.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/app_properties.png)
     - By default Spring boot will load properties from: application.properties
     - things like where the port number can be configured
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/templates.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/templates.png)
 
 ## Spring Framework
   - Lightweight dev with **Java POJOs**
   - **Dependency injection** to promote loose coupling
 
 ### Overview
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_core_container.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_core_container.png)
   - the core container is the heart of spring
     - it manages how beans are created
     - it has a bean factory for creating beans
@@ -106,7 +106,7 @@ image:
   - [list of spring boot starters]()
 
 ### Springboot embedded server
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/embedded_server.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/embedded_server.png)
   - springboot provides an embedded HTTP server so you can get started quickly
     - Tomcat, Jetty, Undertow
   - self contained unit in the .jar file. nothing else you have to install!!
@@ -134,15 +134,15 @@ image:
 {: file='pom.xml'}
 
   - Enable "Build Project Automatically"
-    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/build_automatically.png)
+    - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/build_automatically.png)
   
   - Enable "Allow auto-make to start even if developed application is currently running"
-    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/allow_auto-make.png)
+    - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/allow_auto-make.png)
   
     
 
 ### Deploying Springboot applications
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/war_deploy.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/war_deploy.png)
   - Springboot apps can also be deployed in the traditional way with **WAR** files
   - Deploy WAR file to an external server: Tomcat, JBoss, WebSpher
   - Do not use the **src/main/webapp** directory if app is packaged as a **WAR**
@@ -150,7 +150,7 @@ image:
     - it is **silently ignored** by most build tools if you **generate a JAR**
 
 ### Does Springboot replace Spring MVC, Spring Core, Spring AOP, Spring REST, Spring....
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring.png)
   - No Springboot **does not replace** but rather uses them behind the scenes abstracting the manual config away from the user
 
 ### Does Springboot run faster than regular Spring code?
@@ -242,11 +242,11 @@ spring.security.user.password=password123
 ### POM file
   - **Project Object Model File**
   - shopping list for maven
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/maven_structure.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/maven_structure.png)
 
 ### Project Coordinates
   - where maven goes to look to download
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/project_coordinates.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/project_coordinates.png)
   - referred to as **GAV** (Group ID, Artificat ID, Version)
   - [maven search](https://search.maven.org/)
 
@@ -272,7 +272,7 @@ export JAVA_HOME
 
 ### Maven Commands
   - Cheat sheet
-    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/Maven-Commands-Cheat-Sheet.png)
+    - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/Maven-Commands-Cheat-Sheet.png)
 
   - Creates the target/ directory with all necessary file and the .jar file
 ```sh
@@ -297,7 +297,7 @@ export JAVA_HOME
 #### Spring initializer
   - go to the spring initializer site
     - [spring initializer](https://start.spring.io/)
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_init.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/spring_init.png)
     - enter out the project information
     - add the dependencies on the right, (selected spring web for this demo)
   - hit generate, download the file,  unzip to a directory and open up in ide
@@ -316,7 +316,7 @@ export JAVA_HOME
 ```
 
   - However when we attempt to go to the site at localhost:8080 we get this error because we have no routes setup
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/error.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/error.png)
 
 #### Setup / mapping 
   - We will setup a mapping for the "/" endpoint
@@ -336,7 +336,7 @@ public class FunRestController {
     }
 }
 ```
-  - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/helloworld.png)
+  - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/helloworld.png)
     - now when we navigate to localhost:8080 we get this message
 
 
@@ -368,7 +368,7 @@ public String teamInfo(){
 {: file='restController.java'}
 
   - output
-    - ![](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/output.png)
+    - ![alt-text](/2023-09-18-udemy-spring-boot-course-section-1-quickstart/output.png)
 
 
 ## Common Springboot application properties

@@ -38,10 +38,10 @@ image:
 
 ## Collection is the root of the collection hierarchy
   - Everything branches off of the Collection interface
-  - ![](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/tree.png)
+  - ![alt-text](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/tree.png)
 
 ## Collection interface methods
-  - ![](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/collection_methods.png)
+  - ![alt-text](/2023-09-26-section-15-java-collection-framework-udemy-java-programming-masterclass/collection_methods.png)
 
 ## What's a Collection Class?
   - The Collections class is not the Collections Framework

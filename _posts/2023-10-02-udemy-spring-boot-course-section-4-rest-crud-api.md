@@ -46,7 +46,7 @@ image:
 
 
 # Specialized Component annotations
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/component_annotation.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/component_annotation.png)
   - Spring has provided a few specialized stereotype annotations: @Controller, @Service and @Repository. They all provide the same function as @Component.
   - They all act the same because they are all composed annotations with @Component as a meta-annotation for each of them. They are like @Component aliases with specialized uses and meaning outside Spring auto-detection or dependency injection.
 
@@ -78,7 +78,7 @@ public class MyControllerClass {
 
 # Why have a service layer
   - The service layer is used so you can use all of the needed dao to implment some business logic
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/multiple_dao.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/multiple_dao.png)
 
 ## Best Practices
 Best Practice to apply transactional boundaries at the service layer
@@ -86,7 +86,7 @@ Best Practice to apply transactional boundaries at the service layer
   - The @Transactional annotation should be in the service and not the dao
 
 # Java JSON Data binding
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/conversion.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/conversion.png)
   - java json binding is the process of converting JSON data to a java POJO and vice versa
   - AKA
     - Mapping
@@ -589,7 +589,7 @@ public class Controller {
 ## How does it work
   - Spring Data REST will scan your project for JpaRepository
   - Expose REST APIs for each enity type for you JpaRepository
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/plural.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/plural.png)
 
 ```java
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
@@ -600,16 +600,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
   - All you do is have to add the dependency in the pom.xml file and add your JpaRepository entity interfaces and spring will automatically scan them and implement the CRUD API
 
 ## Architectur before/after
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/spring_data_rest.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/spring_data_rest.png)
 
 ## HATEOAS compliant
   - Spring Data REST endpoints are HATEOAS compliant
   - HATEOAS - Hypermedia as the Engine of Application State
   - think of it as meta-data for REST data
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/hateoas_example.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/hateoas_example.png)
     - example of hateoas compliant for a get request of a single entity
 
-  - ![](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/hateoas_collection.png)
+  - ![alt-text](/2023-10-02-udemy-spring-boot-course-section-4-rest-crud-api/hateoas_collection.png)
     - example of hateoas compliant for a collection response which contains
       - page size
       - total elements
