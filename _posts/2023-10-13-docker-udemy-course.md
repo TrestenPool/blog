@@ -94,8 +94,8 @@ Docker Run (Run)
     - if you want more detailed information about the client and the docker engine
 
 ## Docker cli structure
-  - old way (still works) docker <command> (options)
-  - new way docker <command> <sub-command> (options)
+  - old way (still works) docker COMMAND (options)
+  - new way docker COMMAND SUB-COMMAND (options)
 
 ## Image vs container
   - an image is the application we want to run
