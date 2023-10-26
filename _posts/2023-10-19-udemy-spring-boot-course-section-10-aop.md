@@ -12,6 +12,14 @@ image:
 - [Brief intro example](#brief-intro-example)
 - [Aspect oriented programming](#aspect-oriented-programming)
   - [Weaving](#weaving)
+  - [Pointcut Expressions](#pointcut-expressions)
+  - [Pointcut Declarations](#pointcut-declarations)
+    - [Combining Pointcut Declarations](#combining-pointcut-declarations)
+    - [Controlling Aspect order with @Order](#controlling-aspect-order-with-order)
+    - [How to access method signature and method parameters in the advice](#how-to-access-method-signature-and-method-parameters-in-the-advice)
+    - [Accessing the return value for a @AfterReturning advice](#accessing-the-return-value-for-a-afterreturning-advice)
+    - [@AfterThrowing](#afterthrowing)
+    - [@Around](#around)
 
 
 # Git Repo for this sesion
@@ -20,6 +28,8 @@ image:
 # Resources
   - {% include embed/youtube.html id='Ft29HgsePfQ' %}
   - [baelung docs on aop](https://www.baeldung.com/spring-aop-vs-aspectj)
+  - [pointcut explained](https://jstobigdata.com/spring/pointcut-expressions-in-spring-aop/)
+  - [static methods Spring aop](https://stackoverflow.com/questions/55964758/how-to-advise-static-methods-using-spring-aop)
 
 # Brief intro example 
   - we have the following architecture
@@ -91,6 +101,13 @@ Advice Types
 | After-throwing  | Run advice after the method execution, only if the method exits by throwing an exception. |
 | Around          | Run advice before and after the advised method is invoked.                                |
 
+
+Point Cut expressions
+
+| Expression | Description                             |
+| :--------- | :-------------------------------------- |
+| Before     | Run advice before the method execution. |
+
 Pros / Cons
 
 | Pros                                     | Cons                                                               |
@@ -143,4 +160,373 @@ AspectJ pros/cons
 | works with any POJO, not just beans from app context | AspectJ **pointcut** **syntax** can become **complex**   |
 | **Faster** performance compared to Spring AOP        |                                                          |
 | **Complete** AOP support                             |                                                          |
+
+Parameter Pattern Wildcards
+
+| Symbol              | Description                                                                                     |
+| :------------------ | :---------------------------------------------------------------------------------------------- |
+| ()                  | matches a method with **No** arguments                                                          |
+| (*)                 | matches a method 1 argument of any type                                                         |
+| (..)                | matches a method with **0 or more arguments** of any type                                       |
+| (int,..)            | matches a method with 1 argument of type int, or multiple arguments with the first being an int |
+| (com.tpool.Account) | 1 argument of type Account object with full class path                                          |
+
+
+Should you use Spring AOP or AspectJ
+  - Spring AOP is a lightweight version of AspectJ
+  - it solves common enterprise problems
+  - start off with Spring AOP and if you have complex business needs go ahead and use AspectJ
+
+## Pointcut Expressions
+  - Spring AOP uses AspectJ pointcut expressions
+  - Spring AOP has no support for static methods
+  - 
+  - Pointcut
+    - It is a predicate expression that determines the Join points, hence allowing us to control the advice execution
+    - In simple words, a pointcut expression is like a Regular Expression which determines the classes and methods where the Advice will be executed
+  - Declaring a pointcut is simple, all you need is annotate the method with `@Pointcut(POINTCUT_EXPRESSION)`
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/pointcut-1.png)
+    - matches on specific class method name
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/pointcut-2.png)
+    - just matches on any class that has the method name
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/pointcut-3.png)
+    - matches on any method name starting with **add** like addStudent(), addLog(), addAnything()
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/pointcut-4.png)
+    - matches on any return type
+    - matches on any method that starts with processCreditCard*
+  - `@Before("execution(* com.tpool.aopdemo.dao.*.*(..))")`
+    - this matches for all methods in a given package
+    - com.tpool.aopdemo.dao - tells spring this is the base package
+    - .* - tells spring any class
+    - .* - tells spring any method name
+    - (..) - tels spring any number of arguments of any type
+
+## Pointcut Declarations
+  - way of **reusing** our **pointcut expressions** to multiple advices
+  - Declaring pointcut-declarations
+    - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/pointcut-declaration.png)
+  - Applying pointcut declaration to advice
+    - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/apply-pointcut-declaration.png)
+
+### Combining Pointcut Declarations
+  - we can apply multiple pointcut declarations using **logic operators**
+  - The example we want to do is apply pointcut declarations to "All methods in a package EXCEPT getter/setter methods"
+
+```java
+// just a collection of related advices
+@Aspect
+@Component
+public class MyDemoLoggingAspect {
+
+    // all methods that are in the dao package
+    @Pointcut("execution(* com.tpool.aopdemo.dao.*.*(..))")
+    private void forDaoPackage(){};
+
+    @Pointcut("execution(* com.tpool.aopdemo.dao.*.get*(..))")
+    private void DaoGetters(){};
+
+    @Pointcut("execution(* com.tpool.aopdemo.dao.*.set*(..))")
+    private void DaoSetters(){};
+
+    // all in the dao package but no getters or setters
+    @Pointcut("forDaoPackage() && !(DaoGetters() || DaoSetters())")
+    private void forDaoPackageNoGetterSetter(){}
+
+    @Before("forDaoPackageNoGetterSetter()")
+    public void logging(){
+        System.out.println("logging here ...");
+    }
+}
+```
+
+### Controlling Aspect order with @Order
+  - We want the advices to run in a certain order
+  - Lower numbers have higher precedence
+  - negative numbers are allowed
+  - numbers do not have to be consecutive 
+    - ex. 1, 5, 10, 12
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/breaking_up_aspects.png)
+    - we have to break up the single aspect into multiple to get that fine grain control of the order
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/order.png)
+    - the order in which the aspects will run in
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/annotations.png)
+  - What if two aspects have the same order number?
+    - it is considered undefined, so expect wacky results
+
+```java
+@Aspect
+public class AopExpressions {
+    // all methods that are in the dao package
+    @Pointcut("execution(* com.tpool.aopdemo.dao.*.*(..))")
+    public void forDaoPackage(){};
+
+    // getter methods
+    @Pointcut("execution(* com.tpool.aopdemo.dao.*.get*(..))")
+    public void DaoGetters(){};
+
+    // setter methods
+    @Pointcut("execution(* com.tpool.aopdemo.dao.*.set*(..))")
+    public void DaoSetters(){};
+
+    // all in the dao package but no getters or setters
+    @Pointcut("forDaoPackage() && !(DaoGetters() || DaoSetters())")
+    public void forDaoPackageNoGetterSetter(){}
+}
+```
+{: file='AopExpressions.java'}
+
+```java
+@Aspect
+@Component
+@Order(1)
+public class LoggingAspect {
+    @Before("com.tpool.aopdemo.aspect.AopExpressions.forDaoPackageNoGetterSetter()")
+    public void CloudLog(){
+        System.out.println("=======> Cloud log");
+    }
+}
+```
+{: file='LoggingAspect.java'}
+
+```java
+@Aspect
+@Component
+@Order(2)
+public class ApiAspect {
+    @Before("com.tpool.aopdemo.aspect.AopExpressions.forDaoPackageNoGetterSetter()")
+    public void apiLog(){
+        System.out.println("=======> API log");
+    }
+}
+```
+{: file='ApiAspect.java'}
+    
+```java
+@Aspect
+@Component
+@Order(3)
+public class SecurityAspect {
+    @Before("com.tpool.aopdemo.aspect.AopExpressions.forDaoPackageNoGetterSetter()")
+    public void security(){
+        System.out.println("=======> security check");
+    }
+}
+```
+{: file='SecurityAspect.java'}
+  
+
+### How to access method signature and method parameters in the advice
+  - we want to use the method signature and parameters in the advice for things like logging the method that was called
+  - We want to access the return value for a method 
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/return_value.png)
+
+```java
+@Aspect
+@Component
+@Order(3)
+public class SecurityAspect {
+    @Before("com.tpool.aopdemo.aspect.AopExpressions.forDaoPackageNoGetterSetter()")
+    public void security(JoinPoint joinPoint){
+        System.out.println("=======> security check");
+
+        // method signature
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        System.out.println("Method: " + methodSignature);
+
+
+        // go through all of the arguments
+        System.out.println("args");
+        Object[] args = joinPoint.getArgs();
+        for(var arg: args) {
+            System.out.println(arg);
+        }
+        System.out.println("=== end of args ===");
+
+    }
+}
+```
+
+### Accessing the return value for a @AfterReturning advice
+  - We want to access the return value for a method 
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/return_value.png)
+
+```java
+@AfterReturning(
+        pointcut = "execution(* RetrieveMemberships(..))",
+        returning = "result"
+)
+public void afterReturningResult(List<String> result) {
+    // remove all of the elements in the list
+    result.clear();
+    result.addAll(Arrays.asList("You", "are", "awesome", "!"));
+}
+```
+
+### @AfterThrowing
+  - advice is executed after an exception is thrown from the method being called
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/sequence_diagram.png)
+  - What its great for
+    - log exceptions
+    - perform auding on the exception
+    - notify devops team via email or sms
+
+How to access exception object
+  - use the `throwing="theException"`
+  - the throwing=**theException** has to match what is in the parameters for Throwable **theException**
+
+```java
+@AfterThrowing(
+        pointcut = "execution(* com.tpool.aopdemo.dao.MembershipDAOImpl.simulateException(..) )",
+        throwing = "throwingException"
+)
+public void afterThrowing(Throwable throwingException){
+    System.out.println("you threw an exception buddy");
+    
+    // print out the exception message
+    System.out.println(throwingException.getMessage());
+}
+```
+
+### @Around
+  - Runs before and after method execution
+  - Most common use cases
+    - logging
+    - auditing
+    - security
+    - pre-processing & post-processing
+  - Ability to manage exeptions
+    - swallow, handle, stop exceptions
+  - When using @Around advice you get a reference to the **ProceedingJoinPoint**
+    - this is a handle to the target method
+    - your code can use this to execute the target method
+
+Example below
+  - ProceedingJointPoint
+  - notice `proceedingJointPoint.proceed()` gets the method to be executed
+
+```java
+@Around("execution(* com.tpool.aopdemo.dao.MembershipDAOImpl.getAccount(..) )")
+public Object aroundDemo(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+    // start time
+    long begin = System.currentTimeMillis();
+
+    // calls getAccount()
+    Object result = proceedingJoinPoint.proceed();
+
+    // end time
+    long end = System.currentTimeMillis();
+
+    long duration = end - begin;
+    System.out.println("\n======> DURATION " + duration + " milliseconds");
+
+    return result;
+}
+```
+
+Exception Handling
+  - for an exception thrown from proceeding join point we can
+    - you can handle / swallow / stop the exception
+    - or you can simply re-throw the exception
+  - ![alt-text](/2023-10-19-udemy-spring-boot-course-section-10-aop/exception_sequence_diagram.png)
+
+```java
+@Around("execution(* com.tpool.aopdemo.dao.MembershipDAOImpl.getAccount(..) )")
+public Object handleException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    System.out.println("beginning of handleException()");
+
+    Object result;
+    try {
+        result = proceedingJoinPoint.proceed();
+    }
+    catch (Exception e) {
+        result = "exception occured, but we don't really care";
+    }
+
+    System.out.println("end of handleException()");
+    return result;
+}
+```
+
+If we wanted to rethrow the exception we'd simply use throw again in the catch block like this
+````java
+catch (Exception e) {
+    throw e;
+}
+```
+
+
+
+
+## Enabling Spring AOP
+  - Add to the pom.xml
+    - it will be automatically enabled after that
+    - in the old days you would have to use the @EnableAspectJAutoProxy annotation
+
+# Example using @Before
+
+Development process
+  - Create target object: AccountDao
+  - Create main app
+  - Create an Aspect with **@Before** advice
+
+Create target object: AccountDao
+```java
+public interface AccountDAO {
+  void add Account();
+```
+```java
+@Component
+public class AccountDAOImpl implements AccountDAO {
+  void add Account() {
+    System.out.println("ADDING ACCOUNT");
+  }
+```
+
+Create main app
+```java
+@SpringBootApplication
+public class AppdemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(AppdemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(AccountDAO accountDAO) {
+		return runner -> {
+			demoTheBeforeAdvice(accountDAO);
+		};
+	}
+
+	private void demoTheBeforeAdvice(AccountDAO accountDAO) {
+		accountDAO.addAccount();
+	}
+
+}
+```
+
+Create an Aspect with **@Before** advice
+
+```java
+@Aspect
+@Component
+public class MyDemoLoggingAspect {
+    // pointcut expression goes between the parens of @Before
+    @Before("execution(public void addAccount())")
+    public void loggingAdvice() {
+        System.out.println("===============================");
+        System.out.println("===> Logging stuff here... <===");
+        System.out.println("===============================");
+    }
+}
+```
+
+When we run our code we get the following
+```text
+===============================
+===> Logging stuff here... <===
+===============================
+class com.tpool.aopdemo.dao.AccountDAOImpl: DOING MY DB: WORK ADDING AN ACCOUNT
+```
+
 
