@@ -101,4 +101,3 @@ Docker Run (Run)
   - an image is the application we want to run
   - a container is an instance of that image running as a **process**
 
-
