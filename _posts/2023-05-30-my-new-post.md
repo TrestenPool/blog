@@ -160,3 +160,9 @@ The image below will toggle dark/light mode based on theme preference, notice it
 
 [^footnote]: The footnote source
 [^fn-nth-2]: The 2nd footnote source
+
+
+https://github.com/TrestenPool/blog/assets/49597116/6a39807f-995b-4485-b811-13a32c7ae15f
+
+
+
