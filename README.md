@@ -69,4 +69,4 @@ Rename a post
 <!-- Custom CSS -->
   - If you want to add some custom css add it to the bottom of _sass/main.scss
 
-bundle exec jekyll compose "Angular Section 3. Course Project" --collection "posts"
+bundle exec jekyll compose "Angular Section 5,6,7,8. Components, Databinding, Advanced Directives" --collection "posts"

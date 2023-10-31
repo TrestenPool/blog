@@ -496,8 +496,6 @@ export class ServersComponent implements OnInit {
 ## String interpolation
   - expression placed between the {{ expressionHere }}
   - As long as the expression resolves to a string it will work without issue
-  - so something like this would work `{{ "Hello" + " World" }}`
-  - you can also pass a method that returns a string like this `{{ methodName() }}`
   - You also cannot write multi-line expression between the curly braces
 
 ```typescript
