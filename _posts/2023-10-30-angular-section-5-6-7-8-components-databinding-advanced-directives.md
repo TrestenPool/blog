@@ -15,6 +15,19 @@ image:
 - [Accessing Local references through the DOM with @ViewChild](#accessing-local-references-through-the-dom-with-viewchild)
 - [Projecting content into component with ng-content](#projecting-content-into-component-with-ng-content)
 - [Component lifecycle](#component-lifecycle)
+- [@ContentChild()](#contentchild)
+- [Directives](#directives)
+  - [Attribute Directives](#attribute-directives)
+    - [NgClass](#ngclass)
+    - [NgStyle](#ngstyle)
+  - [Structural Directives](#structural-directives)
+    - [Why do we need the \* in structural directives?](#why-do-we-need-the--in-structural-directives)
+    - [Creating our own Structural Directive](#creating-our-own-structural-directive)
+  - [Creating our own Atribute Directives](#creating-our-own-atribute-directives)
+    - [@HostListener](#hostlistener)
+    - [@HostBinding](#hostbinding)
+    - [Bind property to a directive](#bind-property-to-a-directive)
+    - [Special case for passing down string data](#special-case-for-passing-down-string-data)
 
 
 # Passing data between different components
@@ -276,4 +289,329 @@ myfunc(){
 
 
 # Component lifecycle
-  - stuff 
+  - In Angular, components go through a series of lifecycle events and hooks from creation to destruction
+  - These lifecycle events allow you to interact with your components at various points during their existence.
+
+| Hook                  | Description                                                              |
+| :-------------------- | :----------------------------------------------------------------------- |
+| ngOnChanges           | Called after a bound input property changes                              |
+| ngOnInit              | Called once the component is initialized. Ran after the constructor      |
+| ngDoCheck             | Called during every change detection run                                 |
+| ngAfterContentInit    | Called after content (ng-content) has been projected into view          |
+| ngAfterContentChecked | Called everytime the projected content has been checked                  |
+| ngAfterViewInit       | Called after the component's view (and child views) has been initialized |
+| ngAfterViewChecked    | Called every time the view (and child views) have been checked           |
+| ngOnDestroy           | Called once the component is about to get destroyed                      |
+| ngAfterViewChecked    | Called every time the view (and child views) have been checked           |
+
+
+# @ContentChild()
+  - Say we want access to a local reference that isn't in our component per say
+  - meaning if we have some stuff passed through **ng-content** that we know will have a local reference lets say **#paragraphContent**
+  - We can access this local reference in the child component with @ContentChild()
+
+code below
+  - static: true just means that the child components will be loaded before ngOnInit() so we can reference it in there
+  - if static: false that means that the content will not get loaded until after ngOnInit() meaning you can't access the stuff until after ngOnInit is called()
+  - this is for when the local reference is not in the component directly but gets projected eventually 
+
+```typescript
+@ContentChild('contentParagraph', {static: false})
+paragraph: ElementRef
+```
+
+# Directives
+
+3 Main Categories
+
+
+1. Component
+  - most common
+  - examples
+    - ngComponentOutlet
+2. Attribute Directives
+  - Attribute directives are used to modify the appearance or behavior of an element or component
+  - examples
+    - ngModel
+    - ngIf
+    - ngFor
+    - ngStyle
+    - ngClass
+3. * Structural Directives
+  - They have a preceding *****
+  - Add or remove elements from the DOM
+  - examples
+    - ngIf
+    - ngFor
+    - ngSwitch
+
+## Attribute Directives
+
+### NgClass
+  - when using ngClass you have to use with square brackets
+  - in Angular, you need to wrap ngClass with square brackets [] when you want to bind to a property, expression, or a variable to **dynamically** determine the classes to be applied. 
+  - `[ngClass]`
+  - There are multiple ways to use ngClass
+  - but the main implementation is to use **object expressions**
+  - `[ngClass]=" 'class1': condition1, 'class2': condition2 "`
+
+  > Make sure to wrap the classes in `'class1'`
+  {: .prompt-danger }
+
+```html
+<div *ngIf="onlyOdd">
+  <ul class="list-group">
+    <li
+      class="list-group-item"
+      *ngFor="let num of oddNumbers"
+      [ngClass]=" {'odd': num % 2 !== 0}"
+      >{{ num }}</li>
+  </ul>
+</div>
+```
+
+### NgStyle
+  - When you want to apply css styles to your html element dynamically
+  - `[ngStyle] = " 'css-property': expression ? 'true' : 'false' "`
+
+```html
+<li
+  class="list-group-item"
+  *ngFor="let num of oddNumbers"
+  [ngStyle]="{'background-color': num % 2 !== 0 ? 'yellow' : 'green'}"
+>{{ num }}</li>
+```
+
+
+## Structural Directives
+  - you can't have more than 1 structural directive on an element
+  - only 1 is allowed
+
+### Why do we need the * in structural directives?
+  - when you use *ngStructuralDirective we are really just doing just placeing an ngStructural directive in [] and in an ng-template
+
+```html
+<p *ngIf="!flag"></p>
+
+<!-- same thing as .. -->
+<ng-template [ngIf]="!flag">
+</ng-template>
+```
+
+### Creating our own Structural Directive
+  - we can create our own structural directive
+
+```typescript
+@Directive({
+  selector: '[appUnless]'
+})
+export class UnlessDirective {
+
+  @Input()
+  set appUnless(condition: boolean) {
+    if(!condition) {
+      // if condition is not true, then render the view 
+      this.vcREf.createEmbeddedView(this.templateRef);
+    }
+    else {
+      // if the condtiion is true, then clear the contents from the view 
+      this.vcREf.clear();
+    }
+  }
+
+  constructor(
+    private templateRef: TemplateRef<any>,
+    private vcREf: ViewContainerRef) { 
+  }
+}
+```
+
+```html
+<div *appUnless="onlyOdd">
+  <p>onlyOdd is False</p>
+</div>
+```
+
+## Creating our own Atribute Directives
+
+  - `ng generate directive --skip-test basicHighlight`
+
+> `selector: '[appBasicHighlight]'`  tells angular to create an attribute selector, this does not mean that you have to use [] brackets to use this directive
+{: .prompt-warning }
+
+```typescript
+import { Directive, ElementRef, OnInit } from "@angular/core";
+
+@Directive({
+  // camel case is standard convention
+  selector: '[appBasicHighlight]'
+})
+export class BasicHighlightDirective implements OnInit{
+  
+  constructor(private elementRef: ElementRef) {
+  }
+
+  ngOnInit(): void {
+    // gets access to the element and changing the background color
+    this.elementRef.nativeElement.style.backgroundColor = 'green';
+  }
+
+
+}
+```
+{: file='basic-highlight.directive.ts'}
+
+```html
+<p appBasicHighlight>Style me with a basic directive</p>
+```
+
+> We have learned that it is not good to access the elements directly with `this.elementRef.nativeElement.style.backgroundColor = 'green';`
+{: .prompt-warning }
+  - So what are we supposed to do instead?
+  - use **Render2**
+
+
+```typescript
+{ Directive, ElementRef, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit {
+
+  constructor(
+    private elRef: ElementRef, 
+    private renderer: Renderer2) {
+  }
+
+  ngOnInit(): void {
+    this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
+    this.renderer.setStyle(this.elRef.nativeElement, 'color', 'white');
+  }
+
+}
+```
+
+### @HostListener
+  - We can use @HostListener to listen for event and respond accordingly
+  - we will have the background color change when a mouse enters a paragraph and returns back to original color when it leaves the paragraph
+
+
+> @HostListener('**mouseenter**') takes an argument of the event it will listen to
+{: .prompt-tip }
+
+```typescript
+export class BetterHighlightDirective implements OnInit {
+
+  constructor(private elRef: ElementRef, private renderer: Renderer2) {
+  }
+
+  changeBackground(color: string){
+    this.renderer.setStyle(this.elRef.nativeElement, 'background-color', color);
+  }
+
+  @HostListener('mouseenter')
+  mouseOver() {
+    this.changeBackground('dodgerBlue');
+  }
+
+  @HostListener('mouseleave')
+  mouseLeave() {
+    this.changeBackground('initial');
+  }
+
+}
+```
+
+### @HostBinding
+  - Alternatively to using Renderer2 we can have an element represent the background color and we can update that value and it will be reflected on the page
+
+
+> @HostBinding('style.backgroundColor') takes an argument that connects to the DOM of the element that this directive is sitting on top off
+{: .prompt-info }
+
+```typescript
+@Directive({
+  selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit {
+
+  @HostBinding('style.backgroundColor')
+  backgroundColor: string;
+
+
+  @HostListener('mouseenter')
+  mouseOver() {
+    this.backgroundColor = 'dodgerBlue';
+  }
+
+  @HostListener('mouseleave')
+  mouseLeave() {
+    this.backgroundColor = 'initial';
+  }
+
+}
+```
+
+### Bind property to a directive
+  - If we wanted to bind a property to the we have to pass the name of the selector to one of the @Input('nameOfSelector')
+  
+```typescript
+@Directive({
+  selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit{
+
+  // inputs
+  @Input('appBetterHighlight')
+  highlightColor: string = 'blue';
+
+  @HostBinding('style.backgroundColor')
+  backgroundColor: string = this.highlightColor;
+
+  // happens after the directives gets it's inputs
+  // otherwise, default color will always be initial
+  ngOnInit(): void {
+    this.backgroundColor = highlightColor;
+  }
+
+
+  @HostListener('mouseenter')
+  mouseOver() {
+    this.backgroundColor = this.highlightColor;
+  }
+
+  @HostListener('mouseleave')
+  mouseLeave() {
+    this.backgroundColor = this.defaultColor;
+  }
+
+}
+```
+
+```html
+<p [appBetterHighlight]="'yellow'">Style me with a better directive</p>
+```
+
+### Special case for passing down string data
+  - normally we have to enclose the property we are trying to pass as in put in [] and wrap in single quotes like this example
+
+```typescript
+export class BetterHighlightDirective implements OnInit{
+
+  @Input()
+  something: string;
+
+  // ...
+}
+```
+
+```html
+<p 
+  appBetterHighlight
+  [something]="'hi'"
+  >Style me with a better directive</p>
+```
+
+> instead we can remove the `[]` and the `''` like this `<p appBetterHighlight something="hi"> I am a paragraph </p>`
+{: .prompt-tip }
