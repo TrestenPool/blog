@@ -38,7 +38,7 @@ image:
     - [Docker network drivers](#docker-network-drivers)
     - [Docker networks DNS](#docker-networks-dns)
       - [Docker DNS Round Robin](#docker-dns-round-robin)
-  - [Docker inspect --format](#docker-inspect---format)
+  - [Docker inspect](#docker-inspect)
 - [Section 5 Container Images](#section-5-container-images)
   - [What is an image?](#what-is-an-image)
   - [Official and unofficial images](#official-and-unofficial-images)
@@ -306,7 +306,7 @@ Docker Run (Run)
   - we can multiple containers on a created network resopnd to the same DNS address
   - it will cycle through the dns records using dns round robin
   
-## Docker inspect --format
+## Docker inspect
   - uses Go templates
   - format is case sensitive
 
@@ -572,12 +572,11 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
 ]
 ```
 
-  - `docker inspect --format '{{ .ID }}' portainer`
+  - ![alt-text](/2023-10-13-docker-udemy-course/inspect.png)
     - gets the ID for the container
   
-  - `docker inspect --format '{{ .NetworkSettings.IPAddress }}' portainer`
+  - ![alt-text](/2023-10-13-docker-udemy-course/inspect2.png)
     - gets the ip address for the container
-  
 
 # Section 5 Container Images
 
