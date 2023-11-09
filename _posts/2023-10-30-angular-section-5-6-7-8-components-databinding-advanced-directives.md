@@ -23,6 +23,7 @@ image:
   - [Structural Directives](#structural-directives)
     - [Why do we need the \* in structural directives?](#why-do-we-need-the--in-structural-directives)
     - [Creating our own Structural Directive](#creating-our-own-structural-directive)
+    - [NgSwitch](#ngswitch)
   - [Creating our own Atribute Directives](#creating-our-own-atribute-directives)
     - [@HostListener](#hostlistener)
     - [@HostBinding](#hostbinding)
@@ -401,6 +402,10 @@ paragraph: ElementRef
 ### Creating our own Structural Directive
   - we can create our own structural directive
 
+
+> The @Input() **appUnless** has to be named the **name of the selector** in order to work
+{: .prompt-danger }
+
 ```typescript
 @Directive({
   selector: '[appUnless]'
@@ -431,6 +436,20 @@ export class UnlessDirective {
   <p>onlyOdd is False</p>
 </div>
 ```
+
+### NgSwitch
+  - just like a switch statement in languages like c and java
+
+```html
+<div [ngSwitch]="value">
+  <p *ngSwitchCase="5">5</p>
+  <p *ngSwitchCase="10">10</p>
+  <p *ngSwitchCase="15">15</p>
+  <p *ngSwitchDefault>Not a valid value</p>
+</div>
+```
+
+
 
 ## Creating our own Atribute Directives
 

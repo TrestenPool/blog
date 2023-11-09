@@ -11,6 +11,7 @@ image:
 - [Creating The app](#creating-the-app)
 - [Debugging](#debugging)
   - [Sourcemaps](#sourcemaps)
+- [Creating our Dropdown directive](#creating-our-dropdown-directive)
 
 
 # Course project explained
@@ -56,3 +57,34 @@ image:
   - Angular CLI, for instance, automatically generates sourcemaps during the build process. 
   - You can enable or disable sourcemap generation in the angular.json configuration file. By default, they are generated for development builds and excluded from production builds to save space.
 
+
+# Creating our Dropdown directive
+  - We will make our dropdown directive such that it will attach the class **open** when it is clicked and remove when it is clicked again
+
+> **@HostBinding('class.open')** bind to the class **open** on the element this directive is placed on, meaning when it is true it will be on the element and when it is falsed it will be taken off of the element
+{: .prompt-info }
+
+> **@HostListener('click')** will execute the the method when the click event is present on the element this directive is placed on 
+{: .prompt-info }
+
+```typescript
+import { Directive, HostBinding, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[appDropdown]'
+})
+export class DropdownDirective {
+  @HostBinding('class.open')
+  isOpen: boolean = false;
+
+  @HostListener('click')
+  toggleOpen() {
+    this.isOpen = !this.isOpen;
+  }
+
+}
+```
+
+```html
+<div class="btn-group" appDropdown>
+```
