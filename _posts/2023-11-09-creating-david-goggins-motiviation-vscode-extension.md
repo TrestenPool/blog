@@ -17,5 +17,5 @@ image:
   - `yo code`
     - scaffold a basic js project
 
-# Project Structure
-  - 
+# Getting an error when trying to run the Hello world command from vscode
+  - [vscode version fix](https://stackoverflow.com/questions/50748695/vs-code-extension-helloworld-sample-in-typescript-is-not-working)

@@ -67,6 +67,7 @@ export class LoggingService {
   - Angular creates an application-wide injector (also known as **"root" injector**) during the application bootstrap process
 
 ## Providing a Dependency
+  - ![alt-text](/2023-11-09-angular-section-9-10-services-and-dependency-injection/injecting_services.png)
   - The first step is to add the @Injectable decorator to show that the class can be injected.
 
 ```typscript
@@ -104,3 +105,16 @@ Hierarchy
 
 ### levels
   - highest level is in the app.module.ts 
+
+# Observables in angular
+  - crucial part of the RxJS (Reactive Extensions for JavaScript) 
+  - often used for working with **asynchronous data streams**
+  - provide a way to **handle events**
+  - such as HTTP requests, user input, or data from other sources.
+  - **Subscribe and Unsubscribe**: You can subscribe to an observable to receive notifications when new values are emitted
+    - When you're done with an observable, it's essential to **unsubscribe** to prevent **memory leaks**.
+
+# Subscribing to EventEmitters
+  - you can subscribe to events emitted by an event emitter by using .subscribe()
+  - 
+
