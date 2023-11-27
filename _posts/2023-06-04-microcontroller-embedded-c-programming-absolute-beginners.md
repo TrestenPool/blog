@@ -3,30 +3,28 @@ author: Tresten Pool
 layout: post
 title: 'Microcontroller Embedded C Programming: Absolute Beginners'
 date: 2023-06-04 10:25 -0500
-categories: [Programming]
+categories: [Programming, microcontroller, embedded]
 tags: [c, microcontroller, programming] 
 image:
   path: /2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/microcontroller_udemy.png
 ---
 
-<!------------------------------------------------------->
-<!------------ C COMPILATION & EXECUTION ---------------->
-<!------------------------------------------------------->
-## Index of Topics
----
-> [Overview]()
->> + [Hardware used for this course](#1.1)
->> + [Asked chatgpt to write me curriculium for embedded systems](#1.2)
-
-> [Basic Usage]()
->> + [How printf works on the microcontroller](#2.1)
+Table of contents
+- [Course topics](#course-topics)
+  - [Hardware used for this course](#hardware-used-for-this-course)
+  - [I asked ChatGPT to write me a curriculium to learn embedded systems.](#i-asked-chatgpt-to-write-me-a-curriculium-to-learn-embedded-systems)
+  - [How printf works on the microcontroller](#how-printf-works-on-the-microcontroller)
+  - [IDE used](#ide-used)
+  - [Creating a new project](#creating-a-new-project)
+  - [Project structure](#project-structure)
+  - [Cross compilation](#cross-compilation)
 
 
+# Course topics
 <!------------------------------------------------------->
 <!------------ HARDWARE USED FOR THE COURSE ------------->
 <!------------------------------------------------------->
-<br><br><br>
-### Hardware used for this course <a id='1.1'></a>
+## Hardware used for this course
 ---
 - Board Name: 
   - STM32F4DISCOVERY
@@ -56,8 +54,7 @@ image:
 <!------------------------------------------------------->
 <!----------------- CHAT GPT CURRICULUM ---------------->
 <!------------------------------------------------------->
-<br><br><br>
-### I asked ChatGPT to write me a curriculium to learn embedded systems. <a id='1.2'></a>
+## I asked ChatGPT to write me a curriculium to learn embedded systems.
 ---
 
 1. Basics of Embedded Systems:
@@ -98,8 +95,7 @@ image:
 <!------------------------------------------------------->
 <!------ How printf works on the microcontroller -------->
 <!------------------------------------------------------->
-<br><br><br>
-### How printf works on the microcontroller <a id='2.1'></a>
+## How printf works on the microcontroller
 ---
 
 - Only applicable to MCU's based on **ARM Cortex (M3, M4, M7)** or higher processors
@@ -135,13 +131,27 @@ image:
 - ![ITM unit zoomed in](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/itm_unit.png){: height="100"}
   - Writing the printf function will be pushed onto the fifo queue and written by onto the swo pin
 
+## IDE used
+  - using STM32CubeIDE
+  - target is used for the target device which in this case is the dev board
+  - host is the host code so in this case the code on our thinkpad laptop
+
+## Creating a new project
+  - Steps
+    - open stm32cubeid
+    - select file>new stm32 project
+    - click on the 2nd tab and type in the board name into the search bar
+    - ![ITM unit zoomed in](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/project_tut.png)
+    - then click on 'next' on the bottom right
+
   
+## Project structure
+  - Project structure is as follows
+  - ![alt-text](/2023-06-04-microcontroller-embedded-c-programming-absolute-beginners/project_structure.png)
+  - for every dev board there is a startup folder with startup code for that specific board
 
+## Cross compilation
+  - cross compilation is when you compile code on your machine with the itent that it will be run on another machine with different architecture
+  - example: arm-none-eabi-gcc compiles to an arm executable
 
-
-<!------------------------------------------------------->
-<!------------ HARDWARE USED FOR THE COURSE ------------->
-<!------------------------------------------------------->
-<br><br><br>
-### REFERENCES
----
+  
