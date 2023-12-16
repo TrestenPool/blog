@@ -49,7 +49,7 @@ Install rbenv and ruby-build through git, NOT apt-get
   - https://stackoverflow.com/questions/37720892/you-dont-have-write-permissions-for-the-var-lib-gems-2-3-0-directory
 
 <!-- MY NOTES -->
-Run the localhost serve
+Run the localhost server
   bundle exec jekyll serve
 
 Create a post
