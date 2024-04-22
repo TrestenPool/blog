@@ -18,6 +18,11 @@ image:
     - [Resetting Forms](#resetting-forms)
   - [Reactive Forms](#reactive-forms)
     - [Validation](#validation-1)
+    - [Grouping Controls](#grouping-controls-1)
+    - [Reactive arrays of form controls](#reactive-arrays-of-form-controls)
+    - [Custom Validator](#custom-validator)
+    - [Asynchronous Validators](#asynchronous-validators)
+    - [Reacting to status or value changes](#reacting-to-status-or-value-changes)
 
 
 # Forms
@@ -528,4 +533,285 @@ input.ng-invalid.ng-touched{
 }
 ```
 
+### Grouping Controls
+  - we may want to group our controls like
+    - userinput
+      - username
+      - password
+  - and to access we would use something like userinput.username or userinput.password
+  - to group controls all you have to do is nest a FormGroup inside another FormGroup and give it it's own formcontrols
 
+```typescript
+ngOnInit(): void {
+  // initialize the form
+  this.signupForm = new FormGroup({
+
+    // nested form group
+    'userData': new FormGroup({
+      'username': new FormControl(null, Validators.required),
+      'email': new FormControl('user@gmail.com', [Validators.required, Validators.email]),
+    }),
+
+    'gender': new FormControl('male')
+  });
+}
+```
+
+> **formGroupName="nestedFormGroupName"** is placed in an outer div with the username & email formcontrol placed inside of it
+{: .prompt-tip }
+
+> **formControlName** is used for the name inside the nested formgroup
+{: .prompt-tip }
+
+> **signupForm.get('userData.username')** dot notation is used to get access to the nested formgroup controls like this 
+{: .prompt-tip }
+
+```html
+<!-- nested form group controls -->
+<div 
+  class="form-group"
+  formGroupName="userData"
+  >
+
+  <!-- username -->
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input
+      formControlName="username"
+      type="text"
+      id="username"
+      class="form-control"
+    >
+
+    <span
+      *ngIf="signupForm.get('userData.username').touched && signupForm.get('userData.username').errors"
+      class="help-block">Please enter in a username
+    </span>
+  </div>
+
+  <!-- email -->
+  <div class="form-group">
+    <label for="email">email</label>
+    <input
+      formControlName="email"
+      type="text"
+      id="email"
+      class="form-control"
+      [ngClass]="{invalid: signupForm.get('userData.email').touched && signupForm.get('userData.email').errors}"
+      >
+      <span
+        *ngIf="signupForm.get('userData.email').touched && signupForm.get('userData.email').errors"
+        class="help-block">Please enter a valid email address
+      </span>
+  </div>
+</div>
+```
+
+### Reactive arrays of form controls
+  - using an array in a form
+
+Here is our form
+> note: **'hobbies': new FormArray([])** we are just setting to an empty array startup
+{: .prompt-tip }
+
+```typescript
+ngOnInit(): void {
+  // initialize the form
+  this.signupForm = new FormGroup({
+
+    // nested form group
+    'userData': new FormGroup({
+      'username': new FormControl(null, Validators.required),
+      'email': new FormControl('user@gmail.com', [Validators.required, Validators.email]),
+    }),
+    'gender': new FormControl('male'),
+    'hobbies': new FormArray([])
+  });
+}
+
+onAddHobby(){
+  // add a new hobby input
+  const newControl = new FormControl(null, Validators.required);
+  (<FormArray>this.signupForm.get('hobbies')).push(newControl);
+}
+
+getControls(){
+  // return the controls for the hobbies formArray
+  return (<FormArray>this.signupForm.get('hobbies')).controls;
+}
+```
+
+![alt-text](/2023-11-27-angular-section-15-16-forms/hobbies.png)
+  - here we have a button that when you click on it, it will add another form control which is just a text box
+
+```html
+<!-- hobbies -->
+<div
+  formArrayName="hobbies"
+  >
+  <h4>Your Hobbies</h4>
+  <button 
+    class="btn btn-default"
+    type="button" 
+    (click)="onAddHobby()">Add Hobby</button>
+  <div 
+    class="form-group"
+    *ngFor="let control of getControls(); let i = index">
+    <input 
+      type="text" 
+      class="form-control" 
+      [formControlName]="i">
+  </div>
+</div>
+<!-- hobbies -->
+```
+
+Heres what it looks like when we add a couple of inputs and submit the form
+  - ![alt-text](/2023-11-27-angular-section-15-16-forms/hobbies1.png)
+
+
+### Custom Validator
+  - we want to create a custom validator that prevents the user from using some usernames
+  - we don't want the user to enter in the names **Chris** or **Anna**
+
+> we have to use **this.forbiddenNames.bind(this)** because otherwise **this** will refer to another object and not the current class we are calling it from
+{: .prompt-tip }
+
+```typescript
+export class AppComponent implements OnInit{
+
+  genders = ['male', 'female'];
+  signupForm: FormGroup;
+  forbiddenUsernames = ['Chris', 'Anna']
+
+  ngOnInit(): void {
+    // initialize the form
+    this.signupForm = new FormGroup({
+      // nested form group
+      'userData': new FormGroup({
+        'username': new FormControl(null, [Validators.required, this.forbiddenNames.bind(this)]),
+        'email': new FormControl('user@gmail.com', [Validators.required, Validators.email]),
+      }),
+      'gender': new FormControl('male'),
+      'hobbies': new FormArray([])
+    });
+  }
+
+  // ...
+  
+  forbiddenNames(control: FormControl): {[s: string]: boolean}{
+    // checks if the control value is in the list of forbidden names
+    if(this.forbiddenUsernames.indexOf(control.value) !== -1) {
+      return {'nameIsForbidden': true}
+    }
+    // returning null means success, there was no error found
+    return null;
+  }
+```
+
+
+> Note: we use .getError('errorname') to check if that error is present and show the error
+{: .prompt-tip }
+
+```html
+<!-- username -->
+<div class="form-group">
+  <label for="username">Username</label>
+  <input
+    formControlName="username"
+    type="text"
+    id="username"
+    class="form-control"
+  >
+
+  <!-- required -->
+  <span
+    *ngIf="signupForm.get('userData.username').touched && signupForm.get('userData.username').getError('required')"
+    class="help-block">Please enter in a username
+  </span>
+
+  <!-- forbidden name -->
+  <span
+    *ngIf="signupForm.get('userData.username').getError('nameIsForbidden')"
+    class="help-block">That is a invalid username
+  </span>
+</div>
+```
+
+### Asynchronous Validators
+  - there are plenty of scenarios where we want our validators to be asynchronous
+
+> Notice that **this.forbiddenEmails** is placed as the 3rd argument to FormControl(), this is where the asynchronous validators are palced
+{: .prompt-tip }
+
+> forbiddenEmails() is returning a promise that resolves after 1.5 seconds
+{: .prompt-tip }
+
+```typescript
+export class AppComponent implements OnInit{
+  genders = ['male', 'female'];
+  signupForm: FormGroup;
+  forbiddenUsernames = ['Chris', 'Anna']
+
+  ngOnInit(): void {
+    // initialize the form
+    this.signupForm = new FormGroup({
+      // nested form group
+      'userData': new FormGroup({
+        'username': new FormControl(null, [Validators.required, this.forbiddenNames.bind(this)]),
+        'email': new FormControl('user@gmail.com', [Validators.required, Validators.email], this.forbiddenEmails),
+      }),
+      'gender': new FormControl('male'),
+      'hobbies': new FormArray([])
+    });
+  }
+  forbiddenEmails(control: FormControl): Promise<any> {
+    // promise that resolves after 1.5 seconds
+    const promise = new Promise<any>(
+      (resolve, reject) => {
+        setTimeout(() => {
+          if(control.value === 'test@test.com'){
+            resolve({'emailIsForbidden': true})
+          }
+          else{
+            resolve(null);
+          }
+        }, 1500);
+      }
+    )
+
+    return promise;
+  }
+
+}
+```
+
+It is handled the same way in the html code as before
+
+
+### Reacting to status or value changes
+  - There are 2 observables we can interact with on the entire form or a specific form control
+    - .valueChanges() & .stateChanges()
+
+```typescript
+this.signupForm.valueChanges.subscribe(
+(value) => {
+  console.log(`value = `, value);
+}
+);
+
+// or
+
+this.signupForm.statusChanges.subscribe(
+(status) => {
+  console.log(`status = `, status);
+}
+)
+```
+
+Here is the output for valueChanges
+  - ![alt-text](/2023-11-27-angular-section-15-16-forms/valueChange.png)
+
+Here is the output for stateChanges
+  - ![alt-text](/2023-11-27-angular-section-15-16-forms/stateChange.png)
+  - you get pending if there is an asynchrous change waiting for approval

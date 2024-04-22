@@ -44,6 +44,17 @@ image:
   - [Official and unofficial images](#official-and-unofficial-images)
   - [Image layers](#image-layers)
   - [docker history \& docker inspect](#docker-history--docker-inspect)
+  - [Building an image from a dockerfile](#building-an-image-from-a-dockerfile)
+  - [Ordering of the dockerfile](#ordering-of-the-dockerfile)
+  - [Keywords](#keywords)
+- [Section 6 Persistent Data : Volumes](#section-6-persistent-data--volumes)
+  - [Volume Command](#volume-command)
+  - [Bind Mounting](#bind-mounting)
+  - [Bind Mounts vs Volumes](#bind-mounts-vs-volumes)
+  - [docker volume create](#docker-volume-create)
+- [Section 7. Docker Compose](#section-7-docker-compose)
+  - [What is docker compose](#what-is-docker-compose)
+  - [Docker cli tool](#docker-cli-tool)
 
 
 # Course curriculium 
@@ -68,11 +79,11 @@ image:
 # Section 1
 
 ## Build, Ship, Run
-  - ![bsr](/2023-10-13-docker-udemy-course/profile.png/bsr.png)
+  - ![bsr](/2023-10-13-docker-udemy-course/bsr.png)
   - The 3 steps to take non-containerized software and to containerize them
 
 Docker Image (Build)
-  - ![layers](/2023-10-13-docker-udemy-course/profile.png/layers.png)
+  - ![layers](/2023-10-13-docker-udemy-course/layers.png)
   - A docker file creates a docker image by using layers
   - `docker build`
     - the command to build the image
@@ -84,7 +95,7 @@ Docker Registry (Ship)
   - just a place that that lets you store your docker image
   - `docker push`
     - Pushes docker image to the registry along with the
-  - ![push](/2023-10-13-docker-udemy-course/profile.png/push.png)
+  - ![push](/2023-10-13-docker-udemy-course/push.png)
     - Uses a hash to make sure the user is downloading the correct docker image from the registry
 
 Docker Run (Run)
@@ -96,7 +107,7 @@ Docker Run (Run)
 
 ## Docker Lab
   - [Play with Docker](https://labs.play-with-docker.com)
-  - ![Play with Docker](/2023-10-13-docker-udemy-course/profile.png/play-with-docker.png)
+  - ![Play with Docker](/2023-10-13-docker-udemy-course/play-with-docker.png)
   - His name is Moby Dock!
 
 ## Linux concepts that Docker utilizes
@@ -601,3 +612,89 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
   - `docker history`
     - gives the history of the docker image
     - uses copy on write concept
+
+## Building an image from a dockerfile
+  - `docker build -t customnginx .`
+    - the t just specifies the name of the image
+    - we just use a dot because docker will look for a file named DockerImage
+    - after processing you can find your image with `docker image ls`
+    - say we want to build it again but a couple of the lines are the same, docker will cache it for the next run
+      - that is what makes docker so fast
+
+## Ordering of the dockerfile
+  - order matters especially when it comes to speed
+  - when you build an image it will go line by line and use the cache if it has not changed.
+    - if it has changed it will have to run the code again taking longer
+    - but not only will it have to run that code again, it will have to run all of the code below that too
+    - that is why you keep the code that changes less at the top, and the code that changes the most at the bottom
+  
+## Keywords
+  - FROM
+    - from an offical repo or a custom one to base your image off of
+  - WORKDIR
+    - just like a cd mydir. It just changes your directory
+  - COPY
+    - copy to/from your local machine into your docker images
+
+# Section 6 Persistent Data : Volumes
+  - containers are usually immutable and ephemeral
+  - only re-deploy container, never change
+  - Docker gives us this feature to ensure these "separation of concerns"
+  - known as "persistent data"
+  - Two ways
+    - Volumes
+      - make special location outside of container UFS
+    - Bind Mounts
+      - link container path to host path
+      - cool because it links to a directory on your host, and your docker container can use that file/folder
+      - Maps a host file or directory to a container file
+      - Skips UFS (Union file system) and host files overwrite any in container
+  
+
+## Volume Command
+  - VOLUME command
+    - used to create a mount point and associate it with a directory in the container. This allows the container to share data between the host machine and the container or between containers.
+    - all files created in the container will outlive the container in a separate place on the host
+    - needs manual deletion if you were to delete a container, it would not delete the volume
+  - you dont' have to use the volume command to create a volume in docker, because you can just specify the location manually, however it is recommended to make a volume
+
+  - creating a volume
+  `docker volume create <myVolume>`
+  
+  - `docker container run -d --name mysql -v mysqlVolume mysqlImage`
+    - with **-v** you can specify the name of the volume
+  
+  - `docker container run -d --name mysql -v mysqlVolume:/var/lib/volumes/mysqlVol mysqlImage`
+    - you can even specify the location and name like this
+
+## Bind Mounting
+  - Maps a host file or directory to a container file or directory
+  - Can't use in Dockerfile, must be at container run
+  - `docker container run -v $(pwd):/usr/share/nginx/`
+    - this will bind the mount in the cwd to /user/share/nginx in the container
+
+## Bind Mounts vs Volumes
+  - Bind mounts directly map host files or directories to container files or directories, while volumes are managed by Docker and provide more portability and functionality.
+  - Bind mounts are suitable for development and can be used to access host files during container runtime, while volumes are preferred for sharing data among containers and across different Docker hosts.
+
+
+## docker volume create
+  - you can create your own volume manually
+  - you would want to do this if you want to add a specific **driver**
+
+# Section 7. Docker Compose
+
+## What is docker compose
+  - Docker Compose is a tool provided by Docker that simplifies the process of defining, running, and managing multi-container Docker applications. 
+  - It allows you to define the services, networks, and volumes required for your application in a single **YAML file**, typically named docker-compose.yml.
+  - it uses Declarative synatx making it easy to read and maintain
+  - it allows you to define dependencies
+  - allows you to easily scale by defining the number of instances you want to run the yaml file
+
+## Docker cli tool
+  - `docker-compose`
+  - cli tool used for local/dev/test automation with those yaml files
+  - `docker-compose.yml` - is the default filename, but any can be used with `docker-compose -f`
+  - now with docker 1.13+ these yaml files can be used with swarm
+
+
