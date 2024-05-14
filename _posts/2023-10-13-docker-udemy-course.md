@@ -3,7 +3,7 @@ layout: post
 title: Docker Udemy Course
 date: 2023-10-13 18:16 -0500
 categories: [Containers, Docker, Kubernetes]
-image: 
+image:
   path: /2023-10-13-docker-udemy-course/profile.png
 ---
 
@@ -57,7 +57,7 @@ image:
   - [Docker cli tool](#docker-cli-tool)
 
 
-# Course curriculium 
+# Course curriculium
   - Getting requirements
   - Docker install
   - Container basics
@@ -128,7 +128,7 @@ Docker Run (Run)
     - isolation
     - environments
     - speed
-  
+
   - containers give you speed
     - develop faster
     - build faster
@@ -160,7 +160,7 @@ Docker Run (Run)
     - gets a list of all containers just the container id's
   - ` docker ps -aq --filter "id=container_id" `
     - list docker containers with a certain id
-  - ` docker ps -aq --filter "ancestor=nginx" ` 
+  - ` docker ps -aq --filter "ancestor=nginx" `
     - list docker containers that have an image of **nginx**
 
 ## Creating Container from image
@@ -213,7 +213,7 @@ Docker Run (Run)
     - look at real time stats for a container
 
   - `docker stats`
-    - real time stats for all running containers 
+    - real time stats for all running containers
 
 ## Getting a shell inside containers
   - `docker run -it nginx bash`
@@ -221,7 +221,7 @@ Docker Run (Run)
   - `docker container exec -it nginx bash`
     - get shell inside **existing container**
 
-## Docker networking 
+## Docker networking
   - each container connected to a private virtual network "bridge"
   - each virtual network routes through NAT firewal on host IP
   - all containers on a virtual network can talk to each other without -p
@@ -316,7 +316,7 @@ Docker Run (Run)
 #### Docker DNS Round Robin
   - we can multiple containers on a created network resopnd to the same DNS address
   - it will cycle through the dns records using dns round robin
-  
+
 ## Docker inspect
   - uses Go templates
   - format is case sensitive
@@ -585,7 +585,7 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
 
   - ![alt-text](/2023-10-13-docker-udemy-course/inspect.png)
     - gets the ID for the container
-  
+
   - ![alt-text](/2023-10-13-docker-udemy-course/inspect2.png)
     - gets the ip address for the container
 
@@ -627,7 +627,7 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
     - if it has changed it will have to run the code again taking longer
     - but not only will it have to run that code again, it will have to run all of the code below that too
     - that is why you keep the code that changes less at the top, and the code that changes the most at the bottom
-  
+
 ## Keywords
   - FROM
     - from an offical repo or a custom one to base your image off of
@@ -649,7 +649,7 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
       - cool because it links to a directory on your host, and your docker container can use that file/folder
       - Maps a host file or directory to a container file
       - Skips UFS (Union file system) and host files overwrite any in container
-  
+
 
 ## Volume Command
   - VOLUME command
@@ -660,10 +660,10 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
 
   - creating a volume
   `docker volume create <myVolume>`
-  
+
   - `docker container run -d --name mysql -v mysqlVolume mysqlImage`
     - with **-v** you can specify the name of the volume
-  
+
   - `docker container run -d --name mysql -v mysqlVolume:/var/lib/volumes/mysqlVol mysqlImage`
     - you can even specify the location and name like this
 
@@ -685,7 +685,7 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
 # Section 7. Docker Compose
 
 ## What is docker compose
-  - Docker Compose is a tool provided by Docker that simplifies the process of defining, running, and managing multi-container Docker applications. 
+  - Docker Compose is a tool provided by Docker that simplifies the process of defining, running, and managing multi-container Docker applications.
   - It allows you to define the services, networks, and volumes required for your application in a single **YAML file**, typically named docker-compose.yml.
   - it uses Declarative synatx making it easy to read and maintain
   - it allows you to define dependencies
@@ -697,4 +697,39 @@ tpool@tpool-thinkpad-l480:~$ docker inspect portainer
   - `docker-compose.yml` - is the default filename, but any can be used with `docker-compose -f`
   - now with docker 1.13+ these yaml files can be used with swarm
 
+## docker-compose down --rmi local -v
+  - removes all of the images that were built specifically for this docker-compose file and also removes any volumes that were created in association with it
 
+## docker build
+  - creates custom images before creating a container that will use them
+
+```docker-compose
+services:
+  drupal:
+    image: custom-drupal-image
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - drupal-module:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - drupal-data:/var/lib/postgresql/data
+
+volumes:
+  drupal-data:
+  drupal-module:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+```
+  - creates the image first with the Docker file that is in the current directory and names that image name 'custom-drupal-image'
+
+# Section 8. Swarm Intro and Creating a 3-Node Swarm Cluster
