@@ -55,6 +55,28 @@ image:
 - [Section 7. Docker Compose](#section-7-docker-compose)
   - [What is docker compose](#what-is-docker-compose)
   - [Docker cli tool](#docker-cli-tool)
+  - [docker-compose down --rmi local -v](#docker-compose-down---rmi-local--v)
+  - [docker build](#docker-build)
+- [Section 8. Swarm Intro and Creating a 3-Node Swarm Cluster](#section-8-swarm-intro-and-creating-a-3-node-swarm-cluster)
+  - [What is it](#what-is-it)
+  - [How it works](#how-it-works)
+  - [docker swarm init](#docker-swarm-init)
+  - [docker node ls](#docker-node-ls)
+  - [docker service ls](#docker-service-ls)
+  - [docker service ps ](#docker-service-ps-)
+  - [docker service](#docker-service)
+  - [Say one of those containers goes down](#say-one-of-those-containers-goes-down)
+  - [Overlay Multi-Host Networking](#overlay-multi-host-networking)
+  - [Swarm Routing mesh](#swarm-routing-mesh)
+  - [mounting volumes in swarm](#mounting-volumes-in-swarm)
+  - [Stacks](#stacks)
+  - [Updating a stack](#updating-a-stack)
+  - [Secrets in stacks](#secrets-in-stacks)
+  - [Creating the secret through the file](#creating-the-secret-through-the-file)
+  - [Creating the secret by passing it through the shell](#creating-the-secret-by-passing-it-through-the-shell)
+  - [Telling docker to use a secret for a docker container](#telling-docker-to-use-a-secret-for-a-docker-container)
+  - [Telling docker to use secrets in a container in the docker compose file](#telling-docker-to-use-secrets-in-a-container-in-the-docker-compose-file)
+  - [Secrets with stacks](#secrets-with-stacks)
 
 
 # Course curriculium
@@ -733,3 +755,196 @@ volumes:
   - creates the image first with the Docker file that is in the current directory and names that image name 'custom-drupal-image'
 
 # Section 8. Swarm Intro and Creating a 3-Node Swarm Cluster
+
+## What is it
+  - Swarm mode is a clustering solution built inside of docker
+  - note related to swarm "classic" for pre-1.12 versions
+  - Not enabled by default, new commands once enabled
+    - `docker swarm`
+    - `docker node`
+    - `docker service`
+    - `docker stack`
+    - `docker secret`
+
+## How it works
+  - A swarm is made of nodes
+  - A manager node has a database locally on them, it stores their configuration and gives them all the need to be the authority inside a swarm
+  - They all have their own local db copy and encrypt their traffic to ensure integrity 
+  - the control plane is where all the traffic between the nodes gets sent over
+  - ![docker manager](\2023-10-13-docker-udemy-course\docker-manager.png)
+  - ![docker manager overview](\2023-10-13-docker-udemy-course\manager-overview.png)
+  - a manager is just a worker with permissions to control the swarm
+  - ![docker manager overview](\2023-10-13-docker-udemy-course\swarm-example.png)
+    - a single service can have multiple tasks, as seen in the picture
+  - ![docker swarm architecture](\2023-10-13-docker-udemy-course\swarm-architecure.png)
+
+## docker swarm init
+  - Lots of PKI and security automation
+    - Root signing certificate created for our swarm
+    - cert is issued for first manager role
+    - join tokens were created
+  - Raft database created to store root CA, configs, and secrets
+    - encrypted by default
+    - no need for another key/value system to hold orchestration/secrets
+
+## docker node ls
+  - gets all of the manager and nodes in a swarm
+
+## docker service ls
+  - gets all of the services sent to a swarm of containers
+
+## docker service ps <service-id>
+  - gets all of the tasks for a given service
+
+## docker service
+  - used to sort of in place of the docker run command so we don't break existing docker code
+
+## Say one of those containers goes down
+  - if were to remove a container while a docker swarm has a service that has 3 replicas spinned up. It will create another container and continue. 
+  - Swarm does its best to make sure if a container goes down to spin up a new one as fast as it can
+
+## Overlay Multi-Host Networking
+  - use `--driver overlay` when creating a network
+  - for container to container traffic inside a single swarm
+  - optional IPSec (AES) encryption on network creation
+  - each service can be connect to multiple networks (ex. backend, frontend)
+
+## Swarm Routing mesh
+  - routes ingress (incoming) packets for a service to proper task
+  - spans all nodes in a swarm
+  - uses ipvs from linux kernel
+  - two ways this works
+    - container-to-container in an overlay network (uses vip)
+    - external traffic incoming to published ports (all nodes listen)
+  - stateless load balancing
+  - Load balancer is at OSI Level 3
+    - But the limitation can be overcame by using something like nginx that operates on level 4
+
+## mounting volumes in swarm
+  - [stackoverflow post](https://stackoverflow.com/questions/47756029/how-does-docker-swarm-implement-volume-sharing)
+
+## Stacks
+  - A new layer of abstraction to swarm called **stacks**
+  - Stacks accept **compose files** as their **declarative** definition for **services, networks, and volumes**
+  - `docker stack deploy`
+  - stacks manages all thos objects for us, including the **overlay network** per stack. Adds stack name to start of their name
+  - deploy key in compose file **Cannot** do **build**
+    - compose ignores **deploy**: keyword
+    - swarm ignores **build**: keyword
+  - stacks only work on a 1 swarm basis. Meaning a single stack file can only deploy one swarm, that's it
+  - `docker stack deploy -c mystackfile.yml stackName`
+    - deploy a swarm with a yml file
+
+## Updating a stack
+  - If you wanted to updated a running stack, you just have to update the .yml file and rerun `docker stack deploy -c <mystackfile.yml> mystackname`
+  - docker will go through the file and make any necessary updates
+
+## Secrets in stacks
+  - Easiest "secure" solution for storing secrets in swarm
+  - built into swarm
+  - secure because encrypted at rest, transit.
+  - as of docker 1.13 swarm raft db is encrypted on disk
+  - what is a secret
+    - ssh keys
+    - tls cert
+    - username & passwords
+    - etc. whatever you don't want anyone to view
+  - supports generic strings or binary content up to **500kb** in size
+  - doesn't require apps to be rewritten
+  - only stored on disk of manager nodes
+  - secrets are first stored in swarm, then assigned to a service
+  - they look like files in container but are actually stored in **memory** fs
+    - /run/secrets/<secret-name> or 
+      - /run/secrets/<secret-alias>
+
+## Creating the secret through the file
+  - `docker secret create password mypasswordfile.txt`
+## Creating the secret by passing it through the shell
+  - `echo "myDBpassword" | docker secret create psql_pass -`
+    - the `-` at the end tells the shell to get the input from stdin which was passed via grep
+
+## Telling docker to use a secret for a docker container   
+
+```shell
+  docker service create --name psql \
+    --secret psql_user --secret psql_pass \
+    -e POSTGRES_PASSWORD_FILE=/run/secrets/psql_pass \
+    -e POSTGRES_USER_FILE=/run/secrets/psql_user postgres
+```
+  - this is a security concern because the file gets stored on the file system of the container it is used for
+  - if we were to connect to the shell of this container, the file would be stored here `/run/secrets/<secret-name>`
+
+## Telling docker to use secrets in a container in the docker compose file
+
+```yaml
+version: "3.1"
+
+# services
+services:
+  psql:
+    image: postgres
+    secrets:
+      - psql_user
+      - psql_pass
+    environment:
+      - POSTGRES_PASSWORD_FILE: /run/secrets/psql_pass
+      - POSTGRES_USER_FILE: /run/secrets/psql_user
+
+# define our secrets
+secrets:
+  psql_user:
+    file: ./psql_user.txt
+  psql_pass:
+    file: ./psql_pass.txt
+```
+  - `docker stack deploy -c docker-compose.yml mydb`
+  - creates the secrets before the services
+  - At the bottom we are defining our environment variables by using the file it is stored in
+  - And in the psql service we are using the file path where the environment variable will be stored in on the container
+
+We could also define our secrets before hand and use them in our docker compose another way
+
+## Secrets with stacks
+  - version fo the compose file has to be at min 3.1
+  - **external** keyword tells the compose file to look for the secret that has been declared before
+```yaml
+# This example file from a previous lecture where we ran drupal in docker compose
+# in this Assignment, change it to work with the default drupal image, and change
+# postgres to use a Swarm secret. More info in the README.md file.
+
+version: "3.1"
+
+services:
+
+  drupal:
+    image: custom-drupal
+    ports:
+      - "8080:80"
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+
+  postgres:
+    image: postgres:14
+    environment:
+      - POSTGRES_PASSWORD=/run/secrets/psql-pw
+    # the docker manager will share the secret with this container
+    secrets:
+      - psql-pw
+    volumes:
+      - drupal-data:/var/lib/postgresql/data
+
+volumes:
+  drupal-data:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+
+# tells compose file that the secret has already been declared
+secrets:
+  psql-pw:
+    external: true
+```
