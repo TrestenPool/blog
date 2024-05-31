@@ -9,6 +9,9 @@ image:
 
 - [Course curriculium](#course-curriculium)
 - [Code for this course](#code-for-this-course)
+- [Miscellaneous](#miscellaneous)
+  - [--format](#--format)
+  - [--filter](#--filter)
 - [Section 1](#section-1)
   - [Build, Ship, Run](#build-ship-run)
   - [Docker Lab](#docker-lab)
@@ -77,6 +80,26 @@ image:
   - [Telling docker to use a secret for a docker container](#telling-docker-to-use-a-secret-for-a-docker-container)
   - [Telling docker to use secrets in a container in the docker compose file](#telling-docker-to-use-secrets-in-a-container-in-the-docker-compose-file)
   - [Secrets with stacks](#secrets-with-stacks)
+- [Section 10: Swarm App Lifecycle](#section-10-swarm-app-lifecycle)
+  - [Full App Lifecycle with Compose](#full-app-lifecycle-with-compose)
+  - [Using the docker-compose config to merge](#using-the-docker-compose-config-to-merge)
+  - [Swarm Updates](#swarm-updates)
+  - [Docker Healthcheck](#docker-healthcheck)
+- [Section 13 The What and Why of Kubernetes](#section-13-the-what-and-why-of-kubernetes)
+  - [What is Kubernetes](#what-is-kubernetes)
+  - [Why Kubernetes](#why-kubernetes)
+  - [Kubernetes vs Swarm](#kubernetes-vs-swarm)
+- [Section 14 Kubernetes Architecture and Install](#section-14-kubernetes-architecture-and-install)
+  - [Terminology](#terminology)
+- [Section 15: Your first Pods](#section-15-your-first-pods)
+  - [Kubectl run, create, apply](#kubectl-run-create-apply)
+  - [kubectl explain](#kubectl-explain)
+  - [General](#general)
+  - [Deployment with kubectl](#deployment-with-kubectl)
+  - [Scaling Relicasets](#scaling-relicasets)
+- [Section 16. Inspecting Kubernetes Resources](#section-16-inspecting-kubernetes-resources)
+  - [kubectl get ..](#kubectl-get-)
+  - [kubectl describe](#kubectl-describe)
 
 
 # Course curriculium
@@ -97,6 +120,33 @@ image:
 
 # Code for this course
   - [github repo](https://github.com/bretfisher/udemy-docker-mastery)
+
+# Miscellaneous
+
+## --format
+  - The --format options is available for a lot of docker commands like `docker container ls` and `docker image ls`
+  - You can use a go template to format the output to customize it to your liking [go templates docs](https://docs.docker.com/config/formatting/) 
+
+  - `docker container ls --format {{json .}} | jq`
+    - view all of the possible columns you can print out
+    - pipes the output to jq to make it easier to read
+
+  - `docker image ls --format {{.ID}}\t{{.Repository}}`
+    - print out the ID and Repository information for all of the images
+  
+  - `docker image ls --format 'table {{.ID}}\t{{.Repository}}'`
+  
+  - `docker container inspect --format='{{range .NetworkSettings.Networks}}{{println .IPAddress}}{{println .MacAddress}}{{end}}' httpd`
+    - print out a range of values inside of a nested json object
+    - make sure to end with `{{end}}`
+
+## --filter
+  - The --filter option is available for a lot of docker commands like 
+  - you can either choose to use `--filter` or `-f`
+  - it is in key=value format `--filter foo=bar`
+  - Using the same filter multiple times is interpreted as a **logical OR** `--filter foo=bar --filter foo=mars`
+  - Using a different filter is interpreted as a **logical AND** `--filter foo=bar age=25 state=Tx`
+
 
 # Section 1
 
@@ -948,3 +998,232 @@ secrets:
   psql-pw:
     external: true
 ```
+
+# Section 10: Swarm App Lifecycle
+  
+## Full App Lifecycle with Compose
+  - `docker-compose up` for development environment
+  - `docker-compose up` for CI environment
+  - `docker stack deploy` production environment
+  - `docker-compose.override.yml` - by default when you run `docker-compose up` it will run this file
+  - `docker-compose -f docker-compose.override.yml up -d` - First runs docker-compose.yml then docker-compose.override.yml and merges them
+
+
+## Using the docker-compose config to merge
+  `docker-compose -f docker-compose.yml -f docker-compose.test.yml config > output.yml`
+  - merges the two compose files into one combined one and outputs it to `output.yml`
+
+## Swarm Updates
+  - Provides rolling replacement of tasks/containers in a service
+  - Limits downtime (be careful with "prevents" downtime) 
+
+  - How to update the image used to a newer version
+    - `docker service update --image myapp:1.2.1 myservicerunning`
+  - Adding an environment variable and remove a port
+    - `docker service update --env-add NODE_ENV=production --publish-rm 8080`
+  - Change number of replicas of two services
+    - `docker service scale web=8 api=6`
+  - Rebalancing to even out the tasks to the nodes in a swarm
+    - `docker service update --force web`
+
+## Docker Healthcheck
+  - `HEALTHCHECK` was added in 1.12
+  - supported in dockerfile, compose yaml, docker run, and swarm services
+  - docker engine will exec's the command in the container
+  - it expects exit 0(OK) or exit 1(ERROR)
+  - there are 3 container states (STARTING, HEALTHY, UNHEALTHY)
+  - `docker service create --name db --replicas 3 -e POSTGRES_PASSWORD=mysecretpassword --health-cmd "pg_isready -U postgres || exit 1" -d postgres`
+  - `docker container run --name db -e POSTGRES_PASSWORD=mysecretpassword --health-cmd "pg_isready -U postgres || exit 1" postgres`
+```yaml
+FROM UBUNTU:20.04
+
+COPY ./Downloads /home/newuser/Downloads
+
+WORKDIR /home/newuser/Downloads
+
+HEALTHCHECK ./healcheck-script.sh || exit 1
+```
+- if the healthcheck script fails then it will return 1 and status will be unhealthy
+
+
+# Section 13 The What and Why of Kubernetes
+  
+## What is Kubernetes
+  -  Kubernetes = popular container orchestrator
+  - Released by Google but now maintained by an open source community
+  - Makes many machines act as one
+  - Runs on Top of Docker (usually) as a set of APIs in containers
+  - provides API/CLI to manage containers across servers
+  - many clouds provide it for you
+  - many vendors make a "distribution" of it
+  - uses same raft protocol to get a consensus
+
+## Why Kubernetes
+  - It is the waythe industry is going
+  - Servers + Change Rate = Benefit of orchestration
+
+## Kubernetes vs Swarm
+  - Swarm is Easy
+  - Kubernetes has more features and flexibility
+  - Swarm
+    - Comes with docker
+    - easiest orchestrator to deploy/manage yourself
+    - Follows 80/20 rule, 20% of features of k8 and solves 80% of the uses cases
+    - Runs anywhere Docker does: local,cloud,data-center, arm, windows, 32-bit
+    - Secure by default
+    - Easier to troubleshoot
+  - Kubernetes
+    - Clouds will deploy/manage kubernetes for you
+    - infrastructure vendors are making their own distros
+    - widest adoption and community
+    - Flexible: Covers widest set of use cases
+    - "No one ever got fired for buying IBM"
+
+# Section 14 Kubernetes Architecture and Install
+
+## Terminology
+  Kubernetes 
+  - The whole orchestration system
+  - K8s (Kube for short)
+  - (K eight letters and then the s)
+
+  Kubectl
+  - CLI to configure k8 and manage apps 
+  - "cube control" - official pronunciation
+
+  Node
+  - Single server in the k8 cluster
+
+  Pod
+  - one or more containers running together on one node
+  - basic unit of deployment. Containers are always in pods
+
+  Controller
+  - For creating/updating pods and other objects
+  - Many types of Controllers
+    - Deployment, Replicaset, Statefulset, DaemonSet, Job, CronJob
+
+  Service
+  - network endpoint to connect to a pod(s)
+  - an abstraction which defines a logical set of Pods and a policy by which to access them.
+
+  Jobs
+  - Creates pods(s) and ensures that a specified number successfully completed. When a specified number of successful run of pods is completed, then the job is considered complete
+
+  Namespace
+  - Logical separation between teams and their environments. it allows various teams (Dev,Prod) to share K8's cluster by providing isolated workspace
+  - Filtered group of objects in cluster
+
+  Kubelet
+  - k8 agent running on the nodes
+  - since k8 runs on top of the docker engine, it needs its own agent and engine to function correctly (swarm didn't need one because it was built into docker)
+  
+  Control Plane:
+  - Set of containers that manage the cluster
+  - Includes API server, scheduler, controller manager, etcd, and more
+  - sometimes called the "master"
+
+# Section 15: Your first Pods
+
+## Kubectl run, create, apply
+  - `kubectl run` (single pod per command since 1.18)
+    - similar to docker run
+    - you always have to specify a name for the pod
+
+  - `kubectl create` (create some resources via CLI or YAML)
+    - similar to docker create
+
+  - `kubectl apply` (create / update anything via YAML)
+    - similar to docker stack deploy
+
+## kubectl explain
+  - the cli can give you information about something in k8 with the explain command
+  - `kubectl explain pods`
+  
+## General
+  - You typically use a yaml file for deployment and just the cli for testing and development
+  - Unlike Docker, you can't create a container directly in k8
+    - k8 creates pods (via cli,yaml or api) which k8 then in turn creates containers inside of it
+  - kubelet tells the container runtime to create containers for you
+
+## Deployment with kubectl
+  - essentially the equivalent to what a swarm service is like
+  - allows you to create one or more pods
+  - `kubectl create deployment my-nginx --image nginx`
+  - this will create a **relicateset** instead of a pod directly
+
+  - `kubectl delete deployment my-nginx`
+  - delete the deployment
+
+## Scaling Relicasets
+  - Essentially "add more pods or replicas to the node in the deploymment"
+  - `kubectl scale` will change the deployment record
+  - cm will see that only the replica count has changed
+  - scheduler sees a new pod is requested, assigns to a node
+  - kubelet sees a new pod, tells container runtime to start httpd
+
+
+
+# Section 16. Inspecting Kubernetes Resources
+
+## kubectl get ..
+  - `kubectl get all`
+    - List our common resources (in the default namespace)
+
+  - `kubectl get deploy/<deployment-name>`
+    - view only the kubectl resource you are trying to look at
+
+  - `kubectl get deploy/apache -o wide`
+    - view in wide format
+
+  - `kubectl get deploy/apache -o json`
+    - view in json format
+
+  - `kubectl get` has a weakness
+    - it can only show one resource at a time
+    - we need a command that combines related resources
+    - parent/child resources
+    - events of that resource
+
+## kubectl describe
+  - `kubectl describe deploy/my-apache`
+  - describe does the following
+    - Deployment summary
+    - ReplicaSet status
+    - Pod Template
+    - Old/New ReplicaSet names
+    - Deployment Events
+
+Example output
+```yaml
+trestenp@PD-ITCADTEST6:~/Playground/dca-training/Docker-Certified-Associate-DCA-Exam-Guide$ k describe deploy/apache
+Name:                   apache
+Namespace:              default
+CreationTimestamp:      Fri, 31 May 2024 09:28:28 -0500
+Labels:                 app=apache
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=apache
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=apache
+  Containers:
+   httpd:
+    Image:        httpd
+    Port:         <none>
+    Host Port:    <none>
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   apache-f9489c7dc (2/2 replicas created)
+Events:          <none>
+```
+
