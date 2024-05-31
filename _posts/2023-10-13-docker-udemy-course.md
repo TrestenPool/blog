@@ -7,6 +7,7 @@ image:
   path: /2023-10-13-docker-udemy-course/profile.png
 ---
 
+
 - [Course curriculium](#course-curriculium)
 - [Code for this course](#code-for-this-course)
 - [Miscellaneous](#miscellaneous)
@@ -82,7 +83,7 @@ image:
   - [Secrets with stacks](#secrets-with-stacks)
 - [Section 10: Swarm App Lifecycle](#section-10-swarm-app-lifecycle)
   - [Full App Lifecycle with Compose](#full-app-lifecycle-with-compose)
-  - [Using the docker-compose config to merge](#using-the-docker-compose-config-to-merge)
+  - [Using the docker compose config to merge](#using-the-docker-compose-config-to-merge)
   - [Swarm Updates](#swarm-updates)
   - [Docker Healthcheck](#docker-healthcheck)
 - [Section 13 The What and Why of Kubernetes](#section-13-the-what-and-why-of-kubernetes)
@@ -125,7 +126,7 @@ image:
 
 ## --format
   - The --format options is available for a lot of docker commands like `docker container ls` and `docker image ls`
-  - You can use a go template to format the output to customize it to your liking [go templates docs](https://docs.docker.com/config/formatting/) 
+  - You can use a go template to format the output to customize it to your liking [go templates docs](https://docs.docker.com/config/formatting/)
 
   - `docker container ls --format {{json .}} | jq`
     - view all of the possible columns you can print out
@@ -133,15 +134,15 @@ image:
 
   - `docker image ls --format {{.ID}}\t{{.Repository}}`
     - print out the ID and Repository information for all of the images
-  
+
   - `docker image ls --format 'table {{.ID}}\t{{.Repository}}'`
-  
+
   - `docker container inspect --format='{{range .NetworkSettings.Networks}}{{println .IPAddress}}{{println .MacAddress}}{{end}}' httpd`
     - print out a range of values inside of a nested json object
     - make sure to end with `{{end}}`
 
 ## --filter
-  - The --filter option is available for a lot of docker commands like 
+  - The --filter option is available for a lot of docker commands like
   - you can either choose to use `--filter` or `-f`
   - it is in key=value format `--filter foo=bar`
   - Using the same filter multiple times is interpreted as a **logical OR** `--filter foo=bar --filter foo=mars`
@@ -819,7 +820,7 @@ volumes:
 ## How it works
   - A swarm is made of nodes
   - A manager node has a database locally on them, it stores their configuration and gives them all the need to be the authority inside a swarm
-  - They all have their own local db copy and encrypt their traffic to ensure integrity 
+  - They all have their own local db copy and encrypt their traffic to ensure integrity
   - the control plane is where all the traffic between the nodes gets sent over
   - ![docker manager](\2023-10-13-docker-udemy-course\docker-manager.png)
   - ![docker manager overview](\2023-10-13-docker-udemy-course\manager-overview.png)
@@ -850,7 +851,7 @@ volumes:
   - used to sort of in place of the docker run command so we don't break existing docker code
 
 ## Say one of those containers goes down
-  - if were to remove a container while a docker swarm has a service that has 3 replicas spinned up. It will create another container and continue. 
+  - if were to remove a container while a docker swarm has a service that has 3 replicas spinned up. It will create another container and continue.
   - Swarm does its best to make sure if a container goes down to spin up a new one as fast as it can
 
 ## Overlay Multi-Host Networking
@@ -904,7 +905,7 @@ volumes:
   - only stored on disk of manager nodes
   - secrets are first stored in swarm, then assigned to a service
   - they look like files in container but are actually stored in **memory** fs
-    - /run/secrets/<secret-name> or 
+    - /run/secrets/<secret-name> or
       - /run/secrets/<secret-alias>
 
 ## Creating the secret through the file
@@ -913,7 +914,7 @@ volumes:
   - `echo "myDBpassword" | docker secret create psql_pass -`
     - the `-` at the end tells the shell to get the input from stdin which was passed via grep
 
-## Telling docker to use a secret for a docker container   
+## Telling docker to use a secret for a docker container
 
 ```shell
   docker service create --name psql \
@@ -1000,7 +1001,7 @@ secrets:
 ```
 
 # Section 10: Swarm App Lifecycle
-  
+
 ## Full App Lifecycle with Compose
   - `docker-compose up` for development environment
   - `docker-compose up` for CI environment
@@ -1009,13 +1010,13 @@ secrets:
   - `docker-compose -f docker-compose.override.yml up -d` - First runs docker-compose.yml then docker-compose.override.yml and merges them
 
 
-## Using the docker-compose config to merge
+## Using the docker compose config to merge
   `docker-compose -f docker-compose.yml -f docker-compose.test.yml config > output.yml`
   - merges the two compose files into one combined one and outputs it to `output.yml`
 
 ## Swarm Updates
   - Provides rolling replacement of tasks/containers in a service
-  - Limits downtime (be careful with "prevents" downtime) 
+  - Limits downtime (be careful with "prevents" downtime)
 
   - How to update the image used to a newer version
     - `docker service update --image myapp:1.2.1 myservicerunning`
@@ -1047,7 +1048,7 @@ HEALTHCHECK ./healcheck-script.sh || exit 1
 
 
 # Section 13 The What and Why of Kubernetes
-  
+
 ## What is Kubernetes
   -  Kubernetes = popular container orchestrator
   - Released by Google but now maintained by an open source community
@@ -1082,13 +1083,13 @@ HEALTHCHECK ./healcheck-script.sh || exit 1
 # Section 14 Kubernetes Architecture and Install
 
 ## Terminology
-  Kubernetes 
+  Kubernetes
   - The whole orchestration system
   - K8s (Kube for short)
   - (K eight letters and then the s)
 
   Kubectl
-  - CLI to configure k8 and manage apps 
+  - CLI to configure k8 and manage apps
   - "cube control" - official pronunciation
 
   Node
@@ -1117,7 +1118,7 @@ HEALTHCHECK ./healcheck-script.sh || exit 1
   Kubelet
   - k8 agent running on the nodes
   - since k8 runs on top of the docker engine, it needs its own agent and engine to function correctly (swarm didn't need one because it was built into docker)
-  
+
   Control Plane:
   - Set of containers that manage the cluster
   - Includes API server, scheduler, controller manager, etcd, and more
@@ -1139,7 +1140,7 @@ HEALTHCHECK ./healcheck-script.sh || exit 1
 ## kubectl explain
   - the cli can give you information about something in k8 with the explain command
   - `kubectl explain pods`
-  
+
 ## General
   - You typically use a yaml file for deployment and just the cli for testing and development
   - Unlike Docker, you can't create a container directly in k8
