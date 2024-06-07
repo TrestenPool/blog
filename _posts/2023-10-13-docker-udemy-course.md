@@ -7,12 +7,11 @@ image:
   path: /2023-10-13-docker-udemy-course/profile.png
 ---
 
-
 - [Course curriculium](#course-curriculium)
 - [Code for this course](#code-for-this-course)
 - [Miscellaneous](#miscellaneous)
-  - [--format](#--format)
-  - [--filter](#--filter)
+  - [format option](#format-option)
+  - [filter option](#filter-option)
 - [Section 1](#section-1)
   - [Build, Ship, Run](#build-ship-run)
   - [Docker Lab](#docker-lab)
@@ -101,6 +100,21 @@ image:
 - [Section 16. Inspecting Kubernetes Resources](#section-16-inspecting-kubernetes-resources)
   - [kubectl get ..](#kubectl-get-)
   - [kubectl describe](#kubectl-describe)
+  - [Container Logs in Kubernetes](#container-logs-in-kubernetes)
+- [Section 17. Exposing Kubernetes ports](#section-17-exposing-kubernetes-ports)
+  - [Service Types](#service-types)
+  - [Exposing Containers](#exposing-containers)
+  - [Deleting Services](#deleting-services)
+  - [Kubernetes DNS](#kubernetes-dns)
+- [Section 18. Kubernetes Management Techniques](#section-18-kubernetes-management-techniques)
+  - [Resource Generators](#resource-generators)
+- [Section 19. Moving to Declarative Kubernetes YAML](#section-19-moving-to-declarative-kubernetes-yaml)
+  - [apiVersion](#apiversion)
+  - [Kind](#kind)
+  - [spec](#spec)
+  - [diff](#diff)
+  - [Labels \& Label Selectors](#labels--label-selectors)
+  - [Filtering the get command with  labels](#filtering-the-get-command-with--labels)
 
 
 # Course curriculium
@@ -124,7 +138,7 @@ image:
 
 # Miscellaneous
 
-## --format
+## format option
   - The --format options is available for a lot of docker commands like `docker container ls` and `docker image ls`
   - You can use a go template to format the output to customize it to your liking [go templates docs](https://docs.docker.com/config/formatting/)
 
@@ -141,7 +155,7 @@ image:
     - print out a range of values inside of a nested json object
     - make sure to end with `{{end}}`
 
-## --filter
+## filter option
   - The --filter option is available for a lot of docker commands like
   - you can either choose to use `--filter` or `-f`
   - it is in key=value format `--filter foo=bar`
@@ -1186,6 +1200,9 @@ HEALTHCHECK ./healcheck-script.sh || exit 1
     - parent/child resources
     - events of that resource
 
+  - `kubectl get events --watch-only`
+    - only get the events that happen for future events
+
 ## kubectl describe
   - `kubectl describe deploy/my-apache`
   - describe does the following
@@ -1195,7 +1212,7 @@ HEALTHCHECK ./healcheck-script.sh || exit 1
     - Old/New ReplicaSet names
     - Deployment Events
 
-Example output
+  - Example output
 ```yaml
 trestenp@PD-ITCADTEST6:~/Playground/dca-training/Docker-Certified-Associate-DCA-Exam-Guide$ k describe deploy/apache
 Name:                   apache
@@ -1228,3 +1245,546 @@ NewReplicaSet:   apache-f9489c7dc (2/2 replicas created)
 Events:          <none>
 ```
 
+## Container Logs in Kubernetes
+  - the logs are not stored in etcd. They are stored on each node with the container runtime
+
+  - `kubectl logs pod/mypod`
+    - get the logs for one pod
+
+  - `kubectl logs deploy/apache --all-containers=true`
+    - gets the logs for all of the containers for the deployment
+  
+
+# Section 17. Exposing Kubernetes ports
+
+## Service Types
+  - A service in kubernetes is a stable network address for pods(s)
+  - when you create a pod, you don't automatically get a dns name so it can communicate internally & externally. That has be done manually with services
+  - CoreDNS allows us to resolve services by name
+  - There are different types for services
+    - Cluster IP (default)
+      - Exposes the Service on a cluster-internal IP. Choosing this value makes the Service only reachable from within the cluster. This is the default that is used if you don't explicitly specify a type for a Service. You can expose the Service to the public internet using an Ingress or a Gateway.
+    - NodePort
+      - Exposes the Service on each Node's IP at a static port (the NodePort). To make the node port available, Kubernetes sets up a cluster IP address, the same as if you had requested a Service of type: ClusterIP.
+    - LoadBalancer
+      - Exposes the Service externally using an external load balancer. Kubernetes does not directly offer a load balancing component; you must provide one, or you can integrate your Kubernetes cluster with a cloud provider.
+    - ExternalName
+      - Maps the Service to the contents of the externalName field (for example, to the hostname api.foo.bar.example). The mapping configures your cluster's DNS server to return a CNAME record with that external hostname value. No proxying of any kind is set up.
+
+## Exposing Containers
+  - `kubectl expose deploy/<deployment-name> --port 8888`
+  - `kubectl expose deploy/<deployment-name> --port 8888 --name httpenv-np --type NodePort`
+  
+```bash
+trestenp@PD-ITCADTEST6:~$ kubectl get services
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+httpenv      ClusterIP   10.97.133.11   <none>        8888/TCP         2d15h
+httpenv-np   NodePort    10.103.86.5    <none>        8888:30805/TCP   35s
+kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP          2d23h
+```
+  - In K8, it is opposite to how docker describes and views ports
+    - In docker it is Host:Container
+    - In K8 it is Cluster:Host
+
+## Deleting Services
+  - `kubectl delete <type>/<service-name>`
+    - format
+  - `kubectl delete service/httpenv`
+    - example
+  - `kubectl delete service/httpenv deployment/nginx pod/mypod1`
+    - exampe of deleting multiple objects in k8
+
+## Kubernetes DNS
+  - DNS is optional or an addon inside of a k8 cluster
+  - CorDNS
+    - Starting with 1.11
+    - Like Swarm, this is DNS-based service discovery
+
+# Section 18. Kubernetes Management Techniques
+  - k8 is un-opinionated, meaning you can adapt it for whatever technique you would like to use like imperative or declarative. from the cmdline or yaml
+
+## Resource Generators
+  - the command in kubectl have some automation behind them called generators
+  - These commands are helper templates called "generators"
+  - Every resource in kubernetes has a specification or **"spec"**
+  - To view the spec of a command without executing it, use `--dry-run=client -o yaml` 
+  - `kubectl create deployment nginxDeployment --image nginx --dry-run=client -o yaml`
+  - `kubectl create pod nginxPod --image nginx --dry-run=client -o yaml`
+  - `kubectl create task nginxTask --image nginx --dry-run=client -o yaml`
+  - you can use those YAML defaults as a starting poin
+  - generators are "opinionated defaults"
+
+# Section 19. Moving to Declarative Kubernetes YAML
+  - storing your configuration in yaml and using the `kubectl apply -f myconfig.yaml`
+  - can be yaml or json but humans prefer yaml. K8 will convert to json and relay to api in json
+  - each file contains one or more **manifests**
+  - Each manifest needs **four parts** (rootKey: values)
+    1. `apiVersion:<version>`
+    2. `kind:<kind>`
+    3. `metadata:<metadata>`
+    4. `spec:<spec>`
+  - the apiVersion & kind are what decide what resource you are going to get and what version of the api you are going to use for that resource or kind
+  
+## apiVersion
+  - `kubectl api-versions`
+    - get a list of all of the possible versions you can use in your yaml file
+
+## Kind
+  - `kubectl api-resources`
+    - gives you a list of all the options you can put under **kind** in the yaml file
+
+## spec
+  - `kubectl explain services --recursive`
+
+```text
+trestenp@PD-ITCADTEST6:~$ kubectl explain services --recursive
+KIND:       Service
+VERSION:    v1
+
+DESCRIPTION:
+    Service is a named abstraction of software service (for example, mysql)
+    consisting of local port (for example 3306) that the proxy listens on, and
+    the selector that determines which pods will answer requests sent through
+    the proxy.
+
+FIELDS:
+  apiVersion    <string>
+  kind  <string>
+  metadata      <ObjectMeta>
+    annotations <map[string]string>
+    creationTimestamp   <string>
+    deletionGracePeriodSeconds  <integer>
+    deletionTimestamp   <string>
+    finalizers  <[]string>
+    generateName        <string>
+    generation  <integer>
+    labels      <map[string]string>
+    managedFields       <[]ManagedFieldsEntry>
+      apiVersion        <string>
+      fieldsType        <string>
+      fieldsV1  <FieldsV1>
+      manager   <string>
+      operation <string>
+      subresource       <string>
+      time      <string>
+    name        <string>
+    namespace   <string>
+    ownerReferences     <[]OwnerReference>
+      apiVersion        <string> -required-
+      blockOwnerDeletion        <boolean>
+      controller        <boolean>
+      kind      <string> -required-
+      name      <string> -required-
+      uid       <string> -required-
+    resourceVersion     <string>
+    selfLink    <string>
+    uid <string>
+  spec  <ServiceSpec>
+    allocateLoadBalancerNodePorts       <boolean>
+    clusterIP   <string>
+    clusterIPs  <[]string>
+    externalIPs <[]string>
+    externalName        <string>
+    externalTrafficPolicy       <string>
+    healthCheckNodePort <integer>
+    internalTrafficPolicy       <string>
+    ipFamilies  <[]string>
+    ipFamilyPolicy      <string>
+    loadBalancerClass   <string>
+    loadBalancerIP      <string>
+    loadBalancerSourceRanges    <[]string>
+    ports       <[]ServicePort>
+      appProtocol       <string>
+      name      <string>
+      nodePort  <integer>
+      port      <integer> -required-
+      protocol  <string>
+      targetPort        <IntOrString>
+    publishNotReadyAddresses    <boolean>
+    selector    <map[string]string>
+    sessionAffinity     <string>
+    sessionAffinityConfig       <SessionAffinityConfig>
+      clientIP  <ClientIPConfig>
+        timeoutSeconds  <integer>
+    type        <string>
+  status        <ServiceStatus>
+    conditions  <[]Condition>
+      lastTransitionTime        <string> -required-
+      message   <string> -required-
+      observedGeneration        <integer>
+      reason    <string> -required-
+      status    <string> -required-
+      type      <string> -required-
+    loadBalancer        <LoadBalancerStatus>
+      ingress   <[]LoadBalancerIngress>
+        hostname        <string>
+        ip      <string>
+        ipMode  <string>
+        ports   <[]PortStatus>
+          error <string>
+          port  <integer> -required-
+          protocol      <string> -required-
+```
+  - get a spec list of the possible options you can use
+  - good for a quick lookup and reference because it only tells you the name and the data type it accepts
+  
+  - `kubectl explain services.spec`
+
+```text
+trestenp@PD-ITCADTEST6:~$ k explain services.spec
+KIND:       Service
+VERSION:    v1
+
+FIELD: spec <ServiceSpec>
+
+DESCRIPTION:
+    Spec defines the behavior of a service.
+    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+    ServiceSpec describes the attributes that a user creates on a service.
+
+FIELDS:
+  allocateLoadBalancerNodePorts <boolean>
+    allocateLoadBalancerNodePorts defines if NodePorts will be automatically
+    allocated for services with type LoadBalancer.  Default is "true". It may be
+    set to "false" if the cluster load-balancer does not rely on NodePorts.  If
+    the caller requests specific NodePorts (by specifying a value), those
+    requests will be respected, regardless of this field. This field may only be
+    set for services with type LoadBalancer and will be cleared if the type is
+    changed to any other type.
+
+  clusterIP     <string>
+    clusterIP is the IP address of the service and is usually assigned randomly.
+    If an address is specified manually, is in-range (as per system
+    configuration), and is not in use, it will be allocated to the service;
+    otherwise creation of the service will fail. This field may not be changed
+    through updates unless the type field is also being changed to ExternalName
+    (which requires this field to be blank) or the type field is being changed
+    from ExternalName (in which case this field may optionally be specified, as
+    describe above).  Valid values are "None", empty string (""), or a valid IP
+    address. Setting this to "None" makes a "headless service" (no virtual IP),
+    which is useful when direct endpoint connections are preferred and proxying
+    is not required.  Only applies to types ClusterIP, NodePort, and
+    LoadBalancer. If this field is specified when creating a Service of type
+    ExternalName, creation will fail. This field will be wiped when updating a
+    Service to type ExternalName. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+
+  clusterIPs    <[]string>
+    ClusterIPs is a list of IP addresses assigned to this service, and are
+    usually assigned randomly.  If an address is specified manually, is in-range
+    (as per system configuration), and is not in use, it will be allocated to
+    the service; otherwise creation of the service will fail. This field may not
+    be changed through updates unless the type field is also being changed to
+    ExternalName (which requires this field to be empty) or the type field is
+    being changed from ExternalName (in which case this field may optionally be
+    specified, as describe above).  Valid values are "None", empty string (""),
+    or a valid IP address.  Setting this to "None" makes a "headless service"
+    (no virtual IP), which is useful when direct endpoint connections are
+    preferred and proxying is not required.  Only applies to types ClusterIP,
+    NodePort, and LoadBalancer. If this field is specified when creating a
+    Service of type ExternalName, creation will fail. This field will be wiped
+    when updating a Service to type ExternalName.  If this field is not
+    specified, it will be initialized from the clusterIP field.  If this field
+    is specified, clients must ensure that clusterIPs[0] and clusterIP have the
+    same value.
+
+    This field may hold a maximum of two entries (dual-stack IPs, in either
+    order). These IPs must correspond to the values of the ipFamilies field.
+    Both clusterIPs and ipFamilies are governed by the ipFamilyPolicy field.
+    More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+
+  externalIPs   <[]string>
+    externalIPs is a list of IP addresses for which nodes in the cluster will
+    also accept traffic for this service.  These IPs are not managed by
+    Kubernetes.  The user is responsible for ensuring that traffic arrives at a
+    node with this IP.  A common example is external load-balancers that are not
+    part of the Kubernetes system.
+
+  externalName  <string>
+    externalName is the external reference that discovery mechanisms will return
+    as an alias for this service (e.g. a DNS CNAME record). No proxying will be
+    involved.  Must be a lowercase RFC-1123 hostname
+    (https://tools.ietf.org/html/rfc1123) and requires `type` to be
+    "ExternalName".
+
+  externalTrafficPolicy <string>
+    externalTrafficPolicy describes how nodes distribute service traffic they
+    receive on one of the Service's "externally-facing" addresses (NodePorts,
+    ExternalIPs, and LoadBalancer IPs). If set to "Local", the proxy will
+    configure the service in a way that assumes that external load balancers
+    will take care of balancing the service traffic between nodes, and so each
+    node will deliver traffic only to the node-local endpoints of the service,
+    without masquerading the client source IP. (Traffic mistakenly sent to a
+    node with no endpoints will be dropped.) The default value, "Cluster", uses
+    the standard behavior of routing to all endpoints evenly (possibly modified
+    by topology and other features). Note that traffic sent to an External IP or
+    LoadBalancer IP from within the cluster will always get "Cluster" semantics,
+    but clients sending to a NodePort from within the cluster may need to take
+    traffic policy into account when picking a node.
+
+    Possible enum values:
+     - `"Cluster"`
+     - `"Cluster"` routes traffic to all endpoints.
+     - `"Local"`
+     - `"Local"` preserves the source IP of the traffic by routing only to
+    endpoints on the same node as the traffic was received on (dropping the
+    traffic if there are no local endpoints).
+
+  healthCheckNodePort   <integer>
+    healthCheckNodePort specifies the healthcheck nodePort for the service. This
+    only applies when type is set to LoadBalancer and externalTrafficPolicy is
+    set to Local. If a value is specified, is in-range, and is not in use, it
+    will be used.  If not specified, a value will be automatically allocated.
+    External systems (e.g. load-balancers) can use this port to determine if a
+    given node holds endpoints for this service or not.  If this field is
+    specified when creating a Service which does not need it, creation will
+    fail. This field will be wiped when updating a Service to no longer need it
+    (e.g. changing type). This field cannot be updated once set.
+
+  internalTrafficPolicy <string>
+    InternalTrafficPolicy describes how nodes distribute service traffic they
+    receive on the ClusterIP. If set to "Local", the proxy will assume that pods
+    only want to talk to endpoints of the service on the same node as the pod,
+    dropping the traffic if there are no local endpoints. The default value,
+    "Cluster", uses the standard behavior of routing to all endpoints evenly
+    (possibly modified by topology and other features).
+
+    Possible enum values:
+     - `"Cluster"` routes traffic to all endpoints.
+     - `"Local"` routes traffic only to endpoints on the same node as the client
+    pod (dropping the traffic if there are no local endpoints).
+
+  ipFamilies    <[]string>
+    IPFamilies is a list of IP families (e.g. IPv4, IPv6) assigned to this
+    service. This field is usually assigned automatically based on cluster
+    configuration and the ipFamilyPolicy field. If this field is specified
+    manually, the requested family is available in the cluster, and
+    ipFamilyPolicy allows it, it will be used; otherwise creation of the service
+    will fail. This field is conditionally mutable: it allows for adding or
+    removing a secondary IP family, but it does not allow changing the primary
+    IP family of the Service. Valid values are "IPv4" and "IPv6".  This field
+    only applies to Services of types ClusterIP, NodePort, and LoadBalancer, and
+    does apply to "headless" services. This field will be wiped when updating a
+    Service to type ExternalName.
+
+    This field may hold a maximum of two entries (dual-stack families, in either
+    order).  These families must correspond to the values of the clusterIPs
+    field, if specified. Both clusterIPs and ipFamilies are governed by the
+    ipFamilyPolicy field.
+
+  ipFamilyPolicy        <string>
+    IPFamilyPolicy represents the dual-stack-ness requested or required by this
+    Service. If there is no value provided, then this field will be set to
+    SingleStack. Services can be "SingleStack" (a single IP family),
+    "PreferDualStack" (two IP families on dual-stack configured clusters or a
+    single IP family on single-stack clusters), or "RequireDualStack" (two IP
+    families on dual-stack configured clusters, otherwise fail). The ipFamilies
+    and clusterIPs fields depend on the value of this field. This field will be
+    wiped when updating a service to type ExternalName.
+
+    Possible enum values:
+     - `"PreferDualStack"` indicates that this service prefers dual-stack when
+    the cluster is configured for dual-stack. If the cluster is not configured
+    for dual-stack the service will be assigned a single IPFamily. If the
+    IPFamily is not set in service.spec.ipFamilies then the service will be
+    assigned the default IPFamily configured on the cluster
+     - `"RequireDualStack"` indicates that this service requires dual-stack.
+    Using IPFamilyPolicyRequireDualStack on a single stack cluster will result
+    in validation errors. The IPFamilies (and their order) assigned to this
+    service is based on service.spec.ipFamilies. If service.spec.ipFamilies was
+    not provided then it will be assigned according to how they are configured
+    on the cluster. If service.spec.ipFamilies has only one entry then the
+    alternative IPFamily will be added by apiserver
+     - `"SingleStack"` indicates that this service is required to have a single
+    IPFamily. The IPFamily assigned is based on the default IPFamily used by the
+    cluster or as identified by service.spec.ipFamilies field
+
+  loadBalancerClass     <string>
+    loadBalancerClass is the class of the load balancer implementation this
+    Service belongs to. If specified, the value of this field must be a
+    label-style identifier, with an optional prefix, e.g. "internal-vip" or
+    "example.com/internal-vip". Unprefixed names are reserved for end-users.
+    This field can only be set when the Service type is 'LoadBalancer'. If not
+    set, the default load balancer implementation is used, today this is
+    typically done through the cloud provider integration, but should apply for
+    any default implementation. If set, it is assumed that a load balancer
+    implementation is watching for Services with a matching class. Any default
+    load balancer implementation (e.g. cloud providers) should ignore Services
+    that set this field. This field can only be set when creating or updating a
+    Service to type 'LoadBalancer'. Once set, it can not be changed. This field
+    will be wiped when a service is updated to a non 'LoadBalancer' type.
+
+  loadBalancerIP        <string>
+    Only applies to Service Type: LoadBalancer. This feature depends on whether
+    the underlying cloud-provider supports specifying the loadBalancerIP when a
+    load balancer is created. This field will be ignored if the cloud-provider
+    does not support the feature. Deprecated: This field was under-specified and
+    its meaning varies across implementations. Using it is non-portable and it
+    may not support dual-stack. Users are encouraged to use
+    implementation-specific annotations when available.
+
+  loadBalancerSourceRanges      <[]string>
+    If specified and supported by the platform, this will restrict traffic
+    through the cloud-provider load-balancer will be restricted to the specified
+    client IPs. This field will be ignored if the cloud-provider does not
+    support the feature." More info:
+    https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
+
+  ports <[]ServicePort>
+    The list of ports that are exposed by this service. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+
+  publishNotReadyAddresses      <boolean>
+    publishNotReadyAddresses indicates that any agent which deals with endpoints
+    for this Service should disregard any indications of ready/not-ready. The
+    primary use case for setting this field is for a StatefulSet's Headless
+    Service to propagate SRV DNS records for its Pods for the purpose of peer
+    discovery. The Kubernetes controllers that generate Endpoints and
+    EndpointSlice resources for Services interpret this to mean that all
+    endpoints are considered "ready" even if the Pods themselves are not. Agents
+    which consume only Kubernetes generated endpoints through the Endpoints or
+    EndpointSlice resources can safely assume this behavior.
+
+  selector      <map[string]string>
+    Route service traffic to pods with label keys and values matching this
+    selector. If empty or not present, the service is assumed to have an
+    external process managing its endpoints, which Kubernetes will not modify.
+    Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if type
+    is ExternalName. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/
+
+  sessionAffinity       <string>
+    Supports "ClientIP" and "None". Used to maintain session affinity. Enable
+    client IP based session affinity. Must be ClientIP or None. Defaults to
+    None. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+
+    Possible enum values:
+     - `"ClientIP"` is the Client IP based.
+     - `"None"` - no session affinity.
+
+  sessionAffinityConfig <SessionAffinityConfig>
+    sessionAffinityConfig contains the configurations of session affinity.
+
+  type  <string>
+    type determines how the Service is exposed. Defaults to ClusterIP. Valid
+    options are ExternalName, ClusterIP, NodePort, and LoadBalancer. "ClusterIP"
+    allocates a cluster-internal IP address for load-balancing to endpoints.
+    Endpoints are determined by the selector or if that is not specified, by
+    manual construction of an Endpoints object or EndpointSlice objects. If
+    clusterIP is "None", no virtual IP is allocated and the endpoints are
+    published as a set of endpoints rather than a virtual IP. "NodePort" builds
+    on ClusterIP and allocates a port on every node which routes to the same
+    endpoints as the clusterIP. "LoadBalancer" builds on NodePort and creates an
+    external load-balancer (if supported in the current cloud) which routes to
+    the same endpoints as the clusterIP. "ExternalName" aliases this service to
+    the specified externalName. Several other fields do not apply to
+    ExternalName services. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+
+    Possible enum values:
+     - `"ClusterIP"` means a service will only be accessible inside the cluster,
+    via the cluster IP.
+     - `"ExternalName"` means a service consists of only a reference to an
+    external name that kubedns or equivalent will return as a CNAME record, with
+    no exposing or proxying of any pods involved.
+     - `"LoadBalancer"` means a service will be exposed via an external load
+    balancer (if the cloud provider supports it), in addition to 'NodePort'
+    type.
+     - `"NodePort"` means a service will be exposed on one port of every node,
+    in addition to 'ClusterIP' type.
+```
+  - this is good because it gives you a detailed description of all of the 
+
+  - `kubectl explain services.spec.type`
+  - we can keep drilling down with dot notation to get the resource key:value you are looking for without everything else
+
+```text
+trestenp@PD-ITCADTEST6:~$ kubectl explain services.spec.type
+KIND:       Service
+VERSION:    v1
+
+FIELD: type <string>
+
+DESCRIPTION:
+    type determines how the Service is exposed. Defaults to ClusterIP. Valid
+    options are ExternalName, ClusterIP, NodePort, and LoadBalancer. "ClusterIP"
+    allocates a cluster-internal IP address for load-balancing to endpoints.
+    Endpoints are determined by the selector or if that is not specified, by
+    manual construction of an Endpoints object or EndpointSlice objects. If
+    clusterIP is "None", no virtual IP is allocated and the endpoints are
+    published as a set of endpoints rather than a virtual IP. "NodePort" builds
+    on ClusterIP and allocates a port on every node which routes to the same
+    endpoints as the clusterIP. "LoadBalancer" builds on NodePort and creates an
+    external load-balancer (if supported in the current cloud) which routes to
+    the same endpoints as the clusterIP. "ExternalName" aliases this service to
+    the specified externalName. Several other fields do not apply to
+    ExternalName services. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+
+    Possible enum values:
+     - `"ClusterIP"` means a service will only be accessible inside the cluster,
+    via the cluster IP.
+     - `"ExternalName"` means a service consists of only a reference to an
+    external name that kubedns or equivalent will return as a CNAME record, with
+    no exposing or proxying of any pods involved.
+     - `"LoadBalancer"` means a service will be exposed via an external load
+    balancer (if the cloud provider supports it), in addition to 'NodePort'
+    type.
+     - `"NodePort"` means a service will be exposed on one port of every node,
+    in addition to 'ClusterIP' type.
+```
+  - and if all else fails look at the api docs on the kubernetes site [api-docs](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#servicespec-v1-core)
+
+## diff
+  - `kubectl diff -f app.yml`
+  - looks at the specs that are currently running in k8 and what is in the file and print out the differences
+```text
+trestenp@PD-ITCADTEST6:/mnt/c/Users/trestenp/OneDrive - City of Corpus Christi/Udemy/udemy-docker-mastery-main/udemy-docker-mastery-main$ k diff -f k8s-yaml/app.yml
+diff -u -N /tmp/LIVE-2663337493/apps.v1.Deployment.default.app-nginx-deployment /tmp/MERGED-1538727162/apps.v1.Deployment.default.app-nginx-deployment
+--- /tmp/LIVE-2663337493/apps.v1.Deployment.default.app-nginx-deployment        2024-06-04 08:36:06.529521378 -0500
++++ /tmp/MERGED-1538727162/apps.v1.Deployment.default.app-nginx-deployment      2024-06-04 08:36:06.529521378 -0500
+@@ -6,14 +6,14 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"app-nginx-deployment","namespace":"default"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"app-nginx"}},"template":{"metadata":{"labels":{"app":"app-nginx"}},"spec":{"containers":[{"image":"nginx:1.17.3","name":"nginx","ports":[{"containerPort":80}]}]}}}}
+   creationTimestamp: "2024-06-04T13:30:45Z"
+-  generation: 1
++  generation: 2
+   name: app-nginx-deployment
+   namespace: default
+   resourceVersion: "461022"
+   uid: 66d8722b-d416-4b58-b30c-c3e88bdd0a2f
+ spec:
+   progressDeadlineSeconds: 600
+-  replicas: 3
++  replicas: 2
+   revisionHistoryLimit: 10
+   selector:
+     matchLabels:
+diff -u -N /tmp/LIVE-2663337493/v1.Service.default.app-nginx-service /tmp/MERGED-1538727162/v1.Service.default.app-nginx-service
+--- /tmp/LIVE-2663337493/v1.Service.default.app-nginx-service   2024-06-04 08:36:06.509520740 -0500
++++ /tmp/MERGED-1538727162/v1.Service.default.app-nginx-service 2024-06-04 08:36:06.509520740 -0500
+@@ -24,7 +24,7 @@
+     protocol: TCP
+     targetPort: 80
+   selector:
+-    app: app-nginx
++    app: something-else
+   sessionAffinity: None
+   type: NodePort
+ status:
+```
+
+## Labels & Label Selectors
+  - Labels go under **metadata** 
+  - key:value for identifying your resource later by selecting, grouping, or filtering for it
+  - Common Examples
+    - `tier:frontend`
+    - `app:api`
+    - `env:prod`
+    - `customer:acme.co`
+  - **Annotations** on the other hand are used for large, non-identifying info
+
+## Filtering the get command with  labels
+  - `kubectl get pods -l app=nginx`
